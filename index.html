@@ -39,10 +39,10 @@
 
     <div class="w-full max-w-md bg-slate-50 min-h-screen relative flex flex-col shadow-2xl pb-28">
 
-        <!-- Шапка портала -->
+        <!-- Шапка портала (Тройной тап по логотипу открывает ввод PIN-кода) -->
         <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-3 flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-                <div class="relative">
+                <div class="relative cursor-pointer select-none active:scale-95 transition" onclick="handleSecretLogoClick()">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-md shadow-blue-500/20">
                         G
                     </div>
@@ -74,16 +74,21 @@
             </div>
         </header>
 
-        <!-- Админ-панель -->
+        <!-- Админ-панель (Скрыта по умолчанию, открывается только по PIN) -->
         <section id="admin-action-bar" class="hidden px-4 pt-3">
             <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3 flex items-center justify-between shadow-sm">
                 <div>
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded">Админ-Панель</span>
-                    <p class="text-xs font-bold text-slate-800 mt-1">Мгновенный ввод позиций на склад</p>
+                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-200/70 px-2 py-0.5 rounded">Режим Администратора</span>
+                    <p class="text-xs font-bold text-slate-800 mt-1">Управление складской матрицей</p>
                 </div>
-                <button onclick="openAddProductModal()" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-black shadow-md transition">
-                    + Товар
-                </button>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="openAddProductModal()" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-black shadow-md transition">
+                        + Товар
+                    </button>
+                    <button onclick="logoutAdmin()" class="px-2.5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition" title="Выйти из админки">
+                        Выйти
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -139,7 +144,25 @@
             </button>
         </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО: Карточка товара (Marketplace Enterprise) -->
+        <!-- МОДАЛЬНОЕ ОКНО: Ввод PIN-кода администратора -->
+        <div id="pin-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+            <div class="w-full max-w-xs bg-white rounded-3xl p-5 space-y-4 shadow-2xl text-center transform scale-95 transition-transform duration-300" id="pin-sheet">
+                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center font-black text-xl mx-auto">
+                    🔐
+                </div>
+                <div>
+                    <h3 class="text-sm font-black text-slate-900">Вход для администратора</h3>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Введите PIN для управления товарами</p>
+                </div>
+                <input type="password" id="pin-input" maxlength="8" placeholder="Введите PIN" class="w-full text-center tracking-widest text-lg font-black bg-slate-50 border border-slate-200 rounded-xl p-3 outline-none focus:bg-white focus:border-amber-500">
+                <div class="flex gap-2">
+                    <button onclick="closePinModal()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition">Отмена</button>
+                    <button onclick="submitAdminPin()" class="flex-1 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow-md transition">Войти</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО: Карточка товара -->
         <div id="product-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300">
             <div class="w-full max-w-md bg-white rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="product-sheet">
                 
@@ -151,7 +174,6 @@
                     <button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center hover:bg-slate-200 transition">✕</button>
                 </div>
 
-                <!-- Галерея фото -->
                 <div class="space-y-2">
                     <div class="relative w-full h-56 bg-slate-100 rounded-2xl overflow-hidden border border-slate-100">
                         <img id="modal-main-img" src="" class="w-full h-full object-cover transition duration-300">
@@ -164,7 +186,6 @@
                     <p id="modal-desc" class="text-xs text-slate-500 mt-1 leading-relaxed"></p>
                 </div>
 
-                <!-- Прогресс-бар до следующей скидки -->
                 <div class="bg-blue-50/70 border border-blue-100 rounded-xl p-3 space-y-1.5" id="tier-progress-box">
                     <div class="flex justify-between text-[11px] font-bold">
                         <span class="text-blue-950">Тиражная скидка:</span>
@@ -175,7 +196,6 @@
                     </div>
                 </div>
 
-                <!-- Табы карточки -->
                 <div class="border-b border-slate-200 flex gap-3 text-xs font-bold overflow-x-auto hide-scrollbar">
                     <button onclick="switchTab('pricing')" id="tab-pricing-btn" class="pb-2 border-b-2 border-blue-600 text-blue-600 transition whitespace-nowrap">Цены оптом</button>
                     <button onclick="switchTab('matrix')" id="tab-matrix-btn" class="pb-2 border-b-2 border-transparent text-slate-400 transition whitespace-nowrap">Ростовка (Матрица)</button>
@@ -184,12 +204,10 @@
                     <button onclick="switchTab('warehouses')" id="tab-warehouses-btn" class="pb-2 border-b-2 border-transparent text-slate-400 transition whitespace-nowrap">Склады РФ</button>
                 </div>
 
-                <!-- Таб 1: Градация опта -->
                 <div id="tab-pricing" class="space-y-2 text-xs">
                     <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 grid grid-cols-3 gap-2 text-center" id="modal-tiers-container"></div>
                 </div>
 
-                <!-- Таб 2: Матричный заказ ростовки -->
                 <div id="tab-matrix" class="hidden space-y-2 text-xs">
                     <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 space-y-2.5">
                         <div class="flex justify-between items-center text-[11px] font-bold text-slate-700">
@@ -206,7 +224,6 @@
                     </div>
                 </div>
 
-                <!-- Таб 3: Брендирование -->
                 <div id="tab-branding" class="hidden space-y-2.5 text-xs">
                     <div class="bg-blue-50/70 border border-blue-100 rounded-xl p-3.5 space-y-2">
                         <div class="flex items-center justify-between">
@@ -220,7 +237,6 @@
                     </div>
                 </div>
 
-                <!-- Таб 4: Фулфилмент под маркетплейсы -->
                 <div id="tab-fulfillment" class="hidden space-y-2.5 text-xs">
                     <div class="bg-purple-50/80 border border-purple-100 rounded-xl p-3.5 space-y-2">
                         <div class="flex items-center justify-between">
@@ -238,7 +254,6 @@
                     </div>
                 </div>
 
-                <!-- Таб 5: Мультисклад -->
                 <div id="tab-warehouses" class="hidden space-y-2 text-xs">
                     <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 space-y-2 text-slate-700 text-[11px]">
                         <div class="flex justify-between items-center">
@@ -256,7 +271,6 @@
                     </div>
                 </div>
 
-                <!-- Интерактивный объем: ползунок + пресеты -->
                 <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-3">
                     <div class="flex justify-between items-center">
                         <div>
@@ -430,13 +444,11 @@
                     </div>
                 </div>
 
-                <!-- Режим налогообложения (С НДС / Без НДС) -->
                 <div class="bg-slate-100 p-1 rounded-xl flex text-xs font-bold">
                     <button onclick="setVatMode(false)" id="vat-none-btn" class="flex-1 py-1.5 rounded-lg bg-white shadow-sm text-slate-900 transition">Без НДС (УСН)</button>
                     <button onclick="setVatMode(true)" id="vat-with-btn" class="flex-1 py-1.5 rounded-lg text-slate-500 transition">С НДС 20% (ОСНО)</button>
                 </div>
 
-                <!-- Условия оплаты -->
                 <div>
                     <label class="block font-bold text-slate-700 text-xs mb-1">Условия взаиморасчетов:</label>
                     <select id="payment-terms" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-semibold outline-none">
@@ -497,13 +509,77 @@
         tg.expand();
         tg.ready();
 
+        // Безопасная аутентификация администратора через PIN-код
+        const ADMIN_PIN = "7777";
         const ADMIN_TELEGRAM_ID = 8125122124;
         const currentUserId = tg.initDataUnsafe?.user?.id || 0;
 
-        if (currentUserId === ADMIN_TELEGRAM_ID || currentUserId === 0) {
-            document.getElementById('admin-action-bar').classList.remove('hidden');
-            document.getElementById('role-badge').innerText = 'Режим Администратора';
-            document.getElementById('role-badge').className = 'px-1.5 py-0.5 rounded text-[9px] font-black bg-amber-100 text-amber-800 uppercase';
+        let logoClickCount = 0;
+        let logoClickTimer = null;
+
+        function applyAdminState(isAdmin) {
+            const adminBar = document.getElementById('admin-action-bar');
+            const roleBadge = document.getElementById('role-badge');
+            if (isAdmin) {
+                adminBar.classList.remove('hidden');
+                roleBadge.innerText = 'Режим Администратора';
+                roleBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-black bg-amber-100 text-amber-800 uppercase';
+            } else {
+                adminBar.classList.add('hidden');
+                roleBadge.innerText = 'Опт Портал';
+                roleBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-black bg-blue-100 text-blue-700 uppercase';
+            }
+        }
+
+        // Авторизация по Telegram ID или сохраненной сессии
+        let isSessionAdmin = localStorage.getItem('galk_admin_active') === 'true';
+        if (currentUserId === ADMIN_TELEGRAM_ID || isSessionAdmin) {
+            applyAdminState(true);
+        }
+
+        // Секретный тройной клик по логотипу для вызова PIN-окна
+        function handleSecretLogoClick() {
+            logoClickCount++;
+            clearTimeout(logoClickTimer);
+            logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1000);
+
+            if (logoClickCount >= 3) {
+                logoClickCount = 0;
+                openPinModal();
+            }
+        }
+
+        function openPinModal() {
+            const modal = document.getElementById('pin-modal');
+            const sheet = document.getElementById('pin-sheet');
+            document.getElementById('pin-input').value = '';
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            sheet.classList.remove('scale-95');
+            document.getElementById('pin-input').focus();
+        }
+
+        function closePinModal() {
+            document.getElementById('pin-sheet').classList.add('scale-95');
+            document.getElementById('pin-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function submitAdminPin() {
+            const enteredPin = document.getElementById('pin-input').value.trim();
+            if (enteredPin === ADMIN_PIN) {
+                localStorage.setItem('galk_admin_active', 'true');
+                applyAdminState(true);
+                closePinModal();
+                showToast("Доступ администратора подтвержден!");
+            } else {
+                showToast("Неверный PIN-код", "❌");
+                document.getElementById('pin-input').value = '';
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('galk_admin_active');
+            applyAdminState(false);
+            showToast("Вы вышли из режима админа");
         }
 
         const defaultProducts = [
@@ -564,8 +640,6 @@
 
         let products = JSON.parse(localStorage.getItem('galk_b2b_products')) || defaultProducts;
         let favorites = JSON.parse(localStorage.getItem('galk_b2b_favs')) || [];
-        
-        // Полноценная структура корзины: id -> { qty, unitPrice, branding, fulfillment, matrixSummary }
         let cart = {};
         let currentCat = 'all';
         let currentModalProductId = null;
@@ -870,7 +944,6 @@
             document.getElementById('tier-unit-price').innerText = `${unitPrice} ₽`;
             document.getElementById('slider-total-price').innerText = `${total.toLocaleString('ru-RU')} ₽`;
 
-            // Прогресс тиражной скидки
             const nextTier = product.tiers.find(t => t.min > qty);
             const progressBar = document.getElementById('tier-progress-bar');
             const hint = document.getElementById('tier-discount-hint');
@@ -912,7 +985,6 @@
             document.getElementById('product-modal').classList.add('opacity-0', 'pointer-events-none');
         }
 
-        // Обновление корзины с учетом всех опций
         function updateCart(id, newQty, options = null) {
             const p = products.find(prod => prod.id === id);
             if (!p) return;
