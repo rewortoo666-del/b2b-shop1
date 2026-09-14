@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Galk B2B Wholesale</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background-color: #0b1120;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-soft { animation: pulse-soft 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="flex justify-center min-h-screen text-slate-800 antialiased selection:bg-blue-600 selection:text-white">
+
+    <!-- Основной контейнер мобильного приложения -->
+    <div class="w-full max-w-md bg-slate-50 min-h-screen relative flex flex-col shadow-2xl pb-28">
+
+        <!-- Шапка портала -->
+        <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-700 to-indigo-500 flex items-center justify-center text-white font-extrabold text-lg shadow-md shadow-blue-500/20">
+                    G
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-extrabold text-slate-900 tracking-tight text-sm">Galk B2B Supply</span>
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-extrabold bg-blue-100 text-blue-700 uppercase tracking-wide">Портал</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-[11px] font-semibold text-emerald-600">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-soft"></span>
+                        Склад: Москва (Отгрузка 24ч)
+                    </div>
+                </div>
+            </div>
+            <button onclick="tg.close()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs transition">
+                В чат
+            </button>
+        </header>
+
+        <!-- Инфо-баннеры для оптовиков (Ticker) -->
+        <section class="px-4 pt-3">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-3.5 text-white shadow-lg shadow-blue-600/15 relative overflow-hidden">
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold tracking-widest uppercase bg-white/20 px-2 py-0.5 rounded-md">B2B Условия</span>
+                        <span class="text-[10px] text-blue-100 font-medium">Безнал с НДС / Без НДС</span>
+                    </div>
+                    <p class="text-sm font-extrabold mt-1.5 leading-snug">Скидки до -25% при заказе полными ростовками</p>
+                    <p class="text-[11px] text-blue-100/90 mt-1">Автоматическое формирование УПД и счета в PDF</p>
+                </div>
+                <div class="absolute -right-4 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+            </div>
+        </section>
+
+        <!-- Поиск и категории -->
+        <section class="p-4 pb-2 space-y-3">
+            <div class="relative">
+                <input type="text" id="search" placeholder="Поиск по наименованию или коду..." oninput="filterProducts()"
+                    class="w-full bg-white border border-slate-200 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 transition shadow-sm">
+                <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+
+            <div class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
+                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-white shadow-sm transition whitespace-nowrap">Все товары</button>
+                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 transition whitespace-nowrap">Текстиль / Одежда</button>
+                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 transition whitespace-nowrap">Гаджеты</button>
+                <button onclick="setCategory('Аксессуары')" id="cat-acc" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 transition whitespace-nowrap">Аксессуары</button>
+            </div>
+        </section>
+
+        <!-- Сетка товаров (2 колонки) -->
+        <main class="p-4 pt-1 grid grid-cols-2 gap-3 flex-grow" id="products-container">
+            <!-- Динамический рендер -->
+        </main>
+
+        <!-- Плавающий B2B-виджет сметы -->
+        <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl shadow-slate-900/50 border border-slate-700/50 opacity-0 pointer-events-none translate-y-4 transition-all duration-300 z-40">
+            <div>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider leading-none">Итого спецификация:</p>
+                <p class="text-lg font-black text-white leading-tight mt-0.5" id="total-price">0 ₽</p>
+            </div>
+            <button onclick="showCheckout()" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-bold text-xs tracking-wide shadow-lg shadow-blue-600/30 active:scale-95 transition flex items-center gap-1.5">
+                <span>Оформить заказ</span>
+                <span>→</span>
+            </button>
+        </div>
+
+        <!-- Модалка быстрого просмотра товара (B2B карточка) -->
+        <div id="product-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="w-full max-w-md bg-white rounded-t-3xl p-5 space-y-4 max-h-[85vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="product-sheet">
+                <div class="flex justify-between items-start">
+                    <span id="modal-badge" class="px-2.5 py-1 rounded-lg text-[10px] font-black bg-blue-50 text-blue-700 uppercase tracking-wider"></span>
+                    <button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center hover:bg-slate-200 transition">✕</button>
+                </div>
+                <img id="modal-img" src="" class="w-full h-48 object-cover rounded-2xl bg-slate-100 border border-slate-100">
+                <div>
+                    <h2 id="modal-title" class="text-base font-extrabold text-slate-900 leading-snug"></h2>
+                    <p id="modal-desc" class="text-xs text-slate-500 mt-1 leading-relaxed"></p>
+                </div>
+                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-3 grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                        <span class="text-slate-400 block text-[10px]">Базовая розница:</span>
+                        <span id="modal-retail" class="font-bold line-through text-slate-400 text-xs"></span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block text-[10px]">Оптовая цена партии:</span>
+                        <span id="modal-price" class="font-black text-blue-600 text-sm"></span>
+                    </div>
+                    <div class="col-span-2 pt-2 border-t border-slate-200/60 flex justify-between items-center text-[11px]">
+                        <span class="font-semibold text-slate-600">Квант закупки (MOQ):</span>
+                        <span id="modal-moq" class="font-bold text-slate-900"></span>
+                    </div>
+                </div>
+                <div id="modal-action-slot" class="pt-2"></div>
+            </div>
+        </div>
+
+        <!-- Модалка оформления официального счета -->
+        <div id="checkout-form" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="w-full max-w-md bg-white rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="checkout-sheet">
+                <div class="flex justify-between items-center pb-2 border-b border-slate-100">
+                    <div>
+                        <h2 class="text-lg font-black text-slate-900">Реквизиты поставки</h2>
+                        <p class="text-[11px] text-slate-400">Данные для официального PDF-счета</p>
+                    </div>
+                    <button onclick="hideCheckout()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold flex items-center justify-center hover:bg-slate-200 transition">✕</button>
+                </div>
+
+                <!-- Содержимое корзины (Мини-список) -->
+                <div id="checkout-cart-items" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
+
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Компания / ИП / ИНН *</label>
+                        <input type="text" id="company" placeholder="ООО «Галк-Опт», ИНН 7701234567"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition font-medium">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Город и адрес доставки *</label>
+                        <input type="text" id="city" placeholder="г. Москва, ул. Складочная 3с1"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition font-medium">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Контактное лицо и телефон *</label>
+                        <input type="text" id="contacts" placeholder="Степан, +7 (999) 000-00-00"
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition font-medium">
+                    </div>
+                </div>
+
+                <div class="bg-blue-50/80 border border-blue-100 rounded-xl p-3.5 flex justify-between items-center text-xs">
+                    <div>
+                        <span class="text-blue-900 font-bold block">Сумма к безналичному расчету:</span>
+                        <span class="text-[10px] text-blue-600">Счет будет выслан в чат моментально</span>
+                    </div>
+                    <span class="font-extrabold text-blue-700 text-base" id="checkout-total">0 ₽</span>
+                </div>
+
+                <button onclick="sendOrderToBot()" class="w-full bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white py-3.5 rounded-xl font-bold text-sm shadow-xl shadow-blue-600/30 transition flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <span>Сформировать PDF-счет</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        const products = [
+            { 
+                id: 'p1', 
+                cat: 'Одежда', 
+                title: 'Худи Oversize Premium (420g)', 
+                desc: 'Плотный футер 3-х нитка с начесом. Готовая база под брендирование. Манжеты кашкорсе, двойной капюшон.', 
+                price: 2500, 
+                moq: 10, 
+                disc_price: 2100, 
+                stock: 480, 
+                badge: 'Хит продаж', 
+                img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80' 
+            },
+            { 
+                id: 'p2', 
+                cat: 'Одежда', 
+                title: 'Кроссовки B2B Sport Runner', 
+                desc: 'Дышащая сетка, усиленная подошва EVA. Комплектация в индивидуальных коробках с фабричным штрихкодом.', 
+                price: 3200, 
+                moq: 8, 
+                disc_price: 2800, 
+                stock: 190, 
+                badge: 'Скидка 15%', 
+                img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80' 
+            },
+            { 
+                id: 'p3', 
+                cat: 'Электроника', 
+                title: 'Яндекс Станция Мини 2', 
+                desc: 'Оригинальные станции с гарантией 1 год. Подходят для перепродажи и корпоративных подарков.', 
+                price: 6000, 
+                moq: 5, 
+                disc_price: 5400, 
+                stock: 85, 
+                badge: 'Оригинал', 
+                img: 'https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=600&q=80' 
+            },
+            { 
+                id: 'p4', 
+                cat: 'Аксессуары', 
+                title: 'Рюкзак Urban Tech 25L Oxford', 
+                desc: 'Водоотталкивающая ткань 900D Oxford, защищенный отсек для ноутбука 15.6", встроенный USB-порт.', 
+                price: 1800, 
+                moq: 15, 
+                disc_price: 1450, 
+                stock: 320, 
+                badge: 'В наличии', 
+                img: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80' 
+            }
+        ];
+
+        let cart = {};
+        let currentCat = 'all';
+
+        function setCategory(cat) {
+            currentCat = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold bg-white border border-slate-200 text-slate-600 transition whitespace-nowrap';
+            });
+            const activeMap = { 'all': 'cat-all', 'Одежда': 'cat-clothes', 'Электроника': 'cat-tech', 'Аксессуары': 'cat-acc' };
+            const targetBtn = document.getElementById(activeMap[cat]);
+            if (targetBtn) {
+                targetBtn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-white shadow-sm transition whitespace-nowrap';
+            }
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const query = (document.getElementById('search').value || '').toLowerCase();
+            const filtered = products.filter(p => {
+                const matchCat = currentCat === 'all' || p.cat === currentCat;
+                const matchSearch = p.title.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
+                return matchCat && matchSearch;
+            });
+            renderProducts(filtered);
+        }
+
+        function renderProducts(items) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+
+            items.forEach(p => {
+                const qty = cart[p.id] || 0;
+                container.innerHTML += `
+                    <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition">
+                        <div onclick="openProductModal('${p.id}')" class="cursor-pointer">
+                            <div class="relative w-full aspect-[4/3] bg-slate-100 overflow-hidden">
+                                <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover">
+                                <span class="absolute top-2 left-2 bg-slate-900/85 backdrop-blur-sm text-white font-bold text-[9px] px-2 py-0.5 rounded-md tracking-wider">
+                                    ${p.badge}
+                                </span>
+                            </div>
+                            <div class="p-3 pb-1">
+                                <div class="flex items-center justify-between text-[10px] text-slate-400 font-semibold mb-1">
+                                    <span>${p.cat}</span>
+                                    <span class="text-emerald-600 font-bold">${p.stock} шт</span>
+                                </div>
+                                <h3 class="font-bold text-xs text-slate-900 leading-snug line-clamp-2">${p.title}</h3>
+                                <div class="mt-2 bg-slate-50 border border-slate-100 rounded-xl p-2">
+                                    <div class="flex items-baseline gap-1">
+                                        <span class="font-black text-blue-600 text-sm">${p.disc_price.toLocaleString('ru-RU')} ₽</span>
+                                        <span class="text-[10px] text-slate-400 line-through">${p.price} ₽</span>
+                                    </div>
+                                    <p class="text-[10px] font-semibold text-slate-500 mt-0.5">От ${p.moq} шт (опт)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3 pt-2">
+                            ${qty === 0 
+                                ? `<button onclick="updateCart('${p.id}', ${p.moq})" class="w-full py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 active:scale-95">
+                                    <span>В смету</span>
+                                    <span class="text-[10px] font-medium text-blue-500">(${p.moq} шт)</span>
+                                   </button>`
+                                : `<div class="flex items-center justify-between bg-slate-900 rounded-xl p-1 text-white shadow-inner">
+                                    <button onclick="updateCart('${p.id}', ${qty - p.moq})" class="w-7 h-7 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-bold transition active:scale-90">-</button>
+                                    <span class="text-xs font-bold tracking-tight">${qty} шт</span>
+                                    <button onclick="updateCart('${p.id}', ${qty + p.moq})" class="w-7 h-7 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-lg text-xs font-bold transition active:scale-90">+</button>
+                                   </div>`
+                            }
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openProductModal(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+            const qty = cart[p.id] || 0;
+
+            document.getElementById('modal-badge').innerText = p.badge;
+            document.getElementById('modal-img').src = p.img;
+            document.getElementById('modal-title').innerText = p.title;
+            document.getElementById('modal-desc').innerText = p.desc;
+            document.getElementById('modal-retail').innerText = `${p.price} ₽/шт`;
+            document.getElementById('modal-price').innerText = `${p.disc_price.toLocaleString('ru-RU')} ₽/шт`;
+            document.getElementById('modal-moq').innerText = `от ${p.moq} единиц`;
+
+            const slot = document.getElementById('modal-action-slot');
+            slot.innerHTML = qty === 0
+                ? `<button onclick="updateCart('${p.id}', ${p.moq}); closeProductModal();" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-blue-600/30 transition">
+                    Добавить партию (${p.moq} шт) за ${(p.moq * p.disc_price).toLocaleString('ru-RU')} ₽
+                   </button>`
+                : `<div class="flex items-center justify-between bg-slate-900 rounded-xl p-2 text-white">
+                    <button onclick="updateCart('${p.id}', ${qty - p.moq}); openProductModal('${p.id}');" class="w-10 h-10 flex items-center justify-center bg-slate-800 rounded-lg text-sm font-bold">-</button>
+                    <span class="font-bold text-sm">${qty} шт. в заказе</span>
+                    <button onclick="updateCart('${p.id}', ${qty + p.moq}); openProductModal('${p.id}');" class="w-10 h-10 flex items-center justify-center bg-slate-800 rounded-lg text-sm font-bold">+</button>
+                   </div>`;
+
+            const modal = document.getElementById('product-modal');
+            const sheet = document.getElementById('product-sheet');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            sheet.classList.remove('translate-y-full');
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            const sheet = document.getElementById('product-sheet');
+            sheet.classList.add('translate-y-full');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function updateCart(id, newQty) {
+            if (newQty <= 0) delete cart[id];
+            else cart[id] = newQty;
+            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
+            filterProducts();
+            updateCartUI();
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            for (const [id, qty] of Object.entries(cart)) {
+                const p = products.find(prod => prod.id === id);
+                if (p) {
+                    const price = qty >= p.moq ? p.disc_price : p.price;
+                    total += price * qty;
+                }
+            }
+            return total;
+        }
+
+        function updateCartUI() {
+            const total = calculateTotal();
+            const totalItems = Object.values(cart).reduce((a, b) => a + b, 0);
+            const cartBar = document.getElementById('cart-bar');
+
+            if (totalItems > 0) {
+                cartBar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                document.getElementById('total-price').innerText = total.toLocaleString('ru-RU') + ' ₽';
+            } else {
+                cartBar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            }
+        }
+
+        function showCheckout() {
+            const total = calculateTotal();
+            document.getElementById('checkout-total').innerText = total.toLocaleString('ru-RU') + ' ₽';
+
+            const itemsContainer = document.getElementById('checkout-cart-items');
+            itemsContainer.innerHTML = '';
+            for (const [id, qty] of Object.entries(cart)) {
+                const p = products.find(prod => prod.id === id);
+                if (p) {
+                    itemsContainer.innerHTML += `
+                        <div class="flex justify-between items-center bg-slate-50 border border-slate-100 rounded-xl p-2.5 text-xs">
+                            <div>
+                                <p class="font-bold text-slate-800 leading-tight">${p.title}</p>
+                                <p class="text-[10px] text-slate-400 mt-0.5">${qty} шт × ${p.disc_price} ₽</p>
+                            </div>
+                            <span class="font-extrabold text-slate-900">${(qty * p.disc_price).toLocaleString('ru-RU')} ₽</span>
+                        </div>
+                    `;
+                }
+            }
+
+            const modal = document.getElementById('checkout-form');
+            const sheet = document.getElementById('checkout-sheet');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            sheet.classList.remove('translate-y-full');
+        }
+
+        function hideCheckout() {
+            const modal = document.getElementById('checkout-form');
+            const sheet = document.getElementById('checkout-sheet');
+            sheet.classList.add('translate-y-full');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function sendOrderToBot() {
+            const company = document.getElementById('company').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const contacts = document.getElementById('contacts').value.trim();
+
+            if (!company || !city || !contacts) {
+                try { tg.showAlert("Заполните обязательные поля реквизитов!"); } catch(e) { alert("Заполните обязательные поля!"); }
+                return;
+            }
+
+            let orderItems = [];
+            let totalSum = 0;
+            for (const [id, qty] of Object.entries(cart)) {
+                const p = products.find(prod => prod.id === id);
+                if (p) {
+                    const price = qty >= p.moq ? p.disc_price : p.price;
+                    totalSum += price * qty;
+                    orderItems.push({ title: p.title, qty: qty, price: price, total: price * qty });
+                }
+            }
+
+            const payload = {
+                cart: orderItems,
+                total_sum: totalSum,
+                company: company,
+                city: city,
+                contacts: contacts
+            };
+
+            tg.sendData(JSON.stringify(payload));
+        }
+
+        setCategory('all');
+    </script>
+</body>
+</html>
