@@ -16,20 +16,22 @@
         :root {
             --bg-body: #F4F4F5;
             --bg-surface: #FFFFFF;
-            --bg-sub: #F4F4F5;
+            --bg-sub: #F0F0F2;
             --border-ui: #E4E4E7;
             --text-primary: #09090B;
-            --text-muted: #71717A;
+            --text-secondary: #3F3F46;
+            --text-muted: #52525B;
             --btn-main-bg: #09090B;
             --btn-main-text: #FAFAFA;
         }
 
         .dark {
             --bg-body: #09090B;
-            --bg-surface: #121215;
-            --bg-sub: #18181B;
-            --border-ui: #27272A;
+            --bg-surface: #141417;
+            --bg-sub: #1D1D22;
+            --border-ui: #2E2E35;
             --text-primary: #FAFAFA;
+            --text-secondary: #D4D4D8;
             --text-muted: #A1A1AA;
             --btn-main-bg: #FAFAFA;
             --btn-main-text: #09090B;
@@ -47,11 +49,11 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .smooth {
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .spring-modal {
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .surface-card {
@@ -69,6 +71,18 @@
             color: var(--btn-main-text);
         }
 
+        .text-strong {
+            color: var(--text-primary);
+        }
+
+        .text-desc {
+            color: var(--text-secondary);
+        }
+
+        .text-subtle {
+            color: var(--text-muted);
+        }
+
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
             height: 22px;
@@ -77,7 +91,7 @@
             background: var(--btn-main-bg);
             cursor: pointer;
             border: 3px solid var(--bg-surface);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             transition: transform 0.15s ease;
         }
 
@@ -116,51 +130,51 @@
     <div id="app-wrapper" class="w-full max-w-md min-h-screen relative flex flex-col pb-28">
 
         <!-- Шапка платформы -->
-        <header class="sticky top-0 z-30 bg-white/95 dark:bg-neutral-950/95 border-b border-neutral-200 dark:border-neutral-800/80 px-4 py-3 flex items-center justify-between smooth backdrop-blur-md">
+        <header class="sticky top-0 z-30 bg-white/95 dark:bg-neutral-950/95 border-b border-neutral-200 dark:border-neutral-800 px-4 py-3 flex items-center justify-between smooth backdrop-blur-md">
             <div class="flex items-center gap-2.5">
                 <div class="w-9 h-9 rounded-xl btn-primary flex items-center justify-center font-black text-sm shadow-sm tracking-tight">
                     G
                 </div>
                 <div>
                     <div class="flex items-center gap-1.5">
-                        <span class="font-extrabold text-sm tracking-tight">Galk B2B</span>
+                        <span class="font-extrabold text-sm tracking-tight text-strong">Galk B2B</span>
                         <span id="admin-indicator" class="hidden px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider bg-amber-500 text-black shadow-sm">ADMIN</span>
-                        <span class="px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">Supply</span>
+                        <span class="px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider bg-neutral-200 dark:bg-neutral-800 text-strong">Supply</span>
                     </div>
-                    <div class="flex items-center gap-1 text-[10px] font-medium text-neutral-400">
+                    <div class="flex items-center gap-1 text-[10px] font-medium text-subtle">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Хаб Южные Врата • Честный Знак
+                        Хаб Южные Врата • Онлайн
                     </div>
                 </div>
             </div>
             
             <div class="flex items-center gap-1.5">
-                <!-- Админская кнопка переключения на тикеты (видна только для ADMIN_ID) -->
-                <button onclick="openAdminTicketsModal()" id="admin-mode-toggle" class="hidden px-2.5 py-1.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold text-xs active:scale-90 smooth flex items-center gap-1">
-                    👑 <span>Тикеты</span>
+                <!-- Админская кнопка переключения на список чатов -->
+                <button onclick="openAdminThreadsModal()" id="admin-mode-toggle" class="hidden px-2.5 py-1.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold text-xs active:scale-90 smooth flex items-center gap-1">
+                    👑 <span>Чаты</span>
                 </button>
-                <button onclick="manualSync()" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Синхронизировать каталог">🔄</button>
+                <button onclick="manualSync()" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Обновить каталог">🔄</button>
                 <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Сменить тему">🌙</button>
-                <button onclick="openTrackerModal()" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Трекинг груза">🚚</button>
-                <!-- Кнопка Саппорта: клиент сразу переходит в чат Telegram -->
-                <button onclick="handleSupportClick()" class="px-3 py-1.5 rounded-xl btn-primary font-bold text-xs flex items-center gap-1 active:scale-90 smooth shadow-sm">
-                    💬 <span id="support-btn-text">Саппорт</span>
+                <button onclick="openTrackerModal()" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Трекинг">🚚</button>
+                <!-- Кнопка вызова встроенного саппорт-чата для клиента -->
+                <button onclick="openClientLiveChat()" class="px-3 py-1.5 rounded-xl btn-primary font-bold text-xs flex items-center gap-1 active:scale-90 smooth shadow-sm">
+                    💬 <span>Саппорт</span>
                 </button>
             </div>
         </header>
 
-        <!-- Живой складской тикер -->
+        <!-- Складской тикер -->
         <section id="live-warehouse-ticker" class="px-4 pt-3 no-print">
             <div class="surface-card rounded-xl px-3 py-2 flex items-center justify-between text-[11px] font-semibold">
                 <div class="flex items-center gap-2 truncate">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span id="ticker-text" class="truncate text-neutral-500">Склад Южные Врата: отгружено 42 короба (СДЭК)</span>
+                    <span id="ticker-text" class="truncate text-desc">Склад Южные Врата: отгружено 42 короба (СДЭК)</span>
                 </div>
-                <span class="font-mono text-[9px] uppercase tracking-wider text-neutral-400 pl-2">Live</span>
+                <span class="font-mono text-[9px] uppercase tracking-wider text-subtle pl-2">Live</span>
             </div>
         </section>
 
-        <!-- B2B Условия поставки -->
+        <!-- B2B Условия -->
         <section class="px-4 pt-2.5 no-print">
             <div class="surface-card rounded-2xl p-4 space-y-1.5 smooth">
                 <div class="flex items-center justify-between">
@@ -169,12 +183,12 @@
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ЭДО Диадок / СБИС
                     </span>
                 </div>
-                <h2 class="text-sm font-black tracking-tight pt-1">Оптовые коммерческие партии</h2>
-                <p class="text-[11px] text-neutral-500 leading-snug">Цены прямого импортера, маркировка «Честный Знак», подготовка под Wildberries/Ozon, гарантия брака и отсрочка платежа.</p>
+                <h2 class="text-sm font-black tracking-tight pt-1 text-strong">Оптовые коммерческие партии</h2>
+                <p class="text-[11px] text-desc leading-snug">Цены прямого импортера, сертификаты ТР ТС, фулфилмент под Wildberries/Ozon, отсрочка платежа до 30 дней.</p>
             </div>
         </section>
 
-        <!-- Выгрузка оптового прайса в чат -->
+        <!-- Выгрузка прайс-листа Excel -->
         <section id="b2b-action-bar" class="px-4 pt-2.5 no-print">
             <div class="surface-card rounded-2xl p-2.5 flex items-center justify-between">
                 <div class="flex items-center gap-2.5 pl-1">
@@ -182,8 +196,8 @@
                         XLS
                     </div>
                     <div>
-                        <p class="text-[11px] font-extrabold leading-tight">Оптовый прайс-лист</p>
-                        <p class="text-[9px] text-neutral-500 leading-tight">Все градации цен и остатки в .xlsx</p>
+                        <p class="text-[11px] font-extrabold leading-tight text-strong">Оптовый прайс-лист</p>
+                        <p class="text-[9px] text-desc leading-tight">Актуальные градации цен и остатки в .xlsx</p>
                     </div>
                 </div>
                 <button onclick="exportPriceListExcel()" class="btn-primary active:scale-95 px-3 py-1.5 rounded-xl font-bold text-xs smooth flex items-center gap-1.5">
@@ -192,17 +206,17 @@
             </div>
         </section>
 
-        <!-- Поиск, сортировка и категории -->
+        <!-- Поиск, сортировка и фильтры -->
         <section class="p-4 pb-2 space-y-2.5 no-print">
             <div class="flex gap-2">
                 <div class="relative flex-grow">
-                    <input type="text" id="search" placeholder="Поиск по наименованию, артикулу..." oninput="filterProducts()"
-                        class="w-full surface-card rounded-xl pl-9 pr-3 py-2 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white smooth font-medium">
+                    <input type="text" id="search" placeholder="Поиск по названию, артикулу..." oninput="filterProducts()"
+                        class="w-full surface-card text-strong rounded-xl pl-9 pr-3 py-2 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white smooth font-medium placeholder:text-neutral-400">
                     <svg class="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
-                <select id="sort-select" onchange="filterProducts()" class="surface-card rounded-xl px-2.5 py-2 text-[11px] font-bold outline-none">
+                <select id="sort-select" onchange="filterProducts()" class="surface-card text-strong rounded-xl px-2.5 py-2 text-[11px] font-bold outline-none">
                     <option value="default">Сортировка</option>
                     <option value="price_asc">Сначала дешевле</option>
                     <option value="margin_desc">Топ маржа на WB</option>
@@ -211,22 +225,22 @@
             </div>
 
             <div class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
-                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold btn-primary smooth whitespace-nowrap">Все позиции</button>
-                <button onclick="setCategory('favorites')" id="cat-fav" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">❤️ Избранное</button>
-                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">Одежда и мерч</button>
-                <button onclick="setCategory('Обувь')" id="cat-shoes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">Обувь</button>
-                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">Электроника</button>
-                <button onclick="setCategory('Сувениры')" id="cat-merch" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">Сувениры</button>
+                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold btn-primary smooth whitespace-nowrap">Все товары</button>
+                <button onclick="setCategory('favorites')" id="cat-fav" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">❤️ Избранное</button>
+                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">Одежда и мерч</button>
+                <button onclick="setCategory('Обувь')" id="cat-shoes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">Обувь</button>
+                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">Электроника</button>
+                <button onclick="setCategory('Сувениры')" id="cat-merch" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">Сувениры</button>
             </div>
         </section>
 
-        <!-- Сетка витрины -->
+        <!-- Сетка товаров -->
         <main class="p-4 pt-1 grid grid-cols-2 gap-3 flex-grow" id="products-container"></main>
 
-        <!-- Плавающий виджет сметы -->
+        <!-- Бар сметы -->
         <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl opacity-0 pointer-events-none translate-y-4 smooth z-40 no-print">
             <div>
-                <p class="text-[9px] opacity-60 font-bold uppercase tracking-wider">Спецификация партии:</p>
+                <p class="text-[9px] opacity-75 font-bold uppercase tracking-wider">Спецификация партии:</p>
                 <p class="text-base font-black leading-tight mt-0.5" id="total-price">0 ₽</p>
             </div>
             <button onclick="showCheckout()" class="bg-white text-neutral-950 dark:bg-neutral-900 dark:text-white px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide smooth active:scale-95 flex items-center gap-1.5 shadow-md">
@@ -235,19 +249,104 @@
             </button>
         </div>
 
-        <!-- МОДАЛКА: Карточка товара -->
+        <!-- ==================================================== -->
+        <!-- МОДАЛКА: ВСТРОЕННЫЙ LIVE-ЧАТ КЛИЕНТА (САППОРТ НА САЙТЕ) -->
+        <!-- ==================================================== -->
+        <div id="client-chat-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth">
+            <div class="w-full max-w-md surface-card rounded-t-3xl h-[88vh] flex flex-col shadow-2xl transform translate-y-full spring-modal" id="client-chat-sheet">
+                <!-- Шапка чата -->
+                <div class="p-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl btn-primary flex items-center justify-center font-bold text-xs">М</div>
+                        <div>
+                            <h3 class="text-xs font-black text-strong">Дежурный менеджер B2B</h3>
+                            <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Прямой диалог на сайте
+                            </p>
+                        </div>
+                    </div>
+                    <button onclick="closeClientLiveChat()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center active:scale-90 text-strong">✕</button>
+                </div>
+
+                <!-- Лента сообщений -->
+                <div id="client-chat-messages" class="flex-grow overflow-y-auto p-4 space-y-2.5 text-xs">
+                    <div class="text-center py-6 text-subtle text-[11px]">Загрузка переписки...</div>
+                </div>
+
+                <!-- Быстрые вопросы -->
+                <div class="px-4 py-1.5 flex gap-1.5 overflow-x-auto hide-scrollbar border-t border-neutral-200 dark:border-neutral-800">
+                    <button onclick="sendQuickMessage('Нужен расчет партии и образцы')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold text-desc whitespace-nowrap active:scale-95">📦 Запрос образцов</button>
+                    <button onclick="sendQuickMessage('Согласование отсрочки 30 дней')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold text-desc whitespace-nowrap active:scale-95">⏳ Отсрочка 30 дней</button>
+                    <button onclick="sendQuickMessage('Пришлите сертификаты ТР ТС')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold text-desc whitespace-nowrap active:scale-95">📄 Сертификаты ТР ТС</button>
+                </div>
+
+                <!-- Поле ввода -->
+                <div class="p-3 border-t border-neutral-200 dark:border-neutral-800 flex gap-2">
+                    <input type="text" id="client-msg-input" placeholder="Напишите вопрос менеджеру..." onkeydown="if(event.key==='Enter') sendClientMessage()"
+                        class="flex-grow surface-sub text-strong rounded-xl px-3.5 py-2.5 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white">
+                    <button onclick="sendClientMessage()" class="px-4 py-2.5 btn-primary rounded-xl font-bold text-xs smooth active:scale-95 shadow-md">Отправить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================================================== -->
+        <!-- МОДАЛКА: АДМИН-ПАНЕЛЬ ОБРАЩЕНИЙ (СПИСОК ЧАТОВ И ОТВЕТ) -->
+        <!-- ==================================================== -->
+        <div id="admin-chat-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth">
+            <div class="w-full max-w-md surface-card rounded-t-3xl h-[88vh] flex flex-col shadow-2xl transform translate-y-full spring-modal" id="admin-chat-sheet">
+                
+                <!-- Экран 1: Список тредов клиентов -->
+                <div id="admin-threads-view" class="flex flex-col h-full">
+                    <div class="p-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+                        <div>
+                            <h3 class="text-xs font-black text-strong">Входящие чаты с клиентами</h3>
+                            <p class="text-[10px] text-desc">Нажмите на диалог, чтобы ответить в реальном времени</p>
+                        </div>
+                        <button onclick="closeAdminThreadsModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center text-strong">✕</button>
+                    </div>
+                    <div id="admin-threads-list" class="flex-grow overflow-y-auto p-3 space-y-2 text-xs">
+                        <p class="text-center py-6 text-subtle">Загрузка диалогов...</p>
+                    </div>
+                </div>
+
+                <!-- Экран 2: Чат менеджера с конкретным клиентом -->
+                <div id="admin-active-chat-view" class="hidden flex-col h-full">
+                    <div class="p-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <button onclick="backToThreadsList()" class="px-2.5 py-1 surface-sub rounded-lg font-bold text-xs text-strong active:scale-95">← Чаты</button>
+                            <div>
+                                <h3 id="admin-chat-client-name" class="text-xs font-black text-strong">Клиент</h3>
+                                <p id="admin-chat-client-user" class="text-[10px] text-subtle">@username</p>
+                            </div>
+                        </div>
+                        <button onclick="closeAdminThreadsModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center text-strong">✕</button>
+                    </div>
+
+                    <div id="admin-chat-messages" class="flex-grow overflow-y-auto p-4 space-y-2.5 text-xs"></div>
+
+                    <div class="p-3 border-t border-neutral-200 dark:border-neutral-800 flex gap-2">
+                        <input type="text" id="admin-msg-input" placeholder="Ответ менеджера..." onkeydown="if(event.key==='Enter') sendAdminMessage()"
+                            class="flex-grow surface-sub text-strong rounded-xl px-3.5 py-2.5 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white">
+                        <button onclick="sendAdminMessage()" class="px-4 py-2.5 btn-primary rounded-xl font-bold text-xs smooth active:scale-95 shadow-md">Ответить</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- МОДАЛКА: Карточка товара со всеми табами -->
         <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
             <div class="w-full max-w-md surface-card rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full spring-modal" id="product-sheet">
                 
                 <div class="flex justify-between items-start">
                     <div class="flex items-center gap-2">
-                        <span id="modal-badge" class="px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200"></span>
+                        <span id="modal-badge" class="px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-neutral-200 dark:bg-neutral-800 text-strong"></span>
                         <span id="modal-stock" class="px-2 py-0.5 rounded-lg text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 flex items-center gap-1">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                             <span id="modal-stock-text">В наличии</span>
                         </span>
                     </div>
-                    <button onclick="closeProductModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center smooth active:scale-90">✕</button>
+                    <button onclick="closeProductModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center smooth active:scale-90 text-strong">✕</button>
                 </div>
 
                 <div class="space-y-2">
@@ -259,15 +358,15 @@
                 </div>
 
                 <div>
-                    <h2 id="modal-title" class="text-base font-extrabold leading-snug"></h2>
-                    <p id="modal-desc" class="text-xs text-neutral-500 mt-1 leading-relaxed"></p>
+                    <h2 id="modal-title" class="text-base font-extrabold leading-snug text-strong"></h2>
+                    <p id="modal-desc" class="text-xs text-desc mt-1 leading-relaxed"></p>
                 </div>
 
-                <!-- Прогресс оптовой шкалы цен -->
+                <!-- Прогресс оптовой скидки -->
                 <div class="surface-sub rounded-xl p-3 space-y-1.5" id="tier-progress-box">
                     <div class="flex justify-between text-[11px] font-bold">
-                        <span>Тиражная шкала цен:</span>
-                        <span class="text-neutral-500" id="tier-discount-hint">Добавьте объем</span>
+                        <span class="text-strong">Тиражная шкала цен:</span>
+                        <span class="text-desc font-semibold" id="tier-discount-hint">Добавьте объем</span>
                     </div>
                     <div class="w-full bg-neutral-200 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
                         <div id="tier-progress-bar" class="btn-primary h-full rounded-full smooth" style="width: 30%"></div>
@@ -276,12 +375,12 @@
 
                 <!-- Табы карточки -->
                 <div class="border-b border-neutral-200 dark:border-neutral-800 flex gap-3 text-xs font-bold overflow-x-auto hide-scrollbar">
-                    <button onclick="switchTab('pricing')" id="tab-pricing-btn" class="pb-2 border-b-2 border-neutral-900 dark:border-white font-bold whitespace-nowrap">Цены оптом</button>
-                    <button onclick="switchTab('roi')" id="tab-roi-btn" class="pb-2 border-b-2 border-transparent text-neutral-400 font-bold whitespace-nowrap">💰 Калькулятор WB</button>
-                    <button onclick="switchTab('matrix')" id="tab-matrix-btn" class="pb-2 border-b-2 border-transparent text-neutral-400 font-bold whitespace-nowrap">Ростовка</button>
-                    <button onclick="switchTab('branding')" id="tab-branding-btn" class="pb-2 border-b-2 border-transparent text-neutral-400 font-bold whitespace-nowrap">Брендинг</button>
-                    <button onclick="switchTab('fulfillment')" id="tab-fulfillment-btn" class="pb-2 border-b-2 border-transparent text-neutral-400 font-bold whitespace-nowrap">Фулфилмент</button>
-                    <button onclick="switchTab('warehouses')" id="tab-warehouses-btn" class="pb-2 border-b-2 border-transparent text-neutral-400 font-bold whitespace-nowrap">Склады</button>
+                    <button onclick="switchTab('pricing')" id="tab-pricing-btn" class="pb-2 border-b-2 border-neutral-900 dark:border-white font-bold whitespace-nowrap text-strong">Цены оптом</button>
+                    <button onclick="switchTab('roi')" id="tab-roi-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">💰 Калькулятор WB</button>
+                    <button onclick="switchTab('matrix')" id="tab-matrix-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">Ростовка</button>
+                    <button onclick="switchTab('branding')" id="tab-branding-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">Брендинг</button>
+                    <button onclick="switchTab('fulfillment')" id="tab-fulfillment-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">Фулфилмент</button>
+                    <button onclick="switchTab('warehouses')" id="tab-warehouses-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">Склады</button>
                 </div>
 
                 <div id="tab-pricing" class="space-y-2 text-xs">
@@ -291,17 +390,17 @@
                 <div id="tab-roi" class="hidden space-y-3 text-xs">
                     <div class="surface-sub rounded-2xl p-4 space-y-3">
                         <div class="flex justify-between items-center">
-                            <label class="font-bold text-xs">Планируемая розница на WB (₽):</label>
-                            <input type="number" id="roi-retail-price" oninput="calculateSellerROI()" class="w-24 surface-card text-center font-black rounded-xl py-1.5 outline-none text-sm">
+                            <label class="font-bold text-xs text-strong">Планируемая розница на WB (₽):</label>
+                            <input type="number" id="roi-retail-price" oninput="calculateSellerROI()" class="w-24 surface-card text-center font-black rounded-xl py-1.5 outline-none text-sm text-strong">
                         </div>
                         <div class="grid grid-cols-2 gap-2 pt-1 text-center">
                             <div class="surface-card p-2.5 rounded-xl">
-                                <span class="text-[10px] text-neutral-400 font-bold block uppercase">Чистая маржа</span>
+                                <span class="text-[10px] text-subtle font-bold block uppercase">Чистая маржа</span>
                                 <span class="text-sm font-black text-emerald-600 dark:text-emerald-400" id="roi-net-profit">0 ₽</span>
                             </div>
                             <div class="surface-card p-2.5 rounded-xl">
-                                <span class="text-[10px] text-neutral-400 font-bold block uppercase">Рентабельность ROI</span>
-                                <span class="text-sm font-black" id="roi-percent">+0%</span>
+                                <span class="text-[10px] text-subtle font-bold block uppercase">Рентабельность ROI</span>
+                                <span class="text-sm font-black text-strong" id="roi-percent">+0%</span>
                             </div>
                         </div>
                     </div>
@@ -309,14 +408,14 @@
 
                 <div id="tab-matrix" class="hidden space-y-2 text-xs">
                     <div class="surface-sub rounded-xl p-3 space-y-2.5">
-                        <div class="flex justify-between items-center text-[11px] font-bold text-neutral-400">
+                        <div class="flex justify-between items-center text-[11px] font-bold text-subtle">
                             <span>Размер</span>
                             <span>В коробе</span>
                             <span>Коробок</span>
                             <span>Итого</span>
                         </div>
                         <div id="matrix-rows-container" class="space-y-1.5"></div>
-                        <div class="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex justify-between font-black text-xs">
+                        <div class="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex justify-between font-black text-xs text-strong">
                             <span>Всего по ростовке:</span>
                             <span id="matrix-total-qty">0 шт</span>
                         </div>
@@ -326,46 +425,46 @@
                 <div id="tab-branding" class="hidden space-y-2.5 text-xs">
                     <div class="surface-sub rounded-xl p-3.5 space-y-2">
                         <div class="flex items-center justify-between">
-                            <label class="font-bold flex items-center gap-2 cursor-pointer">
+                            <label class="font-bold flex items-center gap-2 cursor-pointer text-strong">
                                 <input type="checkbox" id="branding-checkbox" onchange="toggleBranding(this.checked)" class="w-4 h-4 rounded">
                                 <span>Нанесение логотипа (DTF/Шелкография)</span>
                             </label>
-                            <span class="font-black" id="branding-price-tag">+ 250 ₽/шт</span>
+                            <span class="font-black text-strong" id="branding-price-tag">+ 250 ₽/шт</span>
                         </div>
-                        <p class="text-[11px] text-neutral-500">Брендирование продукции или фирменной упаковки под ваш бренд.</p>
+                        <p class="text-[11px] text-desc">Брендирование продукции или фирменной упаковки под ваш бренд.</p>
                     </div>
                 </div>
 
                 <div id="tab-fulfillment" class="hidden space-y-2.5 text-xs">
                     <div class="surface-sub rounded-xl p-3.5 space-y-2">
                         <div class="flex items-center justify-between">
-                            <label class="font-bold flex items-center gap-2 cursor-pointer">
+                            <label class="font-bold flex items-center gap-2 cursor-pointer text-strong">
                                 <input type="checkbox" id="fulfillment-checkbox" onchange="toggleFulfillment(this.checked)" class="w-4 h-4 rounded">
                                 <span>Подготовка под FBO/FBS (WB/Ozon)</span>
                             </label>
-                            <span class="font-black">+ 45 ₽/шт</span>
+                            <span class="font-black text-strong">+ 45 ₽/шт</span>
                         </div>
-                        <ul class="text-[11px] text-neutral-500 space-y-1 pl-4 list-disc">
+                        <ul class="text-[11px] text-desc space-y-1 pl-4 list-disc">
                             <li>Маркировка «Честный Знак» + этикетка WB</li>
                             <li>Индивидуальная фасовка в zip-lock пакеты</li>
-                            <li>Формирование коробов и паллет по регламенту маркетплейса</li>
+                            <li>Формирование коробов и паллет под склад</li>
                         </ul>
                     </div>
                 </div>
 
                 <div id="tab-warehouses" class="hidden space-y-2 text-xs">
-                    <div class="surface-sub rounded-xl p-3 space-y-2 text-[11px] text-neutral-500">
+                    <div class="surface-sub rounded-xl p-3 space-y-2 text-[11px]">
                         <div class="flex justify-between items-center">
-                            <span>Склад Москва (Южные Врата):</span>
+                            <span class="text-desc">Склад Москва (Южные Врата):</span>
                             <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (320 шт)</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span>Склад Санкт-Петербург:</span>
+                            <span class="text-desc">Склад Санкт-Петербург:</span>
                             <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (160 шт)</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span>Транзит с фабрики:</span>
-                            <span class="font-bold text-neutral-900 dark:text-white">Поступление через 4 дня (600 шт)</span>
+                            <span class="text-desc">Транзит с фабрики:</span>
+                            <span class="font-bold text-strong">Поступление через 4 дня (600 шт)</span>
                         </div>
                     </div>
                 </div>
@@ -374,31 +473,31 @@
                 <div class="surface-sub rounded-2xl p-4 space-y-3">
                     <div class="flex justify-between items-center">
                         <div>
-                            <span class="text-xs font-bold block">Размер партии:</span>
-                            <span class="text-[10px] text-neutral-400" id="box-quantity-hint">Квант короба: 10 шт</span>
+                            <span class="text-xs font-bold block text-strong">Размер партии:</span>
+                            <span class="text-[10px] text-subtle" id="box-quantity-hint">Квант короба: 10 шт</span>
                         </div>
                         <div class="flex items-center gap-1.5 surface-card px-3 py-1.5 rounded-xl shadow-sm">
-                            <input type="number" id="slider-number-input" class="w-16 text-center font-black text-sm outline-none bg-transparent" oninput="onNumberInputChange(this.value)">
-                            <span class="text-xs font-bold text-neutral-400">шт.</span>
+                            <input type="number" id="slider-number-input" class="w-16 text-center font-black text-sm outline-none bg-transparent text-strong" oninput="onNumberInputChange(this.value)">
+                            <span class="text-xs font-bold text-subtle">шт.</span>
                         </div>
                     </div>
 
                     <input type="range" id="modal-slider" class="w-full h-2 rounded-lg appearance-none outline-none cursor-pointer bg-neutral-200 dark:bg-neutral-800" oninput="onSliderChange(this.value)">
                     <div class="flex gap-2 pt-1 overflow-x-auto hide-scrollbar" id="quick-preset-chips"></div>
 
-                    <div id="logistics-specs-box" class="surface-card rounded-xl p-2.5 flex items-center justify-between text-[11px] text-neutral-500 font-semibold">
+                    <div id="logistics-specs-box" class="surface-card rounded-xl p-2.5 flex items-center justify-between text-[11px] text-desc font-semibold">
                         <div class="flex items-center gap-1.5">
                             <span>📦</span>
                             <span id="logistics-boxes-text">1 короб</span>
                             <span>•</span>
                             <span id="logistics-weight-text">7.5 кг</span>
                         </div>
-                        <span id="logistics-vehicle-badge" class="px-2 py-0.5 rounded-md surface-sub font-bold text-[10px]">СДЭК / Курьер</span>
+                        <span id="logistics-vehicle-badge" class="px-2 py-0.5 rounded-md surface-sub font-bold text-[10px] text-strong">СДЭК / Курьер</span>
                     </div>
 
                     <div class="flex justify-between items-center text-[11px] font-semibold pt-1 border-t border-neutral-200 dark:border-neutral-800">
-                        <span>Себестоимость/ед: <b id="tier-unit-price" class="font-bold text-neutral-900 dark:text-white"></b></span>
-                        <span>Итого: <b id="slider-total-price" class="font-black text-sm text-neutral-900 dark:text-white"></b></span>
+                        <span class="text-desc">Себестоимость/ед: <b id="tier-unit-price" class="font-bold text-strong"></b></span>
+                        <span class="text-desc">Итого: <b id="slider-total-price" class="font-black text-sm text-strong"></b></span>
                     </div>
                 </div>
 
@@ -406,42 +505,26 @@
             </div>
         </div>
 
-        <!-- МОДАЛКА: Трекинг -->
+        <!-- МОДАЛКА: Трекинг груза -->
         <div id="tracker-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
             <div class="w-full max-w-md surface-card rounded-t-3xl p-5 space-y-4 shadow-2xl transform translate-y-full spring-modal" id="tracker-sheet">
                 <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
                     <div>
-                        <h2 class="text-base font-black">Отслеживание груза</h2>
-                        <p class="text-[11px] text-neutral-400">Статус комплектации и транспортировки</p>
+                        <h2 class="text-base font-black text-strong">Отслеживание груза</h2>
+                        <p class="text-[11px] text-desc">Статус комплектации и транспортировки</p>
                     </div>
-                    <button onclick="closeTrackerModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
+                    <button onclick="closeTrackerModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center text-strong">✕</button>
                 </div>
                 <div class="flex gap-2">
-                    <input type="text" id="track-input" placeholder="Номер счета / накладной" class="flex-grow surface-sub rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none">
+                    <input type="text" id="track-input" placeholder="Номер счета / накладной" class="flex-grow surface-sub rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none text-strong">
                     <button onclick="checkOrderStatus()" class="px-4 py-2.5 btn-primary rounded-xl font-bold text-xs smooth active:scale-95">Найти</button>
                 </div>
                 <div id="tracker-result" class="hidden surface-sub rounded-2xl p-4 space-y-2 text-xs">
                     <div class="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-2">
-                        <span class="font-bold" id="track-id-display">Счет #384643</span>
+                        <span class="font-bold text-strong" id="track-id-display">Счет #384643</span>
                         <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-bold text-[10px]">В пути</span>
                     </div>
-                    <p class="text-[11px] text-neutral-400">Партия принята экспедитором, плановый срок доставки по РФ: 2–4 рабочих дня.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- МОДАЛКА: Панель тикетов Саппорта (ДЛЯ АДМИНИСТРАТОРА) -->
-        <div id="admin-tickets-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
-            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto transform translate-y-full spring-modal" id="admin-tickets-sheet">
-                <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                    <div>
-                        <h2 class="text-sm font-black">Входящие обращения в Саппорт</h2>
-                        <p class="text-[11px] text-neutral-400">Список байеров, запросивших помощь</p>
-                    </div>
-                    <button onclick="closeAdminTicketsModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
-                </div>
-                <div id="tickets-list-container" class="space-y-2 text-xs">
-                    <p class="text-center py-6 text-neutral-400">Загрузка обращений...</p>
+                    <p class="text-[11px] text-desc">Партия принята экспедитором, плановый срок доставки по РФ: 2–4 рабочих дня.</p>
                 </div>
             </div>
         </div>
@@ -451,24 +534,24 @@
             <div class="w-full max-w-md surface-card rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full spring-modal" id="checkout-sheet">
                 <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
                     <div>
-                        <h2 class="text-lg font-black">Спецификация поставки</h2>
-                        <p class="text-[11px] text-neutral-400">Формирование официального счета на оплату</p>
+                        <h2 class="text-lg font-black text-strong">Спецификация поставки</h2>
+                        <p class="text-[11px] text-desc">Формирование официального счета на оплату</p>
                     </div>
                     <div class="flex items-center gap-2 no-print">
-                        <button onclick="printQuotation()" class="text-xs font-bold surface-sub px-2.5 py-1 rounded-lg">📄 КП</button>
+                        <button onclick="printQuotation()" class="text-xs font-bold surface-sub px-2.5 py-1 rounded-lg text-strong">📄 КП</button>
                         <button onclick="clearCart()" class="text-xs font-bold text-rose-500 bg-rose-500/10 px-2.5 py-1 rounded-lg">Очистить</button>
-                        <button onclick="hideCheckout()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
+                        <button onclick="hideCheckout()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center text-strong">✕</button>
                     </div>
                 </div>
 
                 <div class="surface-sub p-1 rounded-xl flex text-xs font-bold no-print">
                     <button onclick="setVatMode(false)" id="vat-none-btn" class="flex-1 py-1.5 rounded-lg btn-primary smooth">Без НДС (УСН)</button>
-                    <button onclick="setVatMode(true)" id="vat-with-btn" class="flex-1 py-1.5 rounded-lg text-neutral-400 smooth">С НДС 20% (ОСНО)</button>
+                    <button onclick="setVatMode(true)" id="vat-with-btn" class="flex-1 py-1.5 rounded-lg text-desc smooth">С НДС 20% (ОСНО)</button>
                 </div>
 
                 <div class="no-print space-y-1">
-                    <label class="block font-bold text-xs text-neutral-400">Условия взаиморасчетов:</label>
-                    <select id="payment-terms" class="w-full surface-sub rounded-xl px-3 py-2.5 text-xs font-semibold outline-none">
+                    <label class="block font-bold text-xs text-desc">Условия взаиморасчетов:</label>
+                    <select id="payment-terms" class="w-full surface-sub text-strong rounded-xl px-3 py-2.5 text-xs font-semibold outline-none">
                         <option value="100% предоплата">100% Предоплата по счету (Скидка 2%)</option>
                         <option value="50/50 производство">50% Аванс / 50% Перед отгрузкой</option>
                         <option value="Отсрочка 30 дней">Отсрочка платежа 30 дней (Факторинг)</option>
@@ -479,34 +562,34 @@
 
                 <div class="space-y-3 text-xs">
                     <div class="no-print">
-                        <label class="block font-bold text-neutral-400 mb-1">ИНН компании (ЕГРЮЛ)</label>
+                        <label class="block font-bold text-desc mb-1">ИНН компании (ЕГРЮЛ)</label>
                         <div class="flex gap-2">
                             <input type="text" id="inn-lookup-input" placeholder="10 или 12 цифр ИНН" maxlength="12"
-                                class="flex-grow surface-sub rounded-xl px-3.5 py-2.5 outline-none font-medium">
-                            <button type="button" id="inn-lookup-btn" onclick="autoFillByInn()" class="px-3 py-2.5 surface-card rounded-xl font-bold smooth active:scale-95">
+                                class="flex-grow surface-sub text-strong rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            <button type="button" id="inn-lookup-btn" onclick="autoFillByInn()" class="px-3 py-2.5 surface-card text-strong rounded-xl font-bold smooth active:scale-95">
                                 <span id="inn-btn-text">Найти</span>
                             </button>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block font-bold text-neutral-400 mb-1">Компания / ИП / Реквизиты *</label>
+                        <label class="block font-bold text-desc mb-1">Компания / ИП / Реквизиты *</label>
                         <input type="text" id="company" placeholder="ООО «Галк-Опт», ИНН 7701234567"
-                            class="w-full surface-sub rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            class="w-full surface-sub text-strong rounded-xl px-3.5 py-2.5 outline-none font-medium">
                     </div>
                     <div>
-                        <label class="block font-bold text-neutral-400 mb-1">Город и терминал ТК *</label>
+                        <label class="block font-bold text-desc mb-1">Город и терминал ТК *</label>
                         <input type="text" id="city" placeholder="г. Москва, терминал СДЭК ул. Ленина 12"
-                            class="w-full surface-sub rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            class="w-full surface-sub text-strong rounded-xl px-3.5 py-2.5 outline-none font-medium">
                     </div>
                     <div>
-                        <label class="block font-bold text-neutral-400 mb-1">ФИО и телефон закупщика *</label>
+                        <label class="block font-bold text-desc mb-1">ФИО и телефон закупщика *</label>
                         <input type="text" id="contacts" placeholder="Степан, +7 (999) 000-00-00"
-                            class="w-full surface-sub rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            class="w-full surface-sub text-strong rounded-xl px-3.5 py-2.5 outline-none font-medium">
                     </div>
                     <div class="no-print">
-                        <label class="block font-bold text-neutral-400 mb-1">Транспортная компания</label>
-                        <select id="tk-choice" class="w-full surface-sub rounded-xl px-3 py-2.5 font-medium outline-none">
+                        <label class="block font-bold text-desc mb-1">Транспортная компания</label>
+                        <select id="tk-choice" class="w-full surface-sub text-strong rounded-xl px-3 py-2.5 font-medium outline-none">
                             <option value="СДЭК">СДЭК (Курьер / Склад)</option>
                             <option value="Деловые Линии">Деловые Линии (Паллетная доставка)</option>
                             <option value="ПЭК">ПЭК (Сборный груз)</option>
@@ -517,10 +600,10 @@
 
                 <div class="surface-sub rounded-2xl p-3.5 flex justify-between items-center text-xs">
                     <div>
-                        <span class="font-bold block">Итого к безналичной оплате:</span>
-                        <span class="text-[10px] text-neutral-400" id="vat-description-label">Без НДС • Счет выставляется в Telegram</span>
+                        <span class="font-bold block text-strong">Итого к безналичной оплате:</span>
+                        <span class="text-[10px] text-subtle" id="vat-description-label">Без НДС • Счет выставляется в Telegram</span>
                     </div>
-                    <span class="font-black text-base" id="checkout-total">0 ₽</span>
+                    <span class="font-black text-base text-strong" id="checkout-total">0 ₽</span>
                 </div>
 
                 <button onclick="sendOrderToBot()" class="w-full btn-primary py-3.5 rounded-xl font-bold text-sm smooth active:scale-[0.98] flex items-center justify-center gap-2 no-print shadow-xl">
@@ -532,18 +615,15 @@
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        try {
-            tg.expand();
-            tg.ready();
-        } catch(e) {}
+        const tg = window.Telegram?.WebApp;
+        try { tg.expand(); tg.ready(); } catch(e) {}
 
         const ADMIN_TELEGRAM_ID = 8125122124;
-        const MANAGER_TELEGRAM_USERNAME = "rewortoo666";
-        const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 0;
-        const isAdmin = (currentUserId === ADMIN_TELEGRAM_ID || window.location.hash.includes("admin"));
+        const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 8125122124;
+        const currentUserName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Степан";
+        const currentUserHandle = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? (tg.initDataUnsafe.user.username || "") : "";
 
-        // Постоянный адрес VPS
+        const isAdmin = (currentUserId === ADMIN_TELEGRAM_ID || window.location.hash.includes("admin"));
         const API_SERVER_URL = "https://galk-b2b.duckdns.org";
 
         function resolveImageUrl(url) {
@@ -553,7 +633,7 @@
             return `${API_SERVER_URL}${clean}`;
         }
 
-        // Встроенный каталог — моментальный рендер
+        // Встроенный базовый каталог (показывается мгновенно без белых экранов)
         const defaultProducts = [
             { 
                 id: 'p_watch_custom', cat: 'Электроника', title: 'Apple Watch Ultra 2 Black', desc: 'Фабричный оригинал. Премиальный корпус, полный комплект под перепродажу.', 
@@ -608,7 +688,12 @@
         let isFulfillmentIncluded = false;
         let isVatEnabled = false;
 
-        // Тема Monochrome (White & Black)
+        // Включение админских кнопок
+        if (isAdmin) {
+            document.getElementById('admin-mode-toggle').classList.remove('hidden');
+            document.getElementById('admin-indicator').classList.remove('hidden');
+        }
+
         let isDarkMode = localStorage.getItem('galk_theme_mode') === 'dark';
         function applyTheme(dark) {
             isDarkMode = dark;
@@ -630,80 +715,210 @@
 
         function showToast(text, icon = '⚡️') {
             const toast = document.getElementById('toast');
-            if (!toast) return;
             document.getElementById('toast-text').innerText = text;
             document.getElementById('toast-icon').innerText = icon;
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-            }, 2400);
+            setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2'), 2400);
         }
 
-        // 1. ЛОГИКА САППОРТА И ПЕРЕКЛЮЧЕНИЯ АДМИНКИ:
-        function handleSupportClick() {
-            if (isAdmin) {
-                openAdminTicketsModal();
-            } else {
-                // КЛИЕНТ: мгновенно открывается чат Telegram с менеджером
-                tg.openTelegramLink(`https://t.me/${MANAGER_TELEGRAM_USERNAME}`);
-            }
+        // ====================================================
+        // ЛОГИКА 1: ВСТРОЕННЫЙ LIVE-ЧАТ ДЛЯ КЛИЕНТА
+        // ====================================================
+        let clientPollTimer = null;
+
+        function openClientLiveChat() {
+            document.getElementById('client-chat-modal').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('client-chat-sheet').classList.remove('translate-y-full');
+            loadClientMessages();
+            clientPollTimer = setInterval(loadClientMessages, 2000);
+            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
         }
 
-        // Активация админских функций
-        if (isAdmin) {
-            document.getElementById('admin-mode-toggle').classList.remove('hidden');
-            document.getElementById('admin-indicator').classList.remove('hidden');
-            document.getElementById('support-btn-text').innerText = "Тикеты";
+        function closeClientLiveChat() {
+            document.getElementById('client-chat-sheet').classList.add('translate-y-full');
+            document.getElementById('client-chat-modal').classList.add('opacity-0', 'pointer-events-none');
+            if (clientPollTimer) clearInterval(clientPollTimer);
         }
 
-        async function openAdminTicketsModal() {
-            const modal = document.getElementById('admin-tickets-modal');
-            const sheet = document.getElementById('admin-tickets-sheet');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('translate-y-full');
-
-            const container = document.getElementById('tickets-list-container');
-            container.innerHTML = `<p class="text-center py-6 text-neutral-400">Загрузка обращений...</p>`;
-
+        async function loadClientMessages() {
             try {
-                const res = await fetch(`${API_SERVER_URL}/api/support_tickets?t=${Date.now()}`);
-                const tickets = await res.json();
+                const res = await fetch(`${API_SERVER_URL}/api/chat/messages?user_id=${currentUserId}&t=${Date.now()}`);
+                const data = await res.json();
+                const container = document.getElementById('client-chat-messages');
 
-                if (!tickets || tickets.length === 0) {
-                    container.innerHTML = `<p class="text-center py-8 text-neutral-400">Новых обращений нет 🎉</p>`;
+                if (!data.messages || data.messages.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8 space-y-1">
+                            <p class="font-bold text-strong">Диалог с отделом продаж</p>
+                            <p class="text-[11px] text-desc">Задайте вопрос по наличию, партии или запросите образцы</p>
+                        </div>
+                    `;
                     return;
                 }
 
-                container.innerHTML = tickets.map(t => `
-                    <div class="surface-sub p-3 rounded-2xl space-y-1.5 border border-neutral-200 dark:border-neutral-800">
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold">${t.name} ${t.username ? '(@' + t.username + ')' : ''}</span>
-                            <span class="text-[10px] text-neutral-400">${t.date || ''}</span>
+                container.innerHTML = data.messages.map(m => {
+                    const isMe = m.sender === 'client';
+                    return `
+                        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+                            <div class="max-w-[82%] p-3 rounded-2xl ${isMe ? 'btn-primary' : 'surface-sub text-strong'} shadow-sm">
+                                <p class="text-xs leading-relaxed font-medium">${m.text}</p>
+                            </div>
+                            <span class="text-[9px] text-subtle mt-0.5 px-1 font-mono">${m.time}</span>
                         </div>
-                        <p class="text-[11px] text-neutral-500">${t.message}</p>
-                        <button onclick="openClientChat('${t.username}', '${t.user_id}')" class="w-full mt-1 py-2 btn-primary rounded-xl font-bold text-[11px] active:scale-95 smooth flex items-center justify-center gap-1.5 shadow-sm">
-                            💬 Открыть диалог в Telegram
-                        </button>
+                    `;
+                }).join('');
+                container.scrollTop = container.scrollHeight;
+            } catch(e) {}
+        }
+
+        async function sendClientMessage() {
+            const input = document.getElementById('client-msg-input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+
+            try {
+                await fetch(`${API_SERVER_URL}/api/chat/send`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: currentUserId,
+                        sender: 'client',
+                        name: currentUserName,
+                        username: currentUserHandle,
+                        text: text
+                    })
+                });
+                loadClientMessages();
+                try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+            } catch(e) {
+                showToast("Ошибка отправки", "⚠️");
+            }
+        }
+
+        function sendQuickMessage(txt) {
+            document.getElementById('client-msg-input').value = txt;
+            sendClientMessage();
+        }
+
+        // ====================================================
+        // ЛОГИКА 2: АДМИН-ПАНЕЛЬ ОБРАЩЕНИЙ (СПИСОК ЧАТОВ И ОТВЕТ)
+        // ====================================================
+        let adminPollTimer = null;
+        let activeAdminUserId = null;
+
+        function openAdminThreadsModal() {
+            document.getElementById('admin-chat-modal').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('admin-chat-sheet').classList.remove('translate-y-full');
+            backToThreadsList();
+            loadAdminThreads();
+            adminPollTimer = setInterval(loadAdminThreads, 3000);
+            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+        }
+
+        function closeAdminThreadsModal() {
+            document.getElementById('admin-chat-sheet').classList.add('translate-y-full');
+            document.getElementById('admin-chat-modal').classList.add('opacity-0', 'pointer-events-none');
+            if (adminPollTimer) clearInterval(adminPollTimer);
+        }
+
+        async function loadAdminThreads() {
+            if (activeAdminUserId) return;
+            try {
+                const res = await fetch(`${API_SERVER_URL}/api/chat/threads?t=${Date.now()}`);
+                const threads = await res.json();
+                const container = document.getElementById('admin-threads-list');
+
+                if (!threads || threads.length === 0) {
+                    container.innerHTML = `<p class="text-center py-10 text-subtle">Нет активных обращений 🎉</p>`;
+                    return;
+                }
+
+                container.innerHTML = threads.map(t => `
+                    <div onclick="openAdminChatWithUser('${t.user_id}', '${t.name}', '${t.username}')" class="surface-sub p-3.5 rounded-2xl cursor-pointer hover:border-black dark:hover:border-white smooth space-y-1">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-strong text-xs">${t.name} ${t.username ? '(@' + t.username + ')' : ''}</span>
+                            <span class="text-[10px] text-subtle font-mono">${t.last_time ? t.last_time.slice(11, 16) : ''}</span>
+                        </div>
+                        <p class="text-[11px] text-desc line-clamp-1">${t.last_message || 'Без текста'}</p>
                     </div>
                 `).join('');
+            } catch(e) {}
+        }
+
+        function openAdminChatWithUser(uid, name, username) {
+            activeAdminUserId = uid;
+            document.getElementById('admin-threads-view').classList.add('hidden');
+            document.getElementById('admin-active-chat-view').classList.remove('hidden');
+            document.getElementById('admin-active-chat-view').classList.add('flex');
+
+            document.getElementById('admin-chat-client-name').innerText = name || 'Клиент';
+            document.getElementById('admin-chat-client-user').innerText = username ? `@${username}` : `ID: ${uid}`;
+
+            loadAdminMessages();
+            if (adminPollTimer) clearInterval(adminPollTimer);
+            adminPollTimer = setInterval(loadAdminMessages, 2000);
+        }
+
+        function backToThreadsList() {
+            activeAdminUserId = null;
+            document.getElementById('admin-active-chat-view').classList.add('hidden');
+            document.getElementById('admin-active-chat-view').classList.remove('flex');
+            document.getElementById('admin-threads-view').classList.remove('hidden');
+            loadAdminThreads();
+            if (adminPollTimer) clearInterval(adminPollTimer);
+            adminPollTimer = setInterval(loadAdminThreads, 3000);
+        }
+
+        async function loadAdminMessages() {
+            if (!activeAdminUserId) return;
+            try {
+                const res = await fetch(`${API_SERVER_URL}/api/chat/messages?user_id=${activeAdminUserId}&t=${Date.now()}`);
+                const data = await res.json();
+                const container = document.getElementById('admin-chat-messages');
+
+                container.innerHTML = (data.messages || []).map(m => {
+                    const isManager = m.sender === 'manager';
+                    return `
+                        <div class="flex flex-col ${isManager ? 'items-end' : 'items-start'}">
+                            <div class="max-w-[82%] p-3 rounded-2xl ${isManager ? 'btn-primary' : 'surface-sub text-strong'} shadow-sm">
+                                <p class="text-xs leading-relaxed font-medium">${m.text}</p>
+                            </div>
+                            <span class="text-[9px] text-subtle mt-0.5 px-1 font-mono">${isManager ? 'Вы (Менеджер)' : 'Клиент'} • ${m.time}</span>
+                        </div>
+                    `;
+                }).join('');
+                container.scrollTop = container.scrollHeight;
+            } catch(e) {}
+        }
+
+        async function sendAdminMessage() {
+            const input = document.getElementById('admin-msg-input');
+            const text = input.value.trim();
+            if (!text || !activeAdminUserId) return;
+            input.value = '';
+
+            try {
+                await fetch(`${API_SERVER_URL}/api/chat/send`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: activeAdminUserId,
+                        sender: 'manager',
+                        name: 'Менеджер',
+                        text: text
+                    })
+                });
+                loadAdminMessages();
+                try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
             } catch(e) {
-                container.innerHTML = `<p class="text-center py-6 text-rose-500">Не удалось загрузить тикеты с сервера</p>`;
+                showToast("Ошибка отправки", "⚠️");
             }
         }
 
-        function openClientChat(username, userId) {
-            if (username && username !== "нет") {
-                tg.openTelegramLink(`https://t.me/${username.replace('@', '')}`);
-            } else {
-                tg.openTelegramLink(`tg://user?id=${userId}`);
-            }
-        }
-
-        function closeAdminTicketsModal() {
-            document.getElementById('admin-tickets-sheet').classList.add('translate-y-full');
-            document.getElementById('admin-tickets-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
+        // ====================================================
+        // КАТАЛОГ, ФИЛЬТРЫ И КОРЗИНА
+        // ====================================================
         function toggleFavorite(id, event) {
             if (event) event.stopPropagation();
             if (favorites.includes(id)) {
@@ -720,7 +935,7 @@
         function setCategory(cat) {
             currentCat = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap';
+                btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap';
             });
             const activeMap = { 'all': 'cat-all', 'favorites': 'cat-fav', 'Одежда': 'cat-clothes', 'Обувь': 'cat-shoes', 'Электроника': 'cat-tech', 'Сувениры': 'cat-merch' };
             const targetBtn = document.getElementById(activeMap[cat]);
@@ -771,7 +986,7 @@
             container.innerHTML = '';
 
             if (!items || items.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-12 text-neutral-400 font-bold text-xs">Позиции не найдены</div>`;
+                container.innerHTML = `<div class="col-span-2 text-center py-12 text-subtle font-bold text-xs">Позиции не найдены</div>`;
                 return;
             }
 
@@ -809,18 +1024,18 @@
                                 </span>
                             </div>
                             <div class="p-3 pb-1">
-                                <div class="flex items-center justify-between text-[10px] text-neutral-400 font-semibold mb-1">
+                                <div class="flex items-center justify-between text-[10px] text-subtle font-semibold mb-1">
                                     <span>${p.cat || 'Каталог'}</span>
                                     <span class="text-emerald-600 dark:text-emerald-400 font-bold">${stock} шт</span>
                                 </div>
-                                <h3 class="font-bold text-xs leading-snug line-clamp-2">${p.title}</h3>
+                                <h3 class="font-bold text-xs leading-snug line-clamp-2 text-strong">${p.title}</h3>
                                 <div class="mt-2 surface-sub rounded-xl p-2">
                                     <div class="flex items-baseline gap-1">
-                                        <span class="font-black text-sm text-neutral-900 dark:text-white">${tierPrice.toLocaleString('ru-RU')} ₽</span>
-                                        <span class="text-[10px] text-neutral-400 line-through">${basePrice.toLocaleString('ru-RU')} ₽</span>
+                                        <span class="font-black text-sm text-strong">${tierPrice.toLocaleString('ru-RU')} ₽</span>
+                                        <span class="text-[10px] text-subtle line-through">${basePrice.toLocaleString('ru-RU')} ₽</span>
                                     </div>
                                     <div class="flex justify-between items-center mt-0.5">
-                                        <p class="text-[10px] text-neutral-500 font-semibold">От ${moq} шт</p>
+                                        <p class="text-[10px] text-desc font-semibold">От ${moq} шт</p>
                                         <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded">+${marginPercent}% WB</span>
                                     </div>
                                 </div>
@@ -830,7 +1045,7 @@
                             ${qty === 0 
                                 ? `<button onclick="updateCart('${p.id}', ${moq}); triggerFlyToCartAnimation(this);" class="w-full py-2 btn-primary rounded-xl text-xs font-bold smooth flex items-center justify-center gap-1 active:scale-95 shadow-sm">
                                     <span>В смету</span>
-                                    <span class="text-[10px] opacity-70">(${moq} шт)</span>
+                                    <span class="text-[10px] opacity-75">(${moq} шт)</span>
                                    </button>`
                                 : `<div class="flex items-center justify-between btn-primary rounded-xl p-1 shadow-sm">
                                     <button onclick="updateCart('${p.id}', ${qty - boxQty})" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">-</button>
@@ -858,9 +1073,7 @@
                         filterProducts();
                     }
                 }
-            } catch(e) {
-                console.warn("API Offline / тайм-аут, использована встроенная база");
-            }
+            } catch(e) {}
         }
 
         function manualSync() {
@@ -950,8 +1163,8 @@
             (p.tiers || [{ min: p.moq, price: p.price, label: 'Опт' }]).forEach(t => {
                 tiersBox.innerHTML += `
                     <div class="surface-card rounded-xl p-2">
-                        <span class="text-[10px] text-neutral-400 block">${t.label}</span>
-                        <span class="font-extrabold text-xs">${t.price} ₽</span>
+                        <span class="text-[10px] text-subtle block font-semibold">${t.label}</span>
+                        <span class="font-extrabold text-xs text-strong">${t.price} ₽</span>
                     </div>
                 `;
             });
@@ -967,9 +1180,9 @@
 
             const chips = document.getElementById('quick-preset-chips');
             chips.innerHTML = `
-                <button onclick="setModalQty(1)" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap">🧪 Образец 1 шт</button>
-                <button onclick="setModalQty(${p.moq || 10})" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap">Мин. ${p.moq || 10} шт</button>
-                <button onclick="setModalQty(${(p.box_qty || p.moq || 10) * 3})" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap">3 короба (${(p.box_qty || p.moq || 10) * 3} шт)</button>
+                <button onclick="setModalQty(1)" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap text-strong">🧪 Образец 1 шт</button>
+                <button onclick="setModalQty(${p.moq || 10})" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap text-strong">Мин. ${p.moq || 10} шт</button>
+                <button onclick="setModalQty(${(p.box_qty || p.moq || 10) * 3})" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap text-strong">3 короба (${(p.box_qty || p.moq || 10) * 3} шт)</button>
             `;
 
             renderMatrixTab(p);
@@ -991,10 +1204,10 @@
                 if (el && btn) {
                     if (t === tab) {
                         el.classList.remove('hidden');
-                        btn.className = 'pb-2 border-b-2 border-neutral-900 dark:border-white font-bold whitespace-nowrap';
+                        btn.className = 'pb-2 border-b-2 border-neutral-900 dark:border-white font-bold whitespace-nowrap text-strong';
                     } else {
                         el.classList.add('hidden');
-                        btn.className = 'pb-2 border-b-2 border-transparent text-neutral-400 font-bold whitespace-nowrap';
+                        btn.className = 'pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap';
                     }
                 }
             });
@@ -1039,7 +1252,7 @@
         function renderMatrixTab(product) {
             const container = document.getElementById('matrix-rows-container');
             if (!product.matrix) {
-                container.innerHTML = `<div class="text-neutral-400 text-center py-2">Для данной позиции ростовка не предусмотрена</div>`;
+                container.innerHTML = `<div class="text-subtle text-center py-2">Для данной позиции ростовка не предусмотрена</div>`;
                 document.getElementById('matrix-total-qty').innerText = `${document.getElementById('modal-slider').value} шт`;
                 return;
             }
@@ -1048,13 +1261,13 @@
             product.matrix.forEach((m, idx) => {
                 container.innerHTML += `
                     <div class="flex items-center justify-between surface-card p-2 rounded-xl">
-                        <span class="font-bold">${m.size}</span>
-                        <span class="text-neutral-400 text-[11px]">${m.inBox} шт/кор</span>
+                        <span class="font-bold text-strong">${m.size}</span>
+                        <span class="text-subtle text-[11px]">${m.inBox} шт/кор</span>
                         <div class="flex items-center gap-1">
-                            <input type="number" min="0" value="${m.count || 0}" oninput="updateMatrixRow(${idx}, this.value)" class="w-12 text-center font-bold surface-sub rounded-md py-1">
-                            <span class="text-neutral-400 text-[10px]">кор.</span>
+                            <input type="number" min="0" value="${m.count || 0}" oninput="updateMatrixRow(${idx}, this.value)" class="w-12 text-center font-bold surface-sub text-strong rounded-md py-1">
+                            <span class="text-subtle text-[10px]">кор.</span>
                         </div>
-                        <span class="font-black">${(m.count || 0) * m.inBox} шт</span>
+                        <span class="font-black text-strong">${(m.count || 0) * m.inBox} шт</span>
                     </div>
                 `;
             });
@@ -1224,11 +1437,11 @@
 
             if (withVat) {
                 withBtn.className = 'flex-1 py-1.5 rounded-lg btn-primary font-bold smooth';
-                noneBtn.className = 'flex-1 py-1.5 rounded-lg text-neutral-400 font-medium smooth';
+                noneBtn.className = 'flex-1 py-1.5 rounded-lg text-desc font-medium smooth';
                 desc.innerText = 'Включая НДС 20% • Пакет закрывающих УПД';
             } else {
                 noneBtn.className = 'flex-1 py-1.5 rounded-lg btn-primary font-bold smooth';
-                withBtn.className = 'flex-1 py-1.5 rounded-lg text-neutral-400 font-medium smooth';
+                withBtn.className = 'flex-1 py-1.5 rounded-lg text-desc font-medium smooth';
                 desc.innerText = 'Без НДС (УСН) • Прямой счет на оплату';
             }
             updateCartUI();
@@ -1251,16 +1464,16 @@
                     if (item.branding) badges.push('Мерч +250₽');
                     if (item.fulfillment) badges.push('Фулфилмент +45₽');
                     const badgesText = badges.length > 0 ? ` [${badges.join(', ')}]` : '';
-                    const matrixText = item.matrixSummary ? `<p class="text-[9px] text-neutral-400">${item.matrixSummary}</p>` : '';
+                    const matrixText = item.matrixSummary ? `<p class="text-[9px] text-subtle">${item.matrixSummary}</p>` : '';
 
                     itemsContainer.innerHTML += `
                         <div class="flex justify-between items-center surface-sub rounded-xl p-2.5 text-xs">
                             <div>
-                                <p class="font-bold leading-tight">${p.title}${badgesText}</p>
-                                <p class="text-[10px] text-neutral-400 mt-0.5">${item.qty} шт × ${item.unitPrice} ₽</p>
+                                <p class="font-bold leading-tight text-strong">${p.title}${badgesText}</p>
+                                <p class="text-[10px] text-desc mt-0.5">${item.qty} шт × ${item.unitPrice} ₽</p>
                                 ${matrixText}
                             </div>
-                            <span class="font-extrabold">${(item.qty * item.unitPrice).toLocaleString('ru-RU')} ₽</span>
+                            <span class="font-extrabold text-strong">${(item.qty * item.unitPrice).toLocaleString('ru-RU')} ₽</span>
                         </div>
                     `;
                 }
@@ -1277,7 +1490,6 @@
             document.getElementById('checkout-form').classList.add('opacity-0', 'pointer-events-none');
         }
 
-        // ОТПРАВКА СЧЕТА: Единственная функция формирования счета
         function sendOrderToBot() {
             const company = document.getElementById('company').value.trim();
             const city = document.getElementById('city').value.trim();
