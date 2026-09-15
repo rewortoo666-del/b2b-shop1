@@ -101,7 +101,7 @@
         <!-- Шапка портала -->
         <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-3 flex items-center justify-between transition-colors duration-300">
             <div class="flex items-center gap-2.5">
-                <div class="relative cursor-pointer select-none active:scale-95 transition" onclick="handleSecretLogoClick()" title="Тройной клик для входа в админку">
+                <div class="relative cursor-pointer select-none active:scale-95 transition">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-700 via-blue-600 to-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-md shadow-blue-500/20">
                         G
                     </div>
@@ -112,7 +112,7 @@
                 <div>
                     <div class="flex items-center gap-1.5">
                         <span class="font-black theme-text-main tracking-tight text-sm">Galk B2B Supply</span>
-                        <span id="role-badge" class="px-1.5 py-0.5 rounded text-[9px] font-black bg-blue-100 text-blue-700 uppercase">Опт Портал</span>
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-blue-100 text-blue-700 uppercase">Опт Портал</span>
                     </div>
                     <div class="flex items-center gap-1 text-[10px] font-bold text-slate-500">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -140,21 +140,6 @@
                 <button onclick="tg.close()" class="w-8 h-8 rounded-xl theme-card text-slate-400 font-bold flex items-center justify-center hover:scale-105 transition">✕</button>
             </div>
         </header>
-
-        <!-- Админ-панель -->
-        <section id="admin-action-bar" class="hidden px-4 pt-3 no-print">
-            <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 flex items-center justify-between shadow-sm">
-                <div>
-                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-500 bg-amber-500/20 px-2 py-0.5 rounded">Режим Администратора</span>
-                    <p class="text-xs font-bold theme-text-main mt-1">Управление базой через меню Telegram-бота</p>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <button onclick="logoutAdmin()" class="px-2.5 py-2 theme-card text-slate-400 rounded-xl text-xs font-bold transition active:scale-95">
-                        Выйти
-                    </button>
-                </div>
-            </div>
-        </section>
 
         <!-- Живой тикер склада -->
         <section id="live-warehouse-ticker" class="px-4 pt-2.5 no-print">
@@ -248,24 +233,6 @@
             </button>
         </div>
 
-        <!-- Модалка PIN-кода -->
-        <div id="pin-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 p-4 no-print">
-            <div class="w-full max-w-xs theme-sheet rounded-3xl p-5 space-y-4 shadow-2xl text-center transform scale-95 transition-transform duration-300" id="pin-sheet">
-                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xl mx-auto border border-amber-500/20">
-                    🔐
-                </div>
-                <div>
-                    <h3 class="text-sm font-black theme-text-main">Вход для администратора</h3>
-                    <p class="text-[11px] theme-text-sub mt-0.5">Введите PIN для активации прав</p>
-                </div>
-                <input type="password" id="pin-input" maxlength="8" placeholder="Введите PIN (7777)" class="w-full text-center tracking-widest text-lg font-black theme-input rounded-xl p-3 outline-none focus:ring-2 focus:ring-amber-500/50">
-                <div class="flex gap-2">
-                    <button onclick="closePinModal()" class="flex-1 py-2.5 theme-card theme-text-sub rounded-xl text-xs font-bold transition active:scale-95">Отмена</button>
-                    <button onclick="submitAdminPin()" class="flex-1 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold shadow-md transition active:scale-95">Войти</button>
-                </div>
-            </div>
-        </div>
-
         <!-- Модалка карточки товара -->
         <div id="product-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300 no-print">
             <div class="w-full max-w-md theme-sheet rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="product-sheet">
@@ -279,17 +246,6 @@
                         </span>
                     </div>
                     <button onclick="closeProductModal()" class="w-8 h-8 rounded-full theme-card theme-text-sub font-bold flex items-center justify-center hover:scale-105 transition">✕</button>
-                </div>
-
-                <!-- Админ-контроль карточки -->
-                <div id="modal-admin-actions" class="hidden bg-amber-500/10 border border-amber-500/30 rounded-2xl p-2.5 flex items-center justify-between shadow-sm">
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-xs">⚡️</span>
-                        <span class="text-[11px] font-black text-amber-500 uppercase tracking-wide">Админ-контроль</span>
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <button onclick="exportSingleProductKP()" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-[10px] transition shadow-sm active:scale-95" title="Сформировать PDF и отправить в чат">📄 КП в чат</button>
-                    </div>
                 </div>
 
                 <div class="space-y-2">
@@ -620,14 +576,13 @@
             tg.ready();
         } catch(e) {}
 
-        const ADMIN_PIN = "7777";
         const ADMIN_TELEGRAM_ID = 8125122124;
         const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 0;
 
-        // Постоянный адрес активного Cloudflare туннеля
+        // Постоянный адрес активного туннеля
         const API_SERVER_URL = "https://47209739c31c75.lhr.life";
 
-        // Корректное преобразование адресов фото, сохраненных через бота
+        // Преобразование фото с локального сервера
         function resolveImageUrl(url) {
             if (!url) return 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80';
             if (url.startsWith('http://') || url.startsWith('https://')) return url;
@@ -660,14 +615,6 @@
             applyTheme(!isNeonTheme);
             try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
             showToast(isNeonTheme ? "Включен Neon Dark Vibe" : "Включен светлый B2B интерфейс", isNeonTheme ? "🌙" : "☀️");
-        }
-
-        function isUserAdmin() {
-            try {
-                return currentUserId === ADMIN_TELEGRAM_ID || localStorage.getItem('galk_admin_active') === 'true';
-            } catch(e) {
-                return false;
-            }
         }
 
         // Базовый чистый каталог
@@ -716,7 +663,7 @@
             }
         ];
 
-        // Очистка старого битого кэша
+        // Очищаем старые кэши, чтобы витрина читала только актуальные товары
         localStorage.removeItem('galk_b2b_products');
         localStorage.removeItem('galk_b2b_products_v3');
         let products = defaultProducts;
@@ -769,78 +716,6 @@
                 updateCartUI();
             }
         });
-
-        let logoClickCount = 0;
-        let logoClickTimer = null;
-
-        function applyAdminState(isAdmin) {
-            const adminBar = document.getElementById('admin-action-bar');
-            const roleBadge = document.getElementById('role-badge');
-            const modalAdminActions = document.getElementById('modal-admin-actions');
-
-            if (isAdmin) {
-                if (adminBar) adminBar.classList.remove('hidden');
-                if (roleBadge) {
-                    roleBadge.innerText = 'Режим Администратора';
-                    roleBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-black bg-amber-100 text-amber-800 uppercase';
-                }
-                if (modalAdminActions) modalAdminActions.classList.remove('hidden');
-            } else {
-                if (adminBar) adminBar.classList.add('hidden');
-                if (roleBadge) {
-                    roleBadge.innerText = 'Опт Портал';
-                    roleBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-black bg-blue-100 text-blue-700 uppercase';
-                }
-                if (modalAdminActions) modalAdminActions.classList.add('hidden');
-            }
-            filterProducts();
-        }
-
-        function handleSecretLogoClick() {
-            logoClickCount++;
-            clearTimeout(logoClickTimer);
-            logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1000);
-
-            if (logoClickCount >= 3) {
-                logoClickCount = 0;
-                openPinModal();
-            }
-        }
-
-        function openPinModal() {
-            const modal = document.getElementById('pin-modal');
-            const sheet = document.getElementById('pin-sheet');
-            document.getElementById('pin-input').value = '';
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('scale-95');
-            document.getElementById('pin-input').focus();
-        }
-
-        function closePinModal() {
-            document.getElementById('pin-sheet').classList.add('scale-95');
-            document.getElementById('pin-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function submitAdminPin() {
-            const enteredPin = document.getElementById('pin-input').value.trim();
-            if (enteredPin === ADMIN_PIN) {
-                localStorage.setItem('galk_admin_active', 'true');
-                applyAdminState(true);
-                closePinModal();
-                try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
-                showToast("Доступ администратора активирован!");
-            } else {
-                try { tg.HapticFeedback.notificationOccurred('error'); } catch(e) {}
-                showToast("Неверный PIN-код", "❌");
-                document.getElementById('pin-input').value = '';
-            }
-        }
-
-        function logoutAdmin() {
-            localStorage.removeItem('galk_admin_active');
-            applyAdminState(false);
-            showToast("Вы вышли из режима админа");
-        }
 
         function showToast(text, icon = '✅') {
             const toast = document.getElementById('toast');
@@ -1028,7 +903,7 @@
         }
 
         // ==========================================
-        // ОТПРАВКА ФАЙЛОВ В ЧАТ
+        // ВЫГРУЗКА ПРАЙС-ЛИСТА
         // ==========================================
         async function exportPriceListExcel() {
             showToast("Отправка прайс-листа в чат...", "📊");
@@ -1073,48 +948,6 @@
             }
         }
 
-        async function exportSingleProductKP() {
-            const p = products.find(item => item.id === currentModalProductId);
-            if (!p) return;
-
-            const qty = parseInt(document.getElementById('modal-slider').value) || p.moq;
-            let unitPrice = getBaseUnitPrice(p, qty);
-            if (isBrandingIncluded) unitPrice += 250;
-            if (isFulfillmentIncluded) unitPrice += 45;
-            const total = qty * unitPrice;
-
-            showToast("Формирую КП в PDF...", "⏳");
-            const targetUid = currentUserId || ADMIN_TELEGRAM_ID;
-
-            try {
-                const res = await fetch(`${API_SERVER_URL}/api/send_kp_pdf`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_id: targetUid,
-                        title: p.title,
-                        cat: p.cat,
-                        id: p.id,
-                        desc: p.desc,
-                        qty: qty,
-                        unit_price: unitPrice,
-                        total_sum: total,
-                        branding: isBrandingIncluded,
-                        fulfillment: isFulfillmentIncluded
-                    })
-                });
-
-                if (res.ok) {
-                    try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
-                    showToast("КП отправлено документом в чат! 📄", "✅");
-                } else {
-                    showToast("Сервер не ответил. Проверьте туннель.", "❌");
-                }
-            } catch (err) {
-                showToast("Ошибка отправки КП", "❌");
-            }
-        }
-
         function openProductModal(id) {
             const p = products.find(item => item.id === id);
             if (!p) return;
@@ -1136,15 +969,6 @@
             document.getElementById('modal-main-img').src = resolveImageUrl(rawImg);
             document.getElementById('modal-title').innerText = p.title;
             document.getElementById('modal-desc').innerText = p.desc || '';
-
-            const modalAdminActions = document.getElementById('modal-admin-actions');
-            if (modalAdminActions) {
-                if (isUserAdmin()) {
-                    modalAdminActions.classList.remove('hidden');
-                } else {
-                    modalAdminActions.classList.add('hidden');
-                }
-            }
 
             document.getElementById('roi-retail-price').value = p.wb_price || Math.round(p.price * 1.8);
 
@@ -1729,12 +1553,6 @@
         }, 5000);
 
         applyTheme(isNeonTheme);
-
-        if (isUserAdmin()) {
-            applyAdminState(true);
-        } else {
-            filterProducts();
-        }
         syncCatalogWithServer();
     </script>
 </body>
