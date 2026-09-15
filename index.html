@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Galk B2B Supply Hub</title>
+    <title>Galk B2B Supply Platform</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- SheetJS для генерации оптового прайс-листа Excel -->
@@ -14,86 +14,82 @@
     
     <style>
         :root {
-            --bg-page: #FFFFFF;
-            --bg-card: #F8F9FA;
-            --bg-card-sub: #F1F3F5;
-            --bg-input: #FFFFFF;
-            --border: #E9ECEF;
-            --text-main: #0B0F19;
-            --text-sub: #6C757D;
-            --accent: #000000;
-            --accent-contrast: #FFFFFF;
+            --bg-body: #F4F4F5;
+            --bg-surface: #FFFFFF;
+            --bg-sub: #F4F4F5;
+            --border-ui: #E4E4E7;
+            --text-primary: #09090B;
+            --text-muted: #71717A;
+            --btn-main-bg: #09090B;
+            --btn-main-text: #FAFAFA;
         }
 
         .dark {
-            --bg-page: #090A0F;
-            --bg-card: #12141C;
-            --bg-card-sub: #181B26;
-            --bg-input: #10121A;
-            --border: #222634;
-            --text-main: #F8F9FA;
-            --text-sub: #8B949E;
-            --accent: #FFFFFF;
-            --accent-contrast: #000000;
+            --bg-body: #09090B;
+            --bg-surface: #121215;
+            --bg-sub: #18181B;
+            --border-ui: #27272A;
+            --text-primary: #FAFAFA;
+            --text-muted: #A1A1AA;
+            --btn-main-bg: #FAFAFA;
+            --btn-main-text: #09090B;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-            background-color: var(--bg-page);
-            color: var(--text-main);
+            background-color: var(--bg-body);
+            color: var(--text-primary);
             -webkit-tap-highlight-color: transparent;
-            transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* Плавные переходы элементов */
         .smooth {
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .sheet-transition {
-            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        .spring-modal {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .app-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border);
+        .surface-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-ui);
         }
 
-        .app-card-sub {
-            background-color: var(--bg-card-sub);
-            border: 1px solid var(--border);
+        .surface-sub {
+            background-color: var(--bg-sub);
+            border: 1px solid var(--border-ui);
         }
 
-        .app-input {
-            background-color: var(--bg-input);
-            border: 1px solid var(--border);
-            color: var(--text-main);
+        .btn-primary {
+            background-color: var(--btn-main-bg);
+            color: var(--btn-main-text);
         }
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 20px;
-            width: 20px;
+            height: 22px;
+            width: 22px;
             border-radius: 50%;
-            background: var(--text-main);
+            background: var(--btn-main-bg);
             cursor: pointer;
-            border: 2px solid var(--bg-page);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            border: 3px solid var(--bg-surface);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             transition: transform 0.15s ease;
         }
 
         input[type=range]::-webkit-slider-thumb:active {
-            transform: scale(1.2);
+            transform: scale(1.25);
         }
 
         .fly-particle {
             position: fixed;
             z-index: 100;
             pointer-events: none;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @media print {
@@ -105,86 +101,92 @@
 </head>
 <body class="flex justify-center min-h-screen antialiased selection:bg-neutral-900 selection:text-white">
 
-    <!-- Всплывающий Toast -->
-    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-bold px-4 py-2.5 rounded-2xl shadow-xl border border-neutral-800 dark:border-neutral-200 opacity-0 pointer-events-none smooth transform -translate-y-2 flex items-center gap-2">
-        <span id="toast-icon">✅</span>
+    <!-- Toast-уведомление -->
+    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-bold px-4 py-2.5 rounded-2xl shadow-2xl border border-neutral-800 dark:border-neutral-200 opacity-0 pointer-events-none smooth transform -translate-y-2 flex items-center gap-2">
+        <span id="toast-icon">⚡️</span>
         <span id="toast-text">Готово</span>
     </div>
 
-    <!-- Полноэкранный Lightbox -->
+    <!-- Полноэкранный Lightbox для фото -->
     <div id="lightbox-modal" class="fixed inset-0 z-[70] bg-black/90 flex items-center justify-center p-4 opacity-0 pointer-events-none smooth" onclick="closeLightbox()">
         <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl transition transform scale-95" onclick="event.stopPropagation()">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-neutral-800 text-white font-bold flex items-center justify-center">✕</button>
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-neutral-800 text-white font-bold flex items-center justify-center active:scale-90 smooth">✕</button>
     </div>
 
     <div id="app-wrapper" class="w-full max-w-md min-h-screen relative flex flex-col pb-28">
 
-        <!-- Шапка -->
-        <header class="sticky top-0 z-30 bg-white/95 dark:bg-neutral-950/95 border-b border-neutral-200 dark:border-neutral-800/80 px-4 py-3 flex items-center justify-between smooth">
+        <!-- Шапка платформы -->
+        <header class="sticky top-0 z-30 bg-white/95 dark:bg-neutral-950/95 border-b border-neutral-200 dark:border-neutral-800/80 px-4 py-3 flex items-center justify-between smooth backdrop-blur-md">
             <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 flex items-center justify-center font-black text-sm shadow-md">
+                <div class="w-9 h-9 rounded-xl btn-primary flex items-center justify-center font-black text-sm shadow-sm tracking-tight">
                     G
                 </div>
                 <div>
                     <div class="flex items-center gap-1.5">
                         <span class="font-extrabold text-sm tracking-tight">Galk B2B</span>
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">Hub</span>
+                        <span id="admin-indicator" class="hidden px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider bg-amber-500 text-black shadow-sm">ADMIN</span>
+                        <span class="px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200">Supply</span>
                     </div>
-                    <div class="flex items-center gap-1 text-[10px] font-semibold text-neutral-500">
+                    <div class="flex items-center gap-1 text-[10px] font-medium text-neutral-400">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Склад Москва • Честный Знак
+                        Хаб Южные Врата • Честный Знак
                     </div>
                 </div>
             </div>
             
             <div class="flex items-center gap-1.5">
-                <button onclick="manualSync()" class="w-8 h-8 rounded-xl app-card flex items-center justify-center font-bold active:scale-90 smooth" title="Обновить каталог">🔄</button>
-                <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl app-card flex items-center justify-center font-bold active:scale-90 smooth" title="Сменить тему">🌙</button>
-                <button onclick="openTrackerModal()" class="w-8 h-8 rounded-xl app-card flex items-center justify-center font-bold active:scale-90 smooth" title="Трекинг груза">🚚</button>
-                <button onclick="openSupportChatModal()" class="px-2.5 py-1.5 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-bold text-xs flex items-center gap-1 active:scale-90 smooth">
-                    💬 <span>Саппорт</span>
+                <!-- Админская кнопка переключения на тикеты (видна только для ADMIN_ID) -->
+                <button onclick="openAdminTicketsModal()" id="admin-mode-toggle" class="hidden px-2.5 py-1.5 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/20 font-bold text-xs active:scale-90 smooth flex items-center gap-1">
+                    👑 <span>Тикеты</span>
+                </button>
+                <button onclick="manualSync()" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Синхронизировать каталог">🔄</button>
+                <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Сменить тему">🌙</button>
+                <button onclick="openTrackerModal()" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Трекинг груза">🚚</button>
+                <!-- Кнопка Саппорта: клиент сразу переходит в чат Telegram -->
+                <button onclick="handleSupportClick()" class="px-3 py-1.5 rounded-xl btn-primary font-bold text-xs flex items-center gap-1 active:scale-90 smooth shadow-sm">
+                    💬 <span id="support-btn-text">Саппорт</span>
                 </button>
             </div>
         </header>
 
-        <!-- Тикер склада -->
+        <!-- Живой складской тикер -->
         <section id="live-warehouse-ticker" class="px-4 pt-3 no-print">
-            <div class="app-card rounded-xl px-3 py-2 flex items-center justify-between text-[11px] font-semibold">
+            <div class="surface-card rounded-xl px-3 py-2 flex items-center justify-between text-[11px] font-semibold">
                 <div class="flex items-center gap-2 truncate">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span id="ticker-text" class="truncate text-neutral-600 dark:text-neutral-400">Склад Южные Врата: отгружено 42 короба (СДЭК)</span>
+                    <span id="ticker-text" class="truncate text-neutral-500">Склад Южные Врата: отгружено 42 короба (СДЭК)</span>
                 </div>
                 <span class="font-mono text-[9px] uppercase tracking-wider text-neutral-400 pl-2">Live</span>
             </div>
         </section>
 
-        <!-- B2B Условия -->
+        <!-- B2B Условия поставки -->
         <section class="px-4 pt-2.5 no-print">
-            <div class="app-card rounded-2xl p-4 space-y-1.5 smooth">
+            <div class="surface-card rounded-2xl p-4 space-y-1.5 smooth">
                 <div class="flex items-center justify-between">
-                    <span class="text-[9px] font-black uppercase tracking-wider bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 px-2 py-0.5 rounded-md">Прямой контракт</span>
+                    <span class="text-[9px] font-black uppercase tracking-wider btn-primary px-2 py-0.5 rounded-md">Прямой контракт</span>
                     <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ЭДО СБИС / Диадок
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ЭДО Диадок / СБИС
                     </span>
                 </div>
-                <h2 class="text-sm font-black tracking-tight pt-1">Оптовые поставки коммерческих партий</h2>
-                <p class="text-[11px] text-neutral-500 leading-snug">Прямой импорт, сертификация ТР ТС, фулфилмент под WB/Ozon, гарантия брака и отсрочка платежа.</p>
+                <h2 class="text-sm font-black tracking-tight pt-1">Оптовые коммерческие партии</h2>
+                <p class="text-[11px] text-neutral-500 leading-snug">Цены прямого импортера, маркировка «Честный Знак», подготовка под Wildberries/Ozon, гарантия брака и отсрочка платежа.</p>
             </div>
         </section>
 
-        <!-- Выгрузка прайс-листа Excel -->
+        <!-- Выгрузка оптового прайса в чат -->
         <section id="b2b-action-bar" class="px-4 pt-2.5 no-print">
-            <div class="app-card rounded-2xl p-2.5 flex items-center justify-between">
-                <div class="flex items-center gap-2 pl-1">
+            <div class="surface-card rounded-2xl p-2.5 flex items-center justify-between">
+                <div class="flex items-center gap-2.5 pl-1">
                     <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black text-xs flex items-center justify-center border border-emerald-500/20">
                         XLS
                     </div>
                     <div>
                         <p class="text-[11px] font-extrabold leading-tight">Оптовый прайс-лист</p>
-                        <p class="text-[9px] text-neutral-500 leading-tight">Актуальные остатки и градации цен</p>
+                        <p class="text-[9px] text-neutral-500 leading-tight">Все градации цен и остатки в .xlsx</p>
                     </div>
                 </div>
-                <button onclick="exportPriceListExcel()" class="bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 active:scale-95 px-3 py-1.5 rounded-xl font-bold text-xs smooth flex items-center gap-1.5">
+                <button onclick="exportPriceListExcel()" class="btn-primary active:scale-95 px-3 py-1.5 rounded-xl font-bold text-xs smooth flex items-center gap-1.5">
                     📊 <span>В чат бота</span>
                 </button>
             </div>
@@ -194,13 +196,13 @@
         <section class="p-4 pb-2 space-y-2.5 no-print">
             <div class="flex gap-2">
                 <div class="relative flex-grow">
-                    <input type="text" id="search" placeholder="Поиск по названию, артикулу..." oninput="filterProducts()"
-                        class="w-full app-input rounded-xl pl-9 pr-3 py-2 text-xs outline-none focus:border-neutral-900 dark:focus:border-white smooth font-medium">
+                    <input type="text" id="search" placeholder="Поиск по наименованию, артикулу..." oninput="filterProducts()"
+                        class="w-full surface-card rounded-xl pl-9 pr-3 py-2 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white smooth font-medium">
                     <svg class="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
-                <select id="sort-select" onchange="filterProducts()" class="app-input rounded-xl px-2.5 py-2 text-[11px] font-bold outline-none">
+                <select id="sort-select" onchange="filterProducts()" class="surface-card rounded-xl px-2.5 py-2 text-[11px] font-bold outline-none">
                     <option value="default">Сортировка</option>
                     <option value="price_asc">Сначала дешевле</option>
                     <option value="margin_desc">Топ маржа на WB</option>
@@ -209,25 +211,25 @@
             </div>
 
             <div class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
-                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 smooth whitespace-nowrap">Все товары</button>
-                <button onclick="setCategory('favorites')" id="cat-fav" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold app-card text-neutral-500 smooth whitespace-nowrap">❤️ Избранное</button>
-                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold app-card text-neutral-500 smooth whitespace-nowrap">Одежда и текстиль</button>
-                <button onclick="setCategory('Обувь')" id="cat-shoes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold app-card text-neutral-500 smooth whitespace-nowrap">Обувь</button>
-                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold app-card text-neutral-500 smooth whitespace-nowrap">Гаджеты</button>
-                <button onclick="setCategory('Сувениры')" id="cat-merch" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold app-card text-neutral-500 smooth whitespace-nowrap">Мерч и посуда</button>
+                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold btn-primary smooth whitespace-nowrap">Все позиции</button>
+                <button onclick="setCategory('favorites')" id="cat-fav" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">❤️ Избранное</button>
+                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">Одежда и мерч</button>
+                <button onclick="setCategory('Обувь')" id="cat-shoes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">Обувь</button>
+                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">Электроника</button>
+                <button onclick="setCategory('Сувениры')" id="cat-merch" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap">Сувениры</button>
             </div>
         </section>
 
-        <!-- Сетка каталога -->
+        <!-- Сетка витрины -->
         <main class="p-4 pt-1 grid grid-cols-2 gap-3 flex-grow" id="products-container"></main>
 
-        <!-- Плавающий бар сметы -->
-        <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-950 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl opacity-0 pointer-events-none translate-y-4 smooth z-40 no-print">
+        <!-- Плавающий виджет сметы -->
+        <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl opacity-0 pointer-events-none translate-y-4 smooth z-40 no-print">
             <div>
-                <p class="text-[9px] text-neutral-400 dark:text-neutral-600 font-bold uppercase tracking-wider">Спецификация:</p>
+                <p class="text-[9px] opacity-60 font-bold uppercase tracking-wider">Спецификация партии:</p>
                 <p class="text-base font-black leading-tight mt-0.5" id="total-price">0 ₽</p>
             </div>
-            <button onclick="showCheckout()" class="bg-white text-neutral-950 dark:bg-neutral-900 dark:text-white px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide smooth active:scale-95 flex items-center gap-1.5">
+            <button onclick="showCheckout()" class="bg-white text-neutral-950 dark:bg-neutral-900 dark:text-white px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide smooth active:scale-95 flex items-center gap-1.5 shadow-md">
                 <span>Оформить счет</span>
                 <span>→</span>
             </button>
@@ -235,7 +237,7 @@
 
         <!-- МОДАЛКА: Карточка товара -->
         <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
-            <div class="w-full max-w-md app-card rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full sheet-transition" id="product-sheet">
+            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full spring-modal" id="product-sheet">
                 
                 <div class="flex justify-between items-start">
                     <div class="flex items-center gap-2">
@@ -245,11 +247,11 @@
                             <span id="modal-stock-text">В наличии</span>
                         </span>
                     </div>
-                    <button onclick="closeProductModal()" class="w-8 h-8 rounded-full app-card-sub font-bold flex items-center justify-center smooth active:scale-90">✕</button>
+                    <button onclick="closeProductModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center smooth active:scale-90">✕</button>
                 </div>
 
                 <div class="space-y-2">
-                    <div class="relative w-full h-56 app-card-sub rounded-2xl overflow-hidden cursor-zoom-in group" onclick="openLightbox()">
+                    <div class="relative w-full h-56 surface-sub rounded-2xl overflow-hidden cursor-zoom-in group" onclick="openLightbox()">
                         <img id="modal-main-img" src="" class="w-full h-full object-cover smooth group-hover:scale-105">
                         <span class="absolute bottom-2.5 right-2.5 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-lg">🔍 Зум</span>
                     </div>
@@ -261,14 +263,14 @@
                     <p id="modal-desc" class="text-xs text-neutral-500 mt-1 leading-relaxed"></p>
                 </div>
 
-                <!-- Прогресс скидки -->
-                <div class="app-card-sub rounded-xl p-3 space-y-1.5" id="tier-progress-box">
+                <!-- Прогресс оптовой шкалы цен -->
+                <div class="surface-sub rounded-xl p-3 space-y-1.5" id="tier-progress-box">
                     <div class="flex justify-between text-[11px] font-bold">
-                        <span>Тиражная скидка:</span>
-                        <span class="text-neutral-500" id="tier-discount-hint">Добавьте позиции</span>
+                        <span>Тиражная шкала цен:</span>
+                        <span class="text-neutral-500" id="tier-discount-hint">Добавьте объем</span>
                     </div>
                     <div class="w-full bg-neutral-200 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
-                        <div id="tier-progress-bar" class="bg-neutral-900 dark:bg-white h-full rounded-full smooth" style="width: 30%"></div>
+                        <div id="tier-progress-bar" class="btn-primary h-full rounded-full smooth" style="width: 30%"></div>
                     </div>
                 </div>
 
@@ -283,30 +285,30 @@
                 </div>
 
                 <div id="tab-pricing" class="space-y-2 text-xs">
-                    <div class="app-card-sub rounded-xl p-3 grid grid-cols-3 gap-2 text-center" id="modal-tiers-container"></div>
+                    <div class="surface-sub rounded-xl p-3 grid grid-cols-3 gap-2 text-center" id="modal-tiers-container"></div>
                 </div>
 
                 <div id="tab-roi" class="hidden space-y-3 text-xs">
-                    <div class="app-card-sub rounded-2xl p-4 space-y-3">
+                    <div class="surface-sub rounded-2xl p-4 space-y-3">
                         <div class="flex justify-between items-center">
                             <label class="font-bold text-xs">Планируемая розница на WB (₽):</label>
-                            <input type="number" id="roi-retail-price" oninput="calculateSellerROI()" class="w-24 app-input text-center font-black rounded-xl py-1.5 outline-none text-sm">
+                            <input type="number" id="roi-retail-price" oninput="calculateSellerROI()" class="w-24 surface-card text-center font-black rounded-xl py-1.5 outline-none text-sm">
                         </div>
                         <div class="grid grid-cols-2 gap-2 pt-1 text-center">
-                            <div class="app-card p-2.5 rounded-xl">
-                                <span class="text-[10px] text-neutral-400 font-bold block uppercase">Прибыль</span>
+                            <div class="surface-card p-2.5 rounded-xl">
+                                <span class="text-[10px] text-neutral-400 font-bold block uppercase">Чистая маржа</span>
                                 <span class="text-sm font-black text-emerald-600 dark:text-emerald-400" id="roi-net-profit">0 ₽</span>
                             </div>
-                            <div class="app-card p-2.5 rounded-xl">
+                            <div class="surface-card p-2.5 rounded-xl">
                                 <span class="text-[10px] text-neutral-400 font-bold block uppercase">Рентабельность ROI</span>
-                                <span class="text-sm font-black text-neutral-900 dark:text-white" id="roi-percent">+0%</span>
+                                <span class="text-sm font-black" id="roi-percent">+0%</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="tab-matrix" class="hidden space-y-2 text-xs">
-                    <div class="app-card-sub rounded-xl p-3 space-y-2.5">
+                    <div class="surface-sub rounded-xl p-3 space-y-2.5">
                         <div class="flex justify-between items-center text-[11px] font-bold text-neutral-400">
                             <span>Размер</span>
                             <span>В коробе</span>
@@ -322,7 +324,7 @@
                 </div>
 
                 <div id="tab-branding" class="hidden space-y-2.5 text-xs">
-                    <div class="app-card-sub rounded-xl p-3.5 space-y-2">
+                    <div class="surface-sub rounded-xl p-3.5 space-y-2">
                         <div class="flex items-center justify-between">
                             <label class="font-bold flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="branding-checkbox" onchange="toggleBranding(this.checked)" class="w-4 h-4 rounded">
@@ -335,7 +337,7 @@
                 </div>
 
                 <div id="tab-fulfillment" class="hidden space-y-2.5 text-xs">
-                    <div class="app-card-sub rounded-xl p-3.5 space-y-2">
+                    <div class="surface-sub rounded-xl p-3.5 space-y-2">
                         <div class="flex items-center justify-between">
                             <label class="font-bold flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="fulfillment-checkbox" onchange="toggleFulfillment(this.checked)" class="w-4 h-4 rounded">
@@ -352,7 +354,7 @@
                 </div>
 
                 <div id="tab-warehouses" class="hidden space-y-2 text-xs">
-                    <div class="app-card-sub rounded-xl p-3 space-y-2 text-[11px] text-neutral-500">
+                    <div class="surface-sub rounded-xl p-3 space-y-2 text-[11px] text-neutral-500">
                         <div class="flex justify-between items-center">
                             <span>Склад Москва (Южные Врата):</span>
                             <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (320 шт)</span>
@@ -369,13 +371,13 @@
                 </div>
 
                 <!-- Калькулятор партии -->
-                <div class="app-card-sub rounded-2xl p-4 space-y-3">
+                <div class="surface-sub rounded-2xl p-4 space-y-3">
                     <div class="flex justify-between items-center">
                         <div>
                             <span class="text-xs font-bold block">Размер партии:</span>
                             <span class="text-[10px] text-neutral-400" id="box-quantity-hint">Квант короба: 10 шт</span>
                         </div>
-                        <div class="flex items-center gap-1.5 app-card px-3 py-1.5 rounded-xl shadow-sm">
+                        <div class="flex items-center gap-1.5 surface-card px-3 py-1.5 rounded-xl shadow-sm">
                             <input type="number" id="slider-number-input" class="w-16 text-center font-black text-sm outline-none bg-transparent" oninput="onNumberInputChange(this.value)">
                             <span class="text-xs font-bold text-neutral-400">шт.</span>
                         </div>
@@ -384,18 +386,18 @@
                     <input type="range" id="modal-slider" class="w-full h-2 rounded-lg appearance-none outline-none cursor-pointer bg-neutral-200 dark:bg-neutral-800" oninput="onSliderChange(this.value)">
                     <div class="flex gap-2 pt-1 overflow-x-auto hide-scrollbar" id="quick-preset-chips"></div>
 
-                    <div id="logistics-specs-box" class="app-card rounded-xl p-2.5 flex items-center justify-between text-[11px] text-neutral-500 font-semibold">
+                    <div id="logistics-specs-box" class="surface-card rounded-xl p-2.5 flex items-center justify-between text-[11px] text-neutral-500 font-semibold">
                         <div class="flex items-center gap-1.5">
                             <span>📦</span>
                             <span id="logistics-boxes-text">1 короб</span>
                             <span>•</span>
                             <span id="logistics-weight-text">7.5 кг</span>
                         </div>
-                        <span id="logistics-vehicle-badge" class="px-2 py-0.5 rounded-md app-card-sub font-bold text-[10px]">СДЭК / Курьер</span>
+                        <span id="logistics-vehicle-badge" class="px-2 py-0.5 rounded-md surface-sub font-bold text-[10px]">СДЭК / Курьер</span>
                     </div>
 
                     <div class="flex justify-between items-center text-[11px] font-semibold pt-1 border-t border-neutral-200 dark:border-neutral-800">
-                        <span>Цена за ед: <b id="tier-unit-price" class="font-bold text-neutral-900 dark:text-white"></b></span>
+                        <span>Себестоимость/ед: <b id="tier-unit-price" class="font-bold text-neutral-900 dark:text-white"></b></span>
                         <span>Итого: <b id="slider-total-price" class="font-black text-sm text-neutral-900 dark:text-white"></b></span>
                     </div>
                 </div>
@@ -406,94 +408,67 @@
 
         <!-- МОДАЛКА: Трекинг -->
         <div id="tracker-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
-            <div class="w-full max-w-md app-card rounded-t-3xl p-5 space-y-4 shadow-2xl transform translate-y-full sheet-transition" id="tracker-sheet">
+            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 space-y-4 shadow-2xl transform translate-y-full spring-modal" id="tracker-sheet">
                 <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
                     <div>
-                        <h2 class="text-base font-black">Отслеживание оптового груза</h2>
-                        <p class="text-[11px] text-neutral-400">Проверка сборки и доставки партии</p>
+                        <h2 class="text-base font-black">Отслеживание груза</h2>
+                        <p class="text-[11px] text-neutral-400">Статус комплектации и транспортировки</p>
                     </div>
-                    <button onclick="closeTrackerModal()" class="w-8 h-8 rounded-full app-card-sub font-bold flex items-center justify-center">✕</button>
+                    <button onclick="closeTrackerModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
                 </div>
                 <div class="flex gap-2">
-                    <input type="text" id="track-input" placeholder="Номер счета / накладной" class="flex-grow app-input rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none">
-                    <button onclick="checkOrderStatus()" class="px-4 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-xl font-bold text-xs smooth active:scale-95">Найти</button>
+                    <input type="text" id="track-input" placeholder="Номер счета / накладной" class="flex-grow surface-sub rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none">
+                    <button onclick="checkOrderStatus()" class="px-4 py-2.5 btn-primary rounded-xl font-bold text-xs smooth active:scale-95">Найти</button>
                 </div>
-                <div id="tracker-result" class="hidden app-card-sub rounded-2xl p-4 space-y-2 text-xs">
+                <div id="tracker-result" class="hidden surface-sub rounded-2xl p-4 space-y-2 text-xs">
                     <div class="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-2">
                         <span class="font-bold" id="track-id-display">Счет #384643</span>
                         <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-bold text-[10px]">В пути</span>
                     </div>
-                    <p class="text-[11px] text-neutral-400">Партия укомплектована и передана в курьерскую службу доставки по РФ.</p>
+                    <p class="text-[11px] text-neutral-400">Партия принята экспедитором, плановый срок доставки по РФ: 2–4 рабочих дня.</p>
                 </div>
             </div>
         </div>
 
-        <!-- МОДАЛКА: Поддержка (ИСПРАВЛЕНА: НЕ шлёт счёт) -->
-        <div id="support-chat-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
-            <div class="w-full max-w-md app-card rounded-t-3xl p-5 space-y-4 shadow-2xl transform translate-y-full sheet-transition" id="support-chat-sheet">
+        <!-- МОДАЛКА: Панель тикетов Саппорта (ДЛЯ АДМИНИСТРАТОРА) -->
+        <div id="admin-tickets-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
+            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto transform translate-y-full spring-modal" id="admin-tickets-sheet">
                 <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 flex items-center justify-center font-bold text-xs">М</div>
-                        <div>
-                            <h2 class="text-sm font-black">B2B Поддержка и отдел продаж</h2>
-                            <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Менеджер на связи</p>
-                        </div>
+                    <div>
+                        <h2 class="text-sm font-black">Входящие обращения в Саппорт</h2>
+                        <p class="text-[11px] text-neutral-400">Список байеров, запросивших помощь</p>
                     </div>
-                    <button onclick="closeSupportChatModal()" class="w-8 h-8 rounded-full app-card-sub font-bold flex items-center justify-center">✕</button>
+                    <button onclick="closeAdminTicketsModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
                 </div>
-
-                <div class="space-y-1.5 text-xs">
-                    <label class="block font-bold text-[11px] text-neutral-400">Тема вопроса:</label>
-                    <div class="flex flex-wrap gap-1.5">
-                        <button onclick="setSupportTopic(this, 'Запрос образцов продукции')" class="topic-chip px-2.5 py-1 rounded-lg app-card-sub text-[11px] font-medium smooth">📦 Образцы</button>
-                        <button onclick="setSupportTopic(this, 'Согласование отсрочки платежа')" class="topic-chip px-2.5 py-1 rounded-lg app-card-sub text-[11px] font-medium smooth">⏳ Отсрочка 30 дней</button>
-                        <button onclick="setSupportTopic(this, 'Сертификаты ТР ТС')" class="topic-chip px-2.5 py-1 rounded-lg app-card-sub text-[11px] font-medium smooth">📄 Документы ТР ТС</button>
-                    </div>
-                </div>
-
-                <div class="space-y-1 text-xs">
-                    <label class="block font-bold text-neutral-400">Текст сообщения:</label>
-                    <textarea id="support-message-text" rows="3" placeholder="Опишите вопрос по тиражу, поставке или документам..."
-                        class="w-full app-input rounded-xl p-3 outline-none resize-none"></textarea>
-                </div>
-
-                <div class="space-y-2 pt-1">
-                    <!-- Отправка вопроса в саппорт (не формирует счет!) -->
-                    <button onclick="sendSupportTicketOnly()" class="w-full py-3 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-xl font-bold text-xs smooth active:scale-[0.98] flex items-center justify-center gap-2">
-                        <span>Отправить менеджеру</span>
-                    </button>
-                    
-                    <!-- Прямая кнопка в личку Telegram -->
-                    <button onclick="openDirectTelegramSupport()" class="w-full py-2.5 app-card-sub rounded-xl font-bold text-xs smooth active:scale-[0.98] flex items-center justify-center gap-1.5">
-                        <span>💬 Открыть диалог в Telegram</span>
-                    </button>
+                <div id="tickets-list-container" class="space-y-2 text-xs">
+                    <p class="text-center py-6 text-neutral-400">Загрузка обращений...</p>
                 </div>
             </div>
         </div>
 
         <!-- МОДАЛКА: Оформление коммерческого счета -->
         <div id="checkout-form" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth">
-            <div class="w-full max-w-md app-card rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full sheet-transition" id="checkout-sheet">
+            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full spring-modal" id="checkout-sheet">
                 <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
                     <div>
                         <h2 class="text-lg font-black">Спецификация поставки</h2>
-                        <p class="text-[11px] text-neutral-400">Выставление официального PDF-счета</p>
+                        <p class="text-[11px] text-neutral-400">Формирование официального счета на оплату</p>
                     </div>
                     <div class="flex items-center gap-2 no-print">
-                        <button onclick="printQuotation()" class="text-xs font-bold app-card-sub px-2.5 py-1 rounded-lg">📄 КП</button>
+                        <button onclick="printQuotation()" class="text-xs font-bold surface-sub px-2.5 py-1 rounded-lg">📄 КП</button>
                         <button onclick="clearCart()" class="text-xs font-bold text-rose-500 bg-rose-500/10 px-2.5 py-1 rounded-lg">Очистить</button>
-                        <button onclick="hideCheckout()" class="w-8 h-8 rounded-full app-card-sub font-bold flex items-center justify-center">✕</button>
+                        <button onclick="hideCheckout()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
                     </div>
                 </div>
 
-                <div class="app-card-sub p-1 rounded-xl flex text-xs font-bold no-print">
-                    <button onclick="setVatMode(false)" id="vat-none-btn" class="flex-1 py-1.5 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 smooth">Без НДС (УСН)</button>
+                <div class="surface-sub p-1 rounded-xl flex text-xs font-bold no-print">
+                    <button onclick="setVatMode(false)" id="vat-none-btn" class="flex-1 py-1.5 rounded-lg btn-primary smooth">Без НДС (УСН)</button>
                     <button onclick="setVatMode(true)" id="vat-with-btn" class="flex-1 py-1.5 rounded-lg text-neutral-400 smooth">С НДС 20% (ОСНО)</button>
                 </div>
 
                 <div class="no-print space-y-1">
-                    <label class="block font-bold text-xs text-neutral-400">Условия оплаты:</label>
-                    <select id="payment-terms" class="w-full app-input rounded-xl px-3 py-2.5 text-xs font-semibold outline-none">
+                    <label class="block font-bold text-xs text-neutral-400">Условия взаиморасчетов:</label>
+                    <select id="payment-terms" class="w-full surface-sub rounded-xl px-3 py-2.5 text-xs font-semibold outline-none">
                         <option value="100% предоплата">100% Предоплата по счету (Скидка 2%)</option>
                         <option value="50/50 производство">50% Аванс / 50% Перед отгрузкой</option>
                         <option value="Отсрочка 30 дней">Отсрочка платежа 30 дней (Факторинг)</option>
@@ -507,8 +482,8 @@
                         <label class="block font-bold text-neutral-400 mb-1">ИНН компании (ЕГРЮЛ)</label>
                         <div class="flex gap-2">
                             <input type="text" id="inn-lookup-input" placeholder="10 или 12 цифр ИНН" maxlength="12"
-                                class="flex-grow app-input rounded-xl px-3.5 py-2.5 outline-none font-medium">
-                            <button type="button" id="inn-lookup-btn" onclick="autoFillByInn()" class="px-3 py-2.5 app-card-sub rounded-xl font-bold smooth active:scale-95">
+                                class="flex-grow surface-sub rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            <button type="button" id="inn-lookup-btn" onclick="autoFillByInn()" class="px-3 py-2.5 surface-card rounded-xl font-bold smooth active:scale-95">
                                 <span id="inn-btn-text">Найти</span>
                             </button>
                         </div>
@@ -517,21 +492,21 @@
                     <div>
                         <label class="block font-bold text-neutral-400 mb-1">Компания / ИП / Реквизиты *</label>
                         <input type="text" id="company" placeholder="ООО «Галк-Опт», ИНН 7701234567"
-                            class="w-full app-input rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            class="w-full surface-sub rounded-xl px-3.5 py-2.5 outline-none font-medium">
                     </div>
                     <div>
                         <label class="block font-bold text-neutral-400 mb-1">Город и терминал ТК *</label>
                         <input type="text" id="city" placeholder="г. Москва, терминал СДЭК ул. Ленина 12"
-                            class="w-full app-input rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            class="w-full surface-sub rounded-xl px-3.5 py-2.5 outline-none font-medium">
                     </div>
                     <div>
-                        <label class="block font-bold text-neutral-400 mb-1">ФИО и телефон *</label>
+                        <label class="block font-bold text-neutral-400 mb-1">ФИО и телефон закупщика *</label>
                         <input type="text" id="contacts" placeholder="Степан, +7 (999) 000-00-00"
-                            class="w-full app-input rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            class="w-full surface-sub rounded-xl px-3.5 py-2.5 outline-none font-medium">
                     </div>
                     <div class="no-print">
                         <label class="block font-bold text-neutral-400 mb-1">Транспортная компания</label>
-                        <select id="tk-choice" class="w-full app-input rounded-xl px-3 py-2.5 font-medium outline-none">
+                        <select id="tk-choice" class="w-full surface-sub rounded-xl px-3 py-2.5 font-medium outline-none">
                             <option value="СДЭК">СДЭК (Курьер / Склад)</option>
                             <option value="Деловые Линии">Деловые Линии (Паллетная доставка)</option>
                             <option value="ПЭК">ПЭК (Сборный груз)</option>
@@ -540,15 +515,15 @@
                     </div>
                 </div>
 
-                <div class="app-card-sub rounded-2xl p-3.5 flex justify-between items-center text-xs">
+                <div class="surface-sub rounded-2xl p-3.5 flex justify-between items-center text-xs">
                     <div>
-                        <span class="font-bold block">Сумма к оплате:</span>
-                        <span class="text-[10px] text-neutral-400" id="vat-description-label">Без НДС • Счет отправляется в Telegram</span>
+                        <span class="font-bold block">Итого к безналичной оплате:</span>
+                        <span class="text-[10px] text-neutral-400" id="vat-description-label">Без НДС • Счет выставляется в Telegram</span>
                     </div>
                     <span class="font-black text-base" id="checkout-total">0 ₽</span>
                 </div>
 
-                <button onclick="sendOrderToBot()" class="w-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 py-3.5 rounded-xl font-bold text-sm smooth active:scale-[0.98] flex items-center justify-center gap-2 no-print">
+                <button onclick="sendOrderToBot()" class="w-full btn-primary py-3.5 rounded-xl font-bold text-sm smooth active:scale-[0.98] flex items-center justify-center gap-2 no-print shadow-xl">
                     <span>Выставить официальный счет (PDF)</span>
                 </button>
             </div>
@@ -564,10 +539,11 @@
         } catch(e) {}
 
         const ADMIN_TELEGRAM_ID = 8125122124;
-        const MANAGER_TELEGRAM_USERNAME = "rewortoo666"; // Ссылка на менеджера
+        const MANAGER_TELEGRAM_USERNAME = "rewortoo666";
         const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 0;
+        const isAdmin = (currentUserId === ADMIN_TELEGRAM_ID || window.location.hash.includes("admin"));
 
-        // Постоянный адрес бэкенда на Timeweb
+        // Постоянный адрес VPS
         const API_SERVER_URL = "https://galk-b2b.duckdns.org";
 
         function resolveImageUrl(url) {
@@ -577,7 +553,7 @@
             return `${API_SERVER_URL}${clean}`;
         }
 
-        // Чистая база товаров (показывается МГНОВЕННО, без ожидания интернета)
+        // Встроенный каталог — моментальный рендер
         const defaultProducts = [
             { 
                 id: 'p_watch_custom', cat: 'Электроника', title: 'Apple Watch Ultra 2 Black', desc: 'Фабричный оригинал. Премиальный корпус, полный комплект под перепродажу.', 
@@ -592,13 +568,13 @@
                 tiers: [{ min: 10, price: 850, label: 'от 10 шт' }, { min: 30, price: 765, label: 'от 30 шт' }, { min: 60, price: 680, label: 'от 60 шт' }]
             },
             { 
-                id: 'p_watch', cat: 'Электроника', title: 'Apple Watch Ultra Titanium', desc: 'Премиальная комплектация 1:1, титановый корпус, AMOLED-экран.', 
+                id: 'p_watch', cat: 'Электроника', title: 'Apple Watch Ultra Titanium', desc: 'Премиальная фабричная комплектация 1:1, титановый корпус, AMOLED-экран.', 
                 price: 2200, moq: 5, box_qty: 5, wb_price: 5400, stock: 300, weight_per_unit: 0.18, badge: 'Топ маржа', 
                 images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80'],
                 tiers: [{ min: 5, price: 1850, label: '5-19 шт' }, { min: 20, price: 1650, label: '20-49 шт' }, { min: 50, price: 1490, label: 'от 50 шт' }]
             },
             { 
-                id: 'p1', cat: 'Одежда', title: 'Худи Oversize Premium (420g)', desc: 'Плотный футер 3-х нитка пенье с начесом. Высокое качество пошива.', 
+                id: 'p1', cat: 'Одежда', title: 'Худи Oversize Premium (420g)', desc: 'Плотный футер 3-х нитка пенье с начесом. Высокое качество пошива, усиленная горловина.', 
                 price: 2500, moq: 10, box_qty: 10, wb_price: 4900, stock: 480, weight_per_unit: 0.75, badge: 'Хит продаж', 
                 images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80'],
                 tiers: [{ min: 10, price: 2100, label: '10-29 шт' }, { min: 30, price: 1950, label: '30-99 шт' }, { min: 100, price: 1800, label: 'от 100 шт' }],
@@ -610,13 +586,13 @@
                 ]
             },
             { 
-                id: 'p2', cat: 'Обувь', title: 'Кроссовки B2B Sport Runner PRO', desc: 'Дышащая сетка Ripstop, подошва EVA. Заводская ростовка.', 
+                id: 'p2', cat: 'Обувь', title: 'Кроссовки B2B Sport Runner PRO', desc: 'Дышащая сетка Ripstop, подошва EVA. Заводская ростовка с 40 по 45 размер.', 
                 price: 3200, moq: 8, box_qty: 8, wb_price: 6200, stock: 192, weight_per_unit: 0.9, badge: 'Сезон 2026', 
                 images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'],
                 tiers: [{ min: 8, price: 2800, label: '8-24 шт' }, { min: 25, price: 2600, label: '25-79 шт' }, { min: 80, price: 2400, label: 'от 80 шт' }]
             },
             { 
-                id: 'p3', cat: 'Электроника', title: 'Яндекс Станция Мини 2', desc: 'Оригинальные станции в заводской слюде. Официальная гарантия 1 год.', 
+                id: 'p3', cat: 'Электроника', title: 'Яндекс Станция Мини 2 с часами', desc: 'Оригинальные станции в заводской слюде. Официальная гарантия 1 год.', 
                 price: 6000, moq: 5, box_qty: 5, wb_price: 7990, stock: 85, weight_per_unit: 0.45, badge: 'Оригинал EAC', 
                 images: ['https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=600&q=80'],
                 tiers: [{ min: 5, price: 5400, label: '5-14 шт' }, { min: 15, price: 5100, label: '15-49 шт' }, { min: 50, price: 4850, label: 'от 50 шт' }]
@@ -632,7 +608,7 @@
         let isFulfillmentIncluded = false;
         let isVatEnabled = false;
 
-        // Тема Black & White
+        // Тема Monochrome (White & Black)
         let isDarkMode = localStorage.getItem('galk_theme_mode') === 'dark';
         function applyTheme(dark) {
             isDarkMode = dark;
@@ -652,7 +628,7 @@
             try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
         }
 
-        function showToast(text, icon = '✅') {
+        function showToast(text, icon = '⚡️') {
             const toast = document.getElementById('toast');
             if (!toast) return;
             document.getElementById('toast-text').innerText = text;
@@ -660,7 +636,72 @@
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
             setTimeout(() => {
                 toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-            }, 2500);
+            }, 2400);
+        }
+
+        // 1. ЛОГИКА САППОРТА И ПЕРЕКЛЮЧЕНИЯ АДМИНКИ:
+        function handleSupportClick() {
+            if (isAdmin) {
+                openAdminTicketsModal();
+            } else {
+                // КЛИЕНТ: мгновенно открывается чат Telegram с менеджером
+                tg.openTelegramLink(`https://t.me/${MANAGER_TELEGRAM_USERNAME}`);
+            }
+        }
+
+        // Активация админских функций
+        if (isAdmin) {
+            document.getElementById('admin-mode-toggle').classList.remove('hidden');
+            document.getElementById('admin-indicator').classList.remove('hidden');
+            document.getElementById('support-btn-text').innerText = "Тикеты";
+        }
+
+        async function openAdminTicketsModal() {
+            const modal = document.getElementById('admin-tickets-modal');
+            const sheet = document.getElementById('admin-tickets-sheet');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            sheet.classList.remove('translate-y-full');
+
+            const container = document.getElementById('tickets-list-container');
+            container.innerHTML = `<p class="text-center py-6 text-neutral-400">Загрузка обращений...</p>`;
+
+            try {
+                const res = await fetch(`${API_SERVER_URL}/api/support_tickets?t=${Date.now()}`);
+                const tickets = await res.json();
+
+                if (!tickets || tickets.length === 0) {
+                    container.innerHTML = `<p class="text-center py-8 text-neutral-400">Новых обращений нет 🎉</p>`;
+                    return;
+                }
+
+                container.innerHTML = tickets.map(t => `
+                    <div class="surface-sub p-3 rounded-2xl space-y-1.5 border border-neutral-200 dark:border-neutral-800">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold">${t.name} ${t.username ? '(@' + t.username + ')' : ''}</span>
+                            <span class="text-[10px] text-neutral-400">${t.date || ''}</span>
+                        </div>
+                        <p class="text-[11px] text-neutral-500">${t.message}</p>
+                        <button onclick="openClientChat('${t.username}', '${t.user_id}')" class="w-full mt-1 py-2 btn-primary rounded-xl font-bold text-[11px] active:scale-95 smooth flex items-center justify-center gap-1.5 shadow-sm">
+                            💬 Открыть диалог в Telegram
+                        </button>
+                    </div>
+                `).join('');
+            } catch(e) {
+                container.innerHTML = `<p class="text-center py-6 text-rose-500">Не удалось загрузить тикеты с сервера</p>`;
+            }
+        }
+
+        function openClientChat(username, userId) {
+            if (username && username !== "нет") {
+                tg.openTelegramLink(`https://t.me/${username.replace('@', '')}`);
+            } else {
+                tg.openTelegramLink(`tg://user?id=${userId}`);
+            }
+        }
+
+        function closeAdminTicketsModal() {
+            document.getElementById('admin-tickets-sheet').classList.add('translate-y-full');
+            document.getElementById('admin-tickets-modal').classList.add('opacity-0', 'pointer-events-none');
         }
 
         function toggleFavorite(id, event) {
@@ -670,7 +711,7 @@
                 showToast("Удалено из избранного", "💔");
             } else {
                 favorites.push(id);
-                showToast("В избранном", "❤️");
+                showToast("Добавлено в избранное", "❤️");
             }
             try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
             filterProducts();
@@ -679,12 +720,12 @@
         function setCategory(cat) {
             currentCat = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold app-card text-neutral-500 smooth whitespace-nowrap';
+                btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-neutral-500 smooth whitespace-nowrap';
             });
             const activeMap = { 'all': 'cat-all', 'favorites': 'cat-fav', 'Одежда': 'cat-clothes', 'Обувь': 'cat-shoes', 'Электроника': 'cat-tech', 'Сувениры': 'cat-merch' };
             const targetBtn = document.getElementById(activeMap[cat]);
             if (targetBtn) {
-                targetBtn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-bold bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 smooth whitespace-nowrap';
+                targetBtn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-bold btn-primary smooth whitespace-nowrap';
             }
             try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
             filterProducts();
@@ -753,18 +794,17 @@
                 const badge = p.badge || 'Опт';
 
                 container.innerHTML += `
-                    <div class="app-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md smooth relative group">
-                        
+                    <div class="surface-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md smooth relative group">
                         <div class="absolute top-2 right-2 z-20 flex items-center">
-                            <button onclick="toggleFavorite('${p.id}', event)" class="w-7 h-7 rounded-lg app-card flex items-center justify-center text-xs smooth active:scale-90">
+                            <button onclick="toggleFavorite('${p.id}', event)" class="w-7 h-7 rounded-lg surface-card flex items-center justify-center text-xs smooth active:scale-90">
                                 ${isFav ? '❤️' : '🤍'}
                             </button>
                         </div>
 
                         <div onclick="openProductModal('${p.id}')" class="cursor-pointer">
-                            <div class="relative w-full aspect-[4/3] app-card-sub overflow-hidden">
+                            <div class="relative w-full aspect-[4/3] surface-sub overflow-hidden">
                                 <img src="${img}" alt="${p.title}" class="w-full h-full object-cover smooth group-hover:scale-105">
-                                <span class="absolute top-2 left-2 bg-neutral-900/80 dark:bg-black/80 text-white font-bold text-[9px] px-2 py-0.5 rounded-md tracking-wider">
+                                <span class="absolute top-2 left-2 bg-neutral-900/85 dark:bg-black/85 text-white font-bold text-[9px] px-2 py-0.5 rounded-md tracking-wider">
                                     ${badge}
                                 </span>
                             </div>
@@ -774,7 +814,7 @@
                                     <span class="text-emerald-600 dark:text-emerald-400 font-bold">${stock} шт</span>
                                 </div>
                                 <h3 class="font-bold text-xs leading-snug line-clamp-2">${p.title}</h3>
-                                <div class="mt-2 app-card-sub rounded-xl p-2">
+                                <div class="mt-2 surface-sub rounded-xl p-2">
                                     <div class="flex items-baseline gap-1">
                                         <span class="font-black text-sm text-neutral-900 dark:text-white">${tierPrice.toLocaleString('ru-RU')} ₽</span>
                                         <span class="text-[10px] text-neutral-400 line-through">${basePrice.toLocaleString('ru-RU')} ₽</span>
@@ -788,11 +828,11 @@
                         </div>
                         <div class="p-3 pt-2">
                             ${qty === 0 
-                                ? `<button onclick="updateCart('${p.id}', ${moq}); triggerFlyToCartAnimation(this);" class="w-full py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-xl text-xs font-bold smooth flex items-center justify-center gap-1 active:scale-95">
+                                ? `<button onclick="updateCart('${p.id}', ${moq}); triggerFlyToCartAnimation(this);" class="w-full py-2 btn-primary rounded-xl text-xs font-bold smooth flex items-center justify-center gap-1 active:scale-95 shadow-sm">
                                     <span>В смету</span>
                                     <span class="text-[10px] opacity-70">(${moq} шт)</span>
                                    </button>`
-                                : `<div class="flex items-center justify-between bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-xl p-1">
+                                : `<div class="flex items-center justify-between btn-primary rounded-xl p-1 shadow-sm">
                                     <button onclick="updateCart('${p.id}', ${qty - boxQty})" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">-</button>
                                     <span class="text-xs font-bold">${qty} шт</span>
                                     <button onclick="updateCart('${p.id}', ${qty + boxQty}); triggerFlyToCartAnimation(this);" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">+</button>
@@ -804,14 +844,11 @@
             });
         }
 
-        // Синхронизация с сервером с тайм-аутом 4с, чтобы каталог не зависал
         async function syncCatalogWithServer() {
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 4000);
-                const res = await fetch(`${API_SERVER_URL}/api/products?t=${Date.now()}`, {
-                    signal: controller.signal
-                });
+                const res = await fetch(`${API_SERVER_URL}/api/products?t=${Date.now()}`, { signal: controller.signal });
                 clearTimeout(timeoutId);
 
                 if (res.ok) {
@@ -822,18 +859,17 @@
                     }
                 }
             } catch(e) {
-                console.warn("Сервер офлайн или задержка, отображаем готовую базу");
+                console.warn("API Offline / тайм-аут, использована встроенная база");
             }
         }
 
         function manualSync() {
             showToast("Синхронизация с сервером...", "🔄");
-            syncCatalogWithServer().then(() => showToast("Каталог обновлен!", "✅"));
+            syncCatalogWithServer().then(() => showToast("Каталог актуализирован!", "✅"));
         }
 
-        // Выгрузка прайс-листа Excel
         async function exportPriceListExcel() {
-            showToast("Формируем Excel...", "📊");
+            showToast("Формируем прайс-лист...", "📊");
             try {
                 const excelRows = products.map((p, idx) => ({
                     "№": idx + 1,
@@ -865,12 +901,12 @@
                 });
 
                 if (res.ok) {
-                    showToast("Прайс отправлен вам в чат бота! 📥", "✅");
+                    showToast("Прайс отправлен в чат бота! 📥", "✅");
                 } else {
                     throw new Error("API Offline");
                 }
             } catch(e) {
-                showToast("Нажмите кнопку прайса в чате с ботом", "ℹ️");
+                showToast("Нажмите '📊 Скачать прайс (Excel)' в боте!", "ℹ️");
             }
         }
 
@@ -903,7 +939,7 @@
             (p.images || []).forEach(imgUrl => {
                 const resolved = resolveImageUrl(imgUrl);
                 thumbsContainer.innerHTML += `
-                    <button onclick="document.getElementById('modal-main-img').src = '${resolved}'" class="w-12 h-12 rounded-xl overflow-hidden app-card focus:ring-2 focus:ring-black dark:focus:ring-white smooth">
+                    <button onclick="document.getElementById('modal-main-img').src = '${resolved}'" class="w-12 h-12 rounded-xl overflow-hidden surface-card focus:ring-2 focus:ring-black dark:focus:ring-white smooth">
                         <img src="${resolved}" class="w-full h-full object-cover">
                     </button>
                 `;
@@ -913,7 +949,7 @@
             tiersBox.innerHTML = '';
             (p.tiers || [{ min: p.moq, price: p.price, label: 'Опт' }]).forEach(t => {
                 tiersBox.innerHTML += `
-                    <div class="app-card rounded-xl p-2">
+                    <div class="surface-card rounded-xl p-2">
                         <span class="text-[10px] text-neutral-400 block">${t.label}</span>
                         <span class="font-extrabold text-xs">${t.price} ₽</span>
                     </div>
@@ -931,9 +967,9 @@
 
             const chips = document.getElementById('quick-preset-chips');
             chips.innerHTML = `
-                <button onclick="setModalQty(1)" class="px-2.5 py-1 rounded-lg app-card text-[10px] font-bold active:scale-95 whitespace-nowrap">🧪 Образец 1 шт</button>
-                <button onclick="setModalQty(${p.moq || 10})" class="px-2.5 py-1 rounded-lg app-card text-[10px] font-bold active:scale-95 whitespace-nowrap">Мин. ${p.moq || 10} шт</button>
-                <button onclick="setModalQty(${(p.box_qty || p.moq || 10) * 3})" class="px-2.5 py-1 rounded-lg app-card text-[10px] font-bold active:scale-95 whitespace-nowrap">3 короба (${(p.box_qty || p.moq || 10) * 3} шт)</button>
+                <button onclick="setModalQty(1)" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap">🧪 Образец 1 шт</button>
+                <button onclick="setModalQty(${p.moq || 10})" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap">Мин. ${p.moq || 10} шт</button>
+                <button onclick="setModalQty(${(p.box_qty || p.moq || 10) * 3})" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap">3 короба (${(p.box_qty || p.moq || 10) * 3} шт)</button>
             `;
 
             renderMatrixTab(p);
@@ -1003,7 +1039,7 @@
         function renderMatrixTab(product) {
             const container = document.getElementById('matrix-rows-container');
             if (!product.matrix) {
-                container.innerHTML = `<div class="text-neutral-400 text-center py-2">Для позиции ростовка не предусмотрена</div>`;
+                container.innerHTML = `<div class="text-neutral-400 text-center py-2">Для данной позиции ростовка не предусмотрена</div>`;
                 document.getElementById('matrix-total-qty').innerText = `${document.getElementById('modal-slider').value} шт`;
                 return;
             }
@@ -1011,11 +1047,11 @@
             container.innerHTML = '';
             product.matrix.forEach((m, idx) => {
                 container.innerHTML += `
-                    <div class="flex items-center justify-between app-card p-2 rounded-xl">
+                    <div class="flex items-center justify-between surface-card p-2 rounded-xl">
                         <span class="font-bold">${m.size}</span>
                         <span class="text-neutral-400 text-[11px]">${m.inBox} шт/кор</span>
                         <div class="flex items-center gap-1">
-                            <input type="number" min="0" value="${m.count || 0}" oninput="updateMatrixRow(${idx}, this.value)" class="w-12 text-center font-bold app-input rounded-md py-1">
+                            <input type="number" min="0" value="${m.count || 0}" oninput="updateMatrixRow(${idx}, this.value)" class="w-12 text-center font-bold surface-sub rounded-md py-1">
                             <span class="text-neutral-400 text-[10px]">кор.</span>
                         </div>
                         <span class="font-black">${(m.count || 0) * m.inBox} шт</span>
@@ -1092,13 +1128,13 @@
                 const percent = Math.min(100, Math.round((qty / nextTier.min) * 100));
                 progressBar.style.width = `${percent}%`;
             } else {
-                hint.innerText = 'Максимальная оптовая скидка разблокирована! 🎉';
+                hint.innerText = 'Максимальная оптовая скидка! 🎉';
                 progressBar.style.width = '100%';
             }
 
             const slot = document.getElementById('modal-action-slot');
             slot.innerHTML = `
-                <button onclick="commitModalToCart('${product.id}', ${qty}); closeProductModal(); triggerFlyToCartAnimation(this);" class="w-full py-3.5 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-xl text-xs font-bold smooth flex items-center justify-center gap-2 active:scale-95">
+                <button onclick="commitModalToCart('${product.id}', ${qty}); closeProductModal(); triggerFlyToCartAnimation(this);" class="w-full py-3.5 btn-primary rounded-xl text-xs font-bold smooth flex items-center justify-center gap-2 active:scale-95 shadow-lg">
                     <span>Добавить в спецификацию (${qty} шт)</span>
                     <span>•</span>
                     <span>${total.toLocaleString('ru-RU')} ₽</span>
@@ -1187,11 +1223,11 @@
             const desc = document.getElementById('vat-description-label');
 
             if (withVat) {
-                withBtn.className = 'flex-1 py-1.5 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-bold smooth';
+                withBtn.className = 'flex-1 py-1.5 rounded-lg btn-primary font-bold smooth';
                 noneBtn.className = 'flex-1 py-1.5 rounded-lg text-neutral-400 font-medium smooth';
                 desc.innerText = 'Включая НДС 20% • Пакет закрывающих УПД';
             } else {
-                noneBtn.className = 'flex-1 py-1.5 rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-bold smooth';
+                noneBtn.className = 'flex-1 py-1.5 rounded-lg btn-primary font-bold smooth';
                 withBtn.className = 'flex-1 py-1.5 rounded-lg text-neutral-400 font-medium smooth';
                 desc.innerText = 'Без НДС (УСН) • Прямой счет на оплату';
             }
@@ -1218,7 +1254,7 @@
                     const matrixText = item.matrixSummary ? `<p class="text-[9px] text-neutral-400">${item.matrixSummary}</p>` : '';
 
                     itemsContainer.innerHTML += `
-                        <div class="flex justify-between items-center app-card-sub rounded-xl p-2.5 text-xs">
+                        <div class="flex justify-between items-center surface-sub rounded-xl p-2.5 text-xs">
                             <div>
                                 <p class="font-bold leading-tight">${p.title}${badgesText}</p>
                                 <p class="text-[10px] text-neutral-400 mt-0.5">${item.qty} шт × ${item.unitPrice} ₽</p>
@@ -1241,7 +1277,7 @@
             document.getElementById('checkout-form').classList.add('opacity-0', 'pointer-events-none');
         }
 
-        // ОФОРМЛЕНИЕ СЧЕТА: Единственная функция, отправляющая счет в бот
+        // ОТПРАВКА СЧЕТА: Единственная функция формирования счета
         function sendOrderToBot() {
             const company = document.getElementById('company').value.trim();
             const city = document.getElementById('city').value.trim();
@@ -1289,61 +1325,12 @@
             tg.sendData(JSON.stringify(payload));
         }
 
-        // ИСПРАВЛЕННЫЙ САППОРТ: Отправляет запрос на бэкенд и НЕ шлет счет
-        let selectedSupportTopic = 'Общий вопрос';
-
-        function openSupportChatModal() {
-            document.getElementById('support-chat-modal').classList.remove('opacity-0', 'pointer-events-none');
-            document.getElementById('support-chat-sheet').classList.remove('translate-y-full');
-        }
-
-        function closeSupportChatModal() {
-            document.getElementById('support-chat-sheet').classList.add('translate-y-full');
-            document.getElementById('support-chat-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function setSupportTopic(btn, topic) {
-            selectedSupportTopic = topic;
-            document.querySelectorAll('.topic-chip').forEach(b => b.classList.remove('bg-neutral-900', 'text-white', 'dark:bg-white', 'dark:text-neutral-950'));
-            btn.classList.add('bg-neutral-900', 'text-white', 'dark:bg-white', 'dark:text-neutral-950');
-        }
-
-        async function sendSupportTicketOnly() {
-            const text = document.getElementById('support-message-text').value.trim();
-            if (!text) {
-                showToast("Введите текст вопроса", "⚠️");
-                return;
-            }
-
-            showToast("Отправка вопроса...", "💬");
-
-            try {
-                const targetUid = currentUserId || ADMIN_TELEGRAM_ID;
-                await fetch(`${API_SERVER_URL}/api/support`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_id: targetUid,
-                        topic: selectedSupportTopic,
-                        message: text
-                    })
-                });
-            } catch(e) {}
-
-            closeSupportChatModal();
-            showToast("Менеджер получил обращение! Ответ придет в чат.", "✅");
-            document.getElementById('support-message-text').value = '';
-        }
-
-        function openDirectTelegramSupport() {
-            tg.openTelegramLink(`https://t.me/${MANAGER_TELEGRAM_USERNAME}`);
-        }
-
         function openLightbox() {
             const currentImg = document.getElementById('modal-main-img').src;
             if (!currentImg) return;
             document.getElementById('lightbox-img').src = currentImg;
             document.getElementById('lightbox-modal').classList.remove('opacity-0', 'pointer-events-none');
+            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
         }
 
         function closeLightbox() {
@@ -1353,6 +1340,7 @@
         function openTrackerModal() {
             document.getElementById('tracker-modal').classList.remove('opacity-0', 'pointer-events-none');
             document.getElementById('tracker-sheet').classList.remove('translate-y-full');
+            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
         }
 
         function closeTrackerModal() {
@@ -1377,7 +1365,7 @@
                 const cartRect = cartBar.getBoundingClientRect();
 
                 const particle = document.createElement('div');
-                particle.className = 'fly-particle w-5 h-5 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 rounded-full flex items-center justify-center text-[9px] font-black shadow-lg';
+                particle.className = 'fly-particle w-5 h-5 btn-primary rounded-full flex items-center justify-center text-[9px] font-black shadow-lg';
                 particle.innerText = '+1';
                 particle.style.left = `${rect.left + rect.width / 2 - 10}px`;
                 particle.style.top = `${rect.top + rect.height / 2 - 10}px`;
@@ -1395,7 +1383,7 @@
                     particle.remove();
                     cartBar.classList.add('scale-105');
                     setTimeout(() => cartBar.classList.remove('scale-105'), 180);
-                }, 600);
+                }, 550);
             } catch(e) {}
         }
 
@@ -1457,10 +1445,9 @@
             if (el) el.innerText = tickerMessages[tickerIdx];
         }, 5000);
 
-        // Инициализация интерфейса
         applyTheme(isDarkMode);
-        filterProducts(); // Моментальный вывод товаров
-        syncCatalogWithServer(); // Фоновая синхронизация с Timeweb
+        filterProducts();
+        syncCatalogWithServer();
     </script>
 </body>
 </html>
