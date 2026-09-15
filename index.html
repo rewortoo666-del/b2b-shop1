@@ -6,7 +6,6 @@
     <title>Galk B2B Supply Platform</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SheetJS для генерации оптового прайс-листа Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,24 +15,24 @@
         :root {
             --bg-body: #F4F4F5;
             --bg-surface: #FFFFFF;
-            --bg-sub: #F0F0F2;
-            --border-ui: #E4E4E7;
+            --bg-sub: #EBECEF;
+            --border-ui: #D4D4D8;
             --text-primary: #09090B;
-            --text-secondary: #3F3F46;
+            --text-secondary: #27272A;
             --text-muted: #52525B;
             --btn-main-bg: #09090B;
-            --btn-main-text: #FAFAFA;
+            --btn-main-text: #FFFFFF;
         }
 
         .dark {
             --bg-body: #09090B;
             --bg-surface: #141417;
-            --bg-sub: #1D1D22;
-            --border-ui: #2E2E35;
-            --text-primary: #FAFAFA;
-            --text-secondary: #D4D4D8;
+            --bg-sub: #1F1F24;
+            --border-ui: #33333C;
+            --text-primary: #FFFFFF;
+            --text-secondary: #E4E4E7;
             --text-muted: #A1A1AA;
-            --btn-main-bg: #FAFAFA;
+            --btn-main-bg: #FFFFFF;
             --btn-main-text: #09090B;
         }
 
@@ -42,86 +41,27 @@
             background-color: var(--bg-body);
             color: var(--text-primary);
             -webkit-tap-highlight-color: transparent;
-            transition: background-color 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .smooth {
-            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .spring-modal {
-            transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.38s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .surface-card {
-            background-color: var(--bg-surface);
-            border: 1px solid var(--border-ui);
-        }
-
-        .surface-sub {
-            background-color: var(--bg-sub);
-            border: 1px solid var(--border-ui);
-        }
-
-        .btn-primary {
-            background-color: var(--btn-main-bg);
-            color: var(--btn-main-text);
-        }
-
-        .text-strong {
-            color: var(--text-primary);
-        }
-
-        .text-desc {
-            color: var(--text-secondary);
-        }
-
-        .text-subtle {
-            color: var(--text-muted);
-        }
-
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 22px;
-            width: 22px;
-            border-radius: 50%;
-            background: var(--btn-main-bg);
-            cursor: pointer;
-            border: 3px solid var(--bg-surface);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.15s ease;
-        }
-
-        input[type=range]::-webkit-slider-thumb:active {
-            transform: scale(1.25);
-        }
-
-        .fly-particle {
-            position: fixed;
-            z-index: 100;
-            pointer-events: none;
-            transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @media print {
-            body { background: white !important; color: black !important; }
-            header, #cart-bar, .no-print, #b2b-action-bar, #product-modal, #lightbox-modal, #live-warehouse-ticker { display: none !important; }
-            #checkout-sheet { position: static !important; max-height: none !important; transform: none !important; box-shadow: none !important; }
-        }
+        .smooth { transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+        .spring-modal { transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+        .surface-card { background-color: var(--bg-surface); border: 1px solid var(--border-ui); }
+        .surface-sub { background-color: var(--bg-sub); border: 1px solid var(--border-ui); }
+        .btn-primary { background-color: var(--btn-main-bg); color: var(--btn-main-text); }
     </style>
 </head>
 <body class="flex justify-center min-h-screen antialiased selection:bg-neutral-900 selection:text-white">
 
     <!-- Toast-уведомление -->
-    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-bold px-4 py-2.5 rounded-2xl shadow-2xl border border-neutral-800 dark:border-neutral-200 opacity-0 pointer-events-none smooth transform -translate-y-2 flex items-center gap-2">
+    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-bold px-4 py-2.5 rounded-2xl shadow-2xl border border-neutral-700 opacity-0 pointer-events-none smooth transform -translate-y-2 flex items-center gap-2">
         <span id="toast-icon">⚡️</span>
         <span id="toast-text">Готово</span>
     </div>
 
-    <!-- Полноэкранный Lightbox для фото -->
+    <!-- Полноэкранный Lightbox -->
     <div id="lightbox-modal" class="fixed inset-0 z-[70] bg-black/90 flex items-center justify-center p-4 opacity-0 pointer-events-none smooth" onclick="closeLightbox()">
         <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl transition transform scale-95" onclick="event.stopPropagation()">
         <button onclick="closeLightbox()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-neutral-800 text-white font-bold flex items-center justify-center active:scale-90 smooth">✕</button>
@@ -129,108 +69,56 @@
 
     <div id="app-wrapper" class="w-full max-w-md min-h-screen relative flex flex-col pb-28">
 
-        <!-- Шапка платформы -->
+        <!-- Шапка: аккуратная, без слипания кнопок -->
         <header class="sticky top-0 z-30 bg-white/95 dark:bg-neutral-950/95 border-b border-neutral-200 dark:border-neutral-800 px-4 py-3 flex items-center justify-between smooth backdrop-blur-md">
             <div class="flex items-center gap-2.5">
-                <div class="w-9 h-9 rounded-xl btn-primary flex items-center justify-center font-black text-sm shadow-sm tracking-tight">
-                    G
-                </div>
+                <div class="w-9 h-9 rounded-xl btn-primary flex items-center justify-center font-black text-sm shadow-sm">G</div>
                 <div>
                     <div class="flex items-center gap-1.5">
-                        <span class="font-extrabold text-sm tracking-tight text-strong">Galk B2B</span>
-                        <span id="admin-indicator" class="hidden px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider bg-amber-500 text-black shadow-sm">ADMIN</span>
-                        <span class="px-1.5 py-0.2 rounded text-[8px] font-black uppercase tracking-wider bg-neutral-200 dark:bg-neutral-800 text-strong">Supply</span>
+                        <span class="font-extrabold text-sm tracking-tight">Galk B2B</span>
+                        <span id="admin-badge" class="hidden px-1.5 py-0.2 rounded text-[9px] font-black uppercase bg-amber-500 text-black shadow-sm">ADMIN</span>
                     </div>
-                    <div class="flex items-center gap-1 text-[10px] font-medium text-subtle">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Хаб Южные Врата • Онлайн
+                    <div class="flex items-center gap-1 text-[10px] font-medium opacity-60">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Хаб Москва • Онлайн
                     </div>
                 </div>
             </div>
             
-            <div class="flex items-center gap-1.5">
-                <!-- Админская кнопка переключения на список чатов -->
-                <button onclick="openAdminThreadsModal()" id="admin-mode-toggle" class="hidden px-2.5 py-1.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-bold text-xs active:scale-90 smooth flex items-center gap-1">
+            <div class="flex items-center gap-2">
+                <!-- Кнопка только для админа -->
+                <button onclick="openAdminThreadsModal()" id="admin-chats-btn" class="hidden px-3 py-1.5 rounded-xl bg-amber-500 text-black font-extrabold text-xs active:scale-90 smooth shadow-sm flex items-center gap-1">
                     👑 <span>Чаты</span>
                 </button>
-                <button onclick="manualSync()" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Обновить каталог">🔄</button>
-                <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Сменить тему">🌙</button>
-                <button onclick="openTrackerModal()" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth" title="Трекинг">🚚</button>
-                <!-- Кнопка вызова встроенного саппорт-чата для клиента -->
-                <button onclick="openClientLiveChat()" class="px-3 py-1.5 rounded-xl btn-primary font-bold text-xs flex items-center gap-1 active:scale-90 smooth shadow-sm">
+                <!-- Кнопка только для клиента -->
+                <button onclick="openClientLiveChat()" id="client-chat-btn" class="px-3 py-1.5 rounded-xl btn-primary font-extrabold text-xs active:scale-90 smooth shadow-sm flex items-center gap-1">
                     💬 <span>Саппорт</span>
                 </button>
+                <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl surface-card flex items-center justify-center text-xs font-bold active:scale-90 smooth">🌙</button>
             </div>
         </header>
 
-        <!-- Складской тикер -->
-        <section id="live-warehouse-ticker" class="px-4 pt-3 no-print">
+        <!-- Тикер склада -->
+        <section class="px-4 pt-3 no-print">
             <div class="surface-card rounded-xl px-3 py-2 flex items-center justify-between text-[11px] font-semibold">
                 <div class="flex items-center gap-2 truncate">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span id="ticker-text" class="truncate text-desc">Склад Южные Врата: отгружено 42 короба (СДЭК)</span>
+                    <span id="ticker-text" class="truncate opacity-80">Склад Южные Врата: отгружено 42 короба (СДЭК)</span>
                 </div>
-                <span class="font-mono text-[9px] uppercase tracking-wider text-subtle pl-2">Live</span>
+                <span class="font-mono text-[9px] uppercase tracking-wider opacity-50 pl-2">Live</span>
             </div>
         </section>
 
-        <!-- B2B Условия -->
-        <section class="px-4 pt-2.5 no-print">
-            <div class="surface-card rounded-2xl p-4 space-y-1.5 smooth">
-                <div class="flex items-center justify-between">
-                    <span class="text-[9px] font-black uppercase tracking-wider btn-primary px-2 py-0.5 rounded-md">Прямой контракт</span>
-                    <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ЭДО Диадок / СБИС
-                    </span>
-                </div>
-                <h2 class="text-sm font-black tracking-tight pt-1 text-strong">Оптовые коммерческие партии</h2>
-                <p class="text-[11px] text-desc leading-snug">Цены прямого импортера, сертификаты ТР ТС, фулфилмент под Wildberries/Ozon, отсрочка платежа до 30 дней.</p>
-            </div>
-        </section>
-
-        <!-- Выгрузка прайс-листа Excel -->
-        <section id="b2b-action-bar" class="px-4 pt-2.5 no-print">
-            <div class="surface-card rounded-2xl p-2.5 flex items-center justify-between">
-                <div class="flex items-center gap-2.5 pl-1">
-                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black text-xs flex items-center justify-center border border-emerald-500/20">
-                        XLS
-                    </div>
-                    <div>
-                        <p class="text-[11px] font-extrabold leading-tight text-strong">Оптовый прайс-лист</p>
-                        <p class="text-[9px] text-desc leading-tight">Актуальные градации цен и остатки в .xlsx</p>
-                    </div>
-                </div>
-                <button onclick="exportPriceListExcel()" class="btn-primary active:scale-95 px-3 py-1.5 rounded-xl font-bold text-xs smooth flex items-center gap-1.5">
-                    📊 <span>В чат бота</span>
-                </button>
-            </div>
-        </section>
-
-        <!-- Поиск, сортировка и фильтры -->
+        <!-- Поиск и категории -->
         <section class="p-4 pb-2 space-y-2.5 no-print">
             <div class="flex gap-2">
-                <div class="relative flex-grow">
-                    <input type="text" id="search" placeholder="Поиск по названию, артикулу..." oninput="filterProducts()"
-                        class="w-full surface-card text-strong rounded-xl pl-9 pr-3 py-2 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white smooth font-medium placeholder:text-neutral-400">
-                    <svg class="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                </div>
-                <select id="sort-select" onchange="filterProducts()" class="surface-card text-strong rounded-xl px-2.5 py-2 text-[11px] font-bold outline-none">
-                    <option value="default">Сортировка</option>
-                    <option value="price_asc">Сначала дешевле</option>
-                    <option value="margin_desc">Топ маржа на WB</option>
-                    <option value="stock_desc">По остатку</option>
-                </select>
+                <input type="text" id="search" placeholder="Поиск по товарам..." oninput="filterProducts()"
+                    class="w-full surface-card rounded-xl px-3.5 py-2 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white smooth font-medium placeholder:opacity-50">
             </div>
-
             <div class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
-                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold btn-primary smooth whitespace-nowrap">Все товары</button>
-                <button onclick="setCategory('favorites')" id="cat-fav" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">❤️ Избранное</button>
-                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">Одежда и мерч</button>
-                <button onclick="setCategory('Обувь')" id="cat-shoes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">Обувь</button>
-                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">Электроника</button>
-                <button onclick="setCategory('Сувениры')" id="cat-merch" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap">Сувениры</button>
+                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold btn-primary smooth whitespace-nowrap">Все позиции</button>
+                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card opacity-70 smooth whitespace-nowrap">Электроника</button>
+                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card opacity-70 smooth whitespace-nowrap">Одежда</button>
+                <button onclick="setCategory('Обувь')" id="cat-shoes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card opacity-70 smooth whitespace-nowrap">Обувь</button>
             </div>
         </section>
 
@@ -238,19 +126,18 @@
         <main class="p-4 pt-1 grid grid-cols-2 gap-3 flex-grow" id="products-container"></main>
 
         <!-- Бар сметы -->
-        <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl opacity-0 pointer-events-none translate-y-4 smooth z-40 no-print">
+        <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl opacity-0 pointer-events-none translate-y-4 smooth z-40">
             <div>
-                <p class="text-[9px] opacity-75 font-bold uppercase tracking-wider">Спецификация партии:</p>
+                <p class="text-[9px] opacity-70 font-bold uppercase tracking-wider">Спецификация партии:</p>
                 <p class="text-base font-black leading-tight mt-0.5" id="total-price">0 ₽</p>
             </div>
-            <button onclick="showCheckout()" class="bg-white text-neutral-950 dark:bg-neutral-900 dark:text-white px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide smooth active:scale-95 flex items-center gap-1.5 shadow-md">
-                <span>Оформить счет</span>
-                <span>→</span>
+            <button onclick="showCheckout()" class="bg-white text-neutral-950 dark:bg-neutral-900 dark:text-white px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide smooth active:scale-95 shadow-md">
+                Оформить счет →
             </button>
         </div>
 
         <!-- ==================================================== -->
-        <!-- МОДАЛКА: ВСТРОЕННЫЙ LIVE-ЧАТ КЛИЕНТА (САППОРТ НА САЙТЕ) -->
+        <!-- МОДАЛКА 1: ВСТРОЕННЫЙ LIVE-ЧАТ ДЛЯ КЛИЕНТА -->
         <!-- ==================================================== -->
         <div id="client-chat-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth">
             <div class="w-full max-w-md surface-card rounded-t-3xl h-[88vh] flex flex-col shadow-2xl transform translate-y-full spring-modal" id="client-chat-sheet">
@@ -259,38 +146,38 @@
                     <div class="flex items-center gap-2.5">
                         <div class="w-8 h-8 rounded-xl btn-primary flex items-center justify-center font-bold text-xs">М</div>
                         <div>
-                            <h3 class="text-xs font-black text-strong">Дежурный менеджер B2B</h3>
+                            <h3 class="text-xs font-black">Дежурный менеджер B2B</h3>
                             <p class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Прямой диалог на сайте
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Онлайн в приложении
                             </p>
                         </div>
                     </div>
-                    <button onclick="closeClientLiveChat()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center active:scale-90 text-strong">✕</button>
+                    <button onclick="closeClientLiveChat()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center active:scale-90">✕</button>
                 </div>
 
                 <!-- Лента сообщений -->
                 <div id="client-chat-messages" class="flex-grow overflow-y-auto p-4 space-y-2.5 text-xs">
-                    <div class="text-center py-6 text-subtle text-[11px]">Загрузка переписки...</div>
+                    <div class="text-center py-6 opacity-60 text-[11px]">Загрузка переписки...</div>
                 </div>
 
                 <!-- Быстрые вопросы -->
                 <div class="px-4 py-1.5 flex gap-1.5 overflow-x-auto hide-scrollbar border-t border-neutral-200 dark:border-neutral-800">
-                    <button onclick="sendQuickMessage('Нужен расчет партии и образцы')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold text-desc whitespace-nowrap active:scale-95">📦 Запрос образцов</button>
-                    <button onclick="sendQuickMessage('Согласование отсрочки 30 дней')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold text-desc whitespace-nowrap active:scale-95">⏳ Отсрочка 30 дней</button>
-                    <button onclick="sendQuickMessage('Пришлите сертификаты ТР ТС')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold text-desc whitespace-nowrap active:scale-95">📄 Сертификаты ТР ТС</button>
+                    <button onclick="sendQuickMessage('Нужен расчет партии и образцы')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold whitespace-nowrap active:scale-95">📦 Образцы</button>
+                    <button onclick="sendQuickMessage('Согласование отсрочки 30 дней')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold whitespace-nowrap active:scale-95">⏳ Отсрочка 30 дней</button>
+                    <button onclick="sendQuickMessage('Пришлите сертификаты ТР ТС')" class="px-2.5 py-1 rounded-lg surface-sub text-[10px] font-semibold whitespace-nowrap active:scale-95">📄 Документы ТР ТС</button>
                 </div>
 
                 <!-- Поле ввода -->
                 <div class="p-3 border-t border-neutral-200 dark:border-neutral-800 flex gap-2">
                     <input type="text" id="client-msg-input" placeholder="Напишите вопрос менеджеру..." onkeydown="if(event.key==='Enter') sendClientMessage()"
-                        class="flex-grow surface-sub text-strong rounded-xl px-3.5 py-2.5 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white">
+                        class="flex-grow surface-sub rounded-xl px-3.5 py-2.5 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white">
                     <button onclick="sendClientMessage()" class="px-4 py-2.5 btn-primary rounded-xl font-bold text-xs smooth active:scale-95 shadow-md">Отправить</button>
                 </div>
             </div>
         </div>
 
         <!-- ==================================================== -->
-        <!-- МОДАЛКА: АДМИН-ПАНЕЛЬ ОБРАЩЕНИЙ (СПИСОК ЧАТОВ И ОТВЕТ) -->
+        <!-- МОДАЛКА 2: АДМИН-ПАНЕЛЬ (СПИСОК ЧАТОВ И ОТВЕТ КЛИЕНТАМ) -->
         <!-- ==================================================== -->
         <div id="admin-chat-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth">
             <div class="w-full max-w-md surface-card rounded-t-3xl h-[88vh] flex flex-col shadow-2xl transform translate-y-full spring-modal" id="admin-chat-sheet">
@@ -299,34 +186,34 @@
                 <div id="admin-threads-view" class="flex flex-col h-full">
                     <div class="p-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
                         <div>
-                            <h3 class="text-xs font-black text-strong">Входящие чаты с клиентами</h3>
-                            <p class="text-[10px] text-desc">Нажмите на диалог, чтобы ответить в реальном времени</p>
+                            <h3 class="text-xs font-black">Чаты с контрагентами</h3>
+                            <p class="text-[10px] opacity-60">Выберите диалог для ответа</p>
                         </div>
-                        <button onclick="closeAdminThreadsModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center text-strong">✕</button>
+                        <button onclick="closeAdminThreadsModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
                     </div>
                     <div id="admin-threads-list" class="flex-grow overflow-y-auto p-3 space-y-2 text-xs">
-                        <p class="text-center py-6 text-subtle">Загрузка диалогов...</p>
+                        <p class="text-center py-6 opacity-60">Загрузка обращений...</p>
                     </div>
                 </div>
 
-                <!-- Экран 2: Чат менеджера с конкретным клиентом -->
+                <!-- Экран 2: Чат менеджера с выбранным клиентом -->
                 <div id="admin-active-chat-view" class="hidden flex-col h-full">
                     <div class="p-4 border-b border-neutral-200 dark:border-neutral-800 flex justify-between items-center">
                         <div class="flex items-center gap-2">
-                            <button onclick="backToThreadsList()" class="px-2.5 py-1 surface-sub rounded-lg font-bold text-xs text-strong active:scale-95">← Чаты</button>
+                            <button onclick="backToThreadsList()" class="px-2.5 py-1 surface-sub rounded-lg font-bold text-xs active:scale-95">← Назад</button>
                             <div>
-                                <h3 id="admin-chat-client-name" class="text-xs font-black text-strong">Клиент</h3>
-                                <p id="admin-chat-client-user" class="text-[10px] text-subtle">@username</p>
+                                <h3 id="admin-chat-client-name" class="text-xs font-black">Клиент</h3>
+                                <p id="admin-chat-client-user" class="text-[10px] opacity-60">@username</p>
                             </div>
                         </div>
-                        <button onclick="closeAdminThreadsModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center text-strong">✕</button>
+                        <button onclick="closeAdminThreadsModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
                     </div>
 
                     <div id="admin-chat-messages" class="flex-grow overflow-y-auto p-4 space-y-2.5 text-xs"></div>
 
                     <div class="p-3 border-t border-neutral-200 dark:border-neutral-800 flex gap-2">
                         <input type="text" id="admin-msg-input" placeholder="Ответ менеджера..." onkeydown="if(event.key==='Enter') sendAdminMessage()"
-                            class="flex-grow surface-sub text-strong rounded-xl px-3.5 py-2.5 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white">
+                            class="flex-grow surface-sub rounded-xl px-3.5 py-2.5 text-xs outline-none focus:ring-1 focus:ring-black dark:focus:ring-white">
                         <button onclick="sendAdminMessage()" class="px-4 py-2.5 btn-primary rounded-xl font-bold text-xs smooth active:scale-95 shadow-md">Ответить</button>
                     </div>
                 </div>
@@ -334,280 +221,18 @@
             </div>
         </div>
 
-        <!-- МОДАЛКА: Карточка товара со всеми табами -->
-        <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
-            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full spring-modal" id="product-sheet">
-                
-                <div class="flex justify-between items-start">
-                    <div class="flex items-center gap-2">
-                        <span id="modal-badge" class="px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider bg-neutral-200 dark:bg-neutral-800 text-strong"></span>
-                        <span id="modal-stock" class="px-2 py-0.5 rounded-lg text-[10px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span id="modal-stock-text">В наличии</span>
-                        </span>
-                    </div>
-                    <button onclick="closeProductModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center smooth active:scale-90 text-strong">✕</button>
-                </div>
-
-                <div class="space-y-2">
-                    <div class="relative w-full h-56 surface-sub rounded-2xl overflow-hidden cursor-zoom-in group" onclick="openLightbox()">
-                        <img id="modal-main-img" src="" class="w-full h-full object-cover smooth group-hover:scale-105">
-                        <span class="absolute bottom-2.5 right-2.5 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-lg">🔍 Зум</span>
-                    </div>
-                    <div class="flex gap-2" id="modal-thumbnails"></div>
-                </div>
-
-                <div>
-                    <h2 id="modal-title" class="text-base font-extrabold leading-snug text-strong"></h2>
-                    <p id="modal-desc" class="text-xs text-desc mt-1 leading-relaxed"></p>
-                </div>
-
-                <!-- Прогресс оптовой скидки -->
-                <div class="surface-sub rounded-xl p-3 space-y-1.5" id="tier-progress-box">
-                    <div class="flex justify-between text-[11px] font-bold">
-                        <span class="text-strong">Тиражная шкала цен:</span>
-                        <span class="text-desc font-semibold" id="tier-discount-hint">Добавьте объем</span>
-                    </div>
-                    <div class="w-full bg-neutral-200 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
-                        <div id="tier-progress-bar" class="btn-primary h-full rounded-full smooth" style="width: 30%"></div>
-                    </div>
-                </div>
-
-                <!-- Табы карточки -->
-                <div class="border-b border-neutral-200 dark:border-neutral-800 flex gap-3 text-xs font-bold overflow-x-auto hide-scrollbar">
-                    <button onclick="switchTab('pricing')" id="tab-pricing-btn" class="pb-2 border-b-2 border-neutral-900 dark:border-white font-bold whitespace-nowrap text-strong">Цены оптом</button>
-                    <button onclick="switchTab('roi')" id="tab-roi-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">💰 Калькулятор WB</button>
-                    <button onclick="switchTab('matrix')" id="tab-matrix-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">Ростовка</button>
-                    <button onclick="switchTab('branding')" id="tab-branding-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">Брендинг</button>
-                    <button onclick="switchTab('fulfillment')" id="tab-fulfillment-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">Фулфилмент</button>
-                    <button onclick="switchTab('warehouses')" id="tab-warehouses-btn" class="pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap">Склады</button>
-                </div>
-
-                <div id="tab-pricing" class="space-y-2 text-xs">
-                    <div class="surface-sub rounded-xl p-3 grid grid-cols-3 gap-2 text-center" id="modal-tiers-container"></div>
-                </div>
-
-                <div id="tab-roi" class="hidden space-y-3 text-xs">
-                    <div class="surface-sub rounded-2xl p-4 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <label class="font-bold text-xs text-strong">Планируемая розница на WB (₽):</label>
-                            <input type="number" id="roi-retail-price" oninput="calculateSellerROI()" class="w-24 surface-card text-center font-black rounded-xl py-1.5 outline-none text-sm text-strong">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 pt-1 text-center">
-                            <div class="surface-card p-2.5 rounded-xl">
-                                <span class="text-[10px] text-subtle font-bold block uppercase">Чистая маржа</span>
-                                <span class="text-sm font-black text-emerald-600 dark:text-emerald-400" id="roi-net-profit">0 ₽</span>
-                            </div>
-                            <div class="surface-card p-2.5 rounded-xl">
-                                <span class="text-[10px] text-subtle font-bold block uppercase">Рентабельность ROI</span>
-                                <span class="text-sm font-black text-strong" id="roi-percent">+0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="tab-matrix" class="hidden space-y-2 text-xs">
-                    <div class="surface-sub rounded-xl p-3 space-y-2.5">
-                        <div class="flex justify-between items-center text-[11px] font-bold text-subtle">
-                            <span>Размер</span>
-                            <span>В коробе</span>
-                            <span>Коробок</span>
-                            <span>Итого</span>
-                        </div>
-                        <div id="matrix-rows-container" class="space-y-1.5"></div>
-                        <div class="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex justify-between font-black text-xs text-strong">
-                            <span>Всего по ростовке:</span>
-                            <span id="matrix-total-qty">0 шт</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="tab-branding" class="hidden space-y-2.5 text-xs">
-                    <div class="surface-sub rounded-xl p-3.5 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="font-bold flex items-center gap-2 cursor-pointer text-strong">
-                                <input type="checkbox" id="branding-checkbox" onchange="toggleBranding(this.checked)" class="w-4 h-4 rounded">
-                                <span>Нанесение логотипа (DTF/Шелкография)</span>
-                            </label>
-                            <span class="font-black text-strong" id="branding-price-tag">+ 250 ₽/шт</span>
-                        </div>
-                        <p class="text-[11px] text-desc">Брендирование продукции или фирменной упаковки под ваш бренд.</p>
-                    </div>
-                </div>
-
-                <div id="tab-fulfillment" class="hidden space-y-2.5 text-xs">
-                    <div class="surface-sub rounded-xl p-3.5 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="font-bold flex items-center gap-2 cursor-pointer text-strong">
-                                <input type="checkbox" id="fulfillment-checkbox" onchange="toggleFulfillment(this.checked)" class="w-4 h-4 rounded">
-                                <span>Подготовка под FBO/FBS (WB/Ozon)</span>
-                            </label>
-                            <span class="font-black text-strong">+ 45 ₽/шт</span>
-                        </div>
-                        <ul class="text-[11px] text-desc space-y-1 pl-4 list-disc">
-                            <li>Маркировка «Честный Знак» + этикетка WB</li>
-                            <li>Индивидуальная фасовка в zip-lock пакеты</li>
-                            <li>Формирование коробов и паллет под склад</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div id="tab-warehouses" class="hidden space-y-2 text-xs">
-                    <div class="surface-sub rounded-xl p-3 space-y-2 text-[11px]">
-                        <div class="flex justify-between items-center">
-                            <span class="text-desc">Склад Москва (Южные Врата):</span>
-                            <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (320 шт)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-desc">Склад Санкт-Петербург:</span>
-                            <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (160 шт)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-desc">Транзит с фабрики:</span>
-                            <span class="font-bold text-strong">Поступление через 4 дня (600 шт)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Калькулятор партии -->
-                <div class="surface-sub rounded-2xl p-4 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="text-xs font-bold block text-strong">Размер партии:</span>
-                            <span class="text-[10px] text-subtle" id="box-quantity-hint">Квант короба: 10 шт</span>
-                        </div>
-                        <div class="flex items-center gap-1.5 surface-card px-3 py-1.5 rounded-xl shadow-sm">
-                            <input type="number" id="slider-number-input" class="w-16 text-center font-black text-sm outline-none bg-transparent text-strong" oninput="onNumberInputChange(this.value)">
-                            <span class="text-xs font-bold text-subtle">шт.</span>
-                        </div>
-                    </div>
-
-                    <input type="range" id="modal-slider" class="w-full h-2 rounded-lg appearance-none outline-none cursor-pointer bg-neutral-200 dark:bg-neutral-800" oninput="onSliderChange(this.value)">
-                    <div class="flex gap-2 pt-1 overflow-x-auto hide-scrollbar" id="quick-preset-chips"></div>
-
-                    <div id="logistics-specs-box" class="surface-card rounded-xl p-2.5 flex items-center justify-between text-[11px] text-desc font-semibold">
-                        <div class="flex items-center gap-1.5">
-                            <span>📦</span>
-                            <span id="logistics-boxes-text">1 короб</span>
-                            <span>•</span>
-                            <span id="logistics-weight-text">7.5 кг</span>
-                        </div>
-                        <span id="logistics-vehicle-badge" class="px-2 py-0.5 rounded-md surface-sub font-bold text-[10px] text-strong">СДЭК / Курьер</span>
-                    </div>
-
-                    <div class="flex justify-between items-center text-[11px] font-semibold pt-1 border-t border-neutral-200 dark:border-neutral-800">
-                        <span class="text-desc">Себестоимость/ед: <b id="tier-unit-price" class="font-bold text-strong"></b></span>
-                        <span class="text-desc">Итого: <b id="slider-total-price" class="font-black text-sm text-strong"></b></span>
-                    </div>
-                </div>
-
-                <div id="modal-action-slot"></div>
-            </div>
-        </div>
-
-        <!-- МОДАЛКА: Трекинг груза -->
-        <div id="tracker-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth no-print">
-            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 space-y-4 shadow-2xl transform translate-y-full spring-modal" id="tracker-sheet">
-                <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                    <div>
-                        <h2 class="text-base font-black text-strong">Отслеживание груза</h2>
-                        <p class="text-[11px] text-desc">Статус комплектации и транспортировки</p>
-                    </div>
-                    <button onclick="closeTrackerModal()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center text-strong">✕</button>
-                </div>
-                <div class="flex gap-2">
-                    <input type="text" id="track-input" placeholder="Номер счета / накладной" class="flex-grow surface-sub rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none text-strong">
-                    <button onclick="checkOrderStatus()" class="px-4 py-2.5 btn-primary rounded-xl font-bold text-xs smooth active:scale-95">Найти</button>
-                </div>
-                <div id="tracker-result" class="hidden surface-sub rounded-2xl p-4 space-y-2 text-xs">
-                    <div class="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-2">
-                        <span class="font-bold text-strong" id="track-id-display">Счет #384643</span>
-                        <span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-bold text-[10px]">В пути</span>
-                    </div>
-                    <p class="text-[11px] text-desc">Партия принята экспедитором, плановый срок доставки по РФ: 2–4 рабочих дня.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- МОДАЛКА: Оформление коммерческого счета -->
+        <!-- МОДАЛКА 3: Оформление коммерческого счета -->
         <div id="checkout-form" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none smooth">
-            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full spring-modal" id="checkout-sheet">
+            <div class="w-full max-w-md surface-card rounded-t-3xl p-5 pb-8 space-y-3.5 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full spring-modal" id="checkout-sheet">
                 <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                    <div>
-                        <h2 class="text-lg font-black text-strong">Спецификация поставки</h2>
-                        <p class="text-[11px] text-desc">Формирование официального счета на оплату</p>
-                    </div>
-                    <div class="flex items-center gap-2 no-print">
-                        <button onclick="printQuotation()" class="text-xs font-bold surface-sub px-2.5 py-1 rounded-lg text-strong">📄 КП</button>
-                        <button onclick="clearCart()" class="text-xs font-bold text-rose-500 bg-rose-500/10 px-2.5 py-1 rounded-lg">Очистить</button>
-                        <button onclick="hideCheckout()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center text-strong">✕</button>
-                    </div>
+                    <h2 class="text-sm font-black">Оформление официального счета</h2>
+                    <button onclick="hideCheckout()" class="w-8 h-8 rounded-full surface-sub font-bold flex items-center justify-center">✕</button>
                 </div>
-
-                <div class="surface-sub p-1 rounded-xl flex text-xs font-bold no-print">
-                    <button onclick="setVatMode(false)" id="vat-none-btn" class="flex-1 py-1.5 rounded-lg btn-primary smooth">Без НДС (УСН)</button>
-                    <button onclick="setVatMode(true)" id="vat-with-btn" class="flex-1 py-1.5 rounded-lg text-desc smooth">С НДС 20% (ОСНО)</button>
-                </div>
-
-                <div class="no-print space-y-1">
-                    <label class="block font-bold text-xs text-desc">Условия взаиморасчетов:</label>
-                    <select id="payment-terms" class="w-full surface-sub text-strong rounded-xl px-3 py-2.5 text-xs font-semibold outline-none">
-                        <option value="100% предоплата">100% Предоплата по счету (Скидка 2%)</option>
-                        <option value="50/50 производство">50% Аванс / 50% Перед отгрузкой</option>
-                        <option value="Отсрочка 30 дней">Отсрочка платежа 30 дней (Факторинг)</option>
-                    </select>
-                </div>
-
-                <div id="checkout-cart-items" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
-
-                <div class="space-y-3 text-xs">
-                    <div class="no-print">
-                        <label class="block font-bold text-desc mb-1">ИНН компании (ЕГРЮЛ)</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="inn-lookup-input" placeholder="10 или 12 цифр ИНН" maxlength="12"
-                                class="flex-grow surface-sub text-strong rounded-xl px-3.5 py-2.5 outline-none font-medium">
-                            <button type="button" id="inn-lookup-btn" onclick="autoFillByInn()" class="px-3 py-2.5 surface-card text-strong rounded-xl font-bold smooth active:scale-95">
-                                <span id="inn-btn-text">Найти</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block font-bold text-desc mb-1">Компания / ИП / Реквизиты *</label>
-                        <input type="text" id="company" placeholder="ООО «Галк-Опт», ИНН 7701234567"
-                            class="w-full surface-sub text-strong rounded-xl px-3.5 py-2.5 outline-none font-medium">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-desc mb-1">Город и терминал ТК *</label>
-                        <input type="text" id="city" placeholder="г. Москва, терминал СДЭК ул. Ленина 12"
-                            class="w-full surface-sub text-strong rounded-xl px-3.5 py-2.5 outline-none font-medium">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-desc mb-1">ФИО и телефон закупщика *</label>
-                        <input type="text" id="contacts" placeholder="Степан, +7 (999) 000-00-00"
-                            class="w-full surface-sub text-strong rounded-xl px-3.5 py-2.5 outline-none font-medium">
-                    </div>
-                    <div class="no-print">
-                        <label class="block font-bold text-desc mb-1">Транспортная компания</label>
-                        <select id="tk-choice" class="w-full surface-sub text-strong rounded-xl px-3 py-2.5 font-medium outline-none">
-                            <option value="СДЭК">СДЭК (Курьер / Склад)</option>
-                            <option value="Деловые Линии">Деловые Линии (Паллетная доставка)</option>
-                            <option value="ПЭК">ПЭК (Сборный груз)</option>
-                            <option value="Самовывоз">Самовывоз (Склад Москва, Южные Врата)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="surface-sub rounded-2xl p-3.5 flex justify-between items-center text-xs">
-                    <div>
-                        <span class="font-bold block text-strong">Итого к безналичной оплате:</span>
-                        <span class="text-[10px] text-subtle" id="vat-description-label">Без НДС • Счет выставляется в Telegram</span>
-                    </div>
-                    <span class="font-black text-base text-strong" id="checkout-total">0 ₽</span>
-                </div>
-
-                <button onclick="sendOrderToBot()" class="w-full btn-primary py-3.5 rounded-xl font-bold text-sm smooth active:scale-[0.98] flex items-center justify-center gap-2 no-print shadow-xl">
-                    <span>Выставить официальный счет (PDF)</span>
+                <input type="text" id="company" placeholder="Компания / ИП / ИНН *" class="w-full surface-sub rounded-xl p-3 text-xs outline-none">
+                <input type="text" id="city" placeholder="Город и терминал СДЭК *" class="w-full surface-sub rounded-xl p-3 text-xs outline-none">
+                <input type="text" id="contacts" placeholder="ФИО и телефон байера *" class="w-full surface-sub rounded-xl p-3 text-xs outline-none">
+                <button onclick="sendOrderToBot()" class="w-full btn-primary py-3.5 rounded-xl font-bold text-xs smooth active:scale-95 shadow-xl">
+                    Выставить PDF-счет в чат
                 </button>
             </div>
         </div>
@@ -618,111 +243,53 @@
         const tg = window.Telegram?.WebApp;
         try { tg.expand(); tg.ready(); } catch(e) {}
 
-        const ADMIN_TELEGRAM_ID = 8125122124;
-        const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 8125122124;
-        const currentUserName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.first_name : "Степан";
-        const currentUserHandle = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? (tg.initDataUnsafe.user.username || "") : "";
+        // Автоопределение пользователя и обоих твоих ID
+        const ADMIN_IDS = [8125122124, 8719389972];
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlUid = urlParams.get('uid');
 
-        const isAdmin = (currentUserId === ADMIN_TELEGRAM_ID || window.location.hash.includes("admin"));
+        const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) 
+            ? tg.initDataUnsafe.user.id 
+            : (urlUid ? Number(urlUid) : 8719389972);
+
+        const currentUserName = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) 
+            ? tg.initDataUnsafe.user.first_name 
+            : "Степан";
+
+        const currentUserHandle = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) 
+            ? (tg.initDataUnsafe.user.username || "") 
+            : "";
+
+        const isAdmin = ADMIN_IDS.includes(Number(currentUserId)) || window.location.hash.includes("admin");
         const API_SERVER_URL = "https://galk-b2b.duckdns.org";
 
-        function resolveImageUrl(url) {
-            if (!url) return 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80';
-            if (url.startsWith('http://') || url.startsWith('https://')) return url;
-            const clean = url.startsWith('/') ? url : '/' + url;
-            return `${API_SERVER_URL}${clean}`;
+        // Переключение шапки под роль
+        if (isAdmin) {
+            document.getElementById('admin-chats-btn').classList.remove('hidden');
+            document.getElementById('admin-badge').classList.remove('hidden');
+            document.getElementById('client-chat-btn').classList.add('hidden'); // Админу скрываем клиентский саппорт
         }
 
-        // Встроенный базовый каталог (показывается мгновенно без белых экранов)
-        const defaultProducts = [
-            { 
-                id: 'p_watch_custom', cat: 'Электроника', title: 'Apple Watch Ultra 2 Black', desc: 'Фабричный оригинал. Премиальный корпус, полный комплект под перепродажу.', 
-                price: 2500, moq: 10, box_qty: 10, wb_price: 4900, stock: 80, weight_per_unit: 0.2, badge: 'Новинка', 
-                images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 10, price: 850, label: 'от 10 шт' }, { min: 30, price: 790, label: 'от 30 шт' }, { min: 50, price: 720, label: 'от 50 шт' }]
-            },
-            { 
-                id: 'p_1789469101', cat: 'Электроника', title: 'Apple Watch Series 9', desc: 'Фабричный оригинал. Прямые поставки от первого импортера.', 
-                price: 990, moq: 10, box_qty: 10, wb_price: 2500, stock: 80, weight_per_unit: 0.5, badge: 'Новинка', 
-                images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 10, price: 850, label: 'от 10 шт' }, { min: 30, price: 765, label: 'от 30 шт' }, { min: 60, price: 680, label: 'от 60 шт' }]
-            },
-            { 
-                id: 'p_watch', cat: 'Электроника', title: 'Apple Watch Ultra Titanium', desc: 'Премиальная фабричная комплектация 1:1, титановый корпус, AMOLED-экран.', 
-                price: 2200, moq: 5, box_qty: 5, wb_price: 5400, stock: 300, weight_per_unit: 0.18, badge: 'Топ маржа', 
-                images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 5, price: 1850, label: '5-19 шт' }, { min: 20, price: 1650, label: '20-49 шт' }, { min: 50, price: 1490, label: 'от 50 шт' }]
-            },
-            { 
-                id: 'p1', cat: 'Одежда', title: 'Худи Oversize Premium (420g)', desc: 'Плотный футер 3-х нитка пенье с начесом. Высокое качество пошива, усиленная горловина.', 
-                price: 2500, moq: 10, box_qty: 10, wb_price: 4900, stock: 480, weight_per_unit: 0.75, badge: 'Хит продаж', 
-                images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 10, price: 2100, label: '10-29 шт' }, { min: 30, price: 1950, label: '30-99 шт' }, { min: 100, price: 1800, label: 'от 100 шт' }],
-                matrix: [
-                    { size: 'S (46)', inBox: 2, count: 0 },
-                    { size: 'M (48)', inBox: 3, count: 0 },
-                    { size: 'L (50)', inBox: 3, count: 0 },
-                    { size: 'XL (52)', inBox: 2, count: 0 }
-                ]
-            },
-            { 
-                id: 'p2', cat: 'Обувь', title: 'Кроссовки B2B Sport Runner PRO', desc: 'Дышащая сетка Ripstop, подошва EVA. Заводская ростовка с 40 по 45 размер.', 
-                price: 3200, moq: 8, box_qty: 8, wb_price: 6200, stock: 192, weight_per_unit: 0.9, badge: 'Сезон 2026', 
-                images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 8, price: 2800, label: '8-24 шт' }, { min: 25, price: 2600, label: '25-79 шт' }, { min: 80, price: 2400, label: 'от 80 шт' }]
-            },
-            { 
-                id: 'p3', cat: 'Электроника', title: 'Яндекс Станция Мини 2 с часами', desc: 'Оригинальные станции в заводской слюде. Официальная гарантия 1 год.', 
-                price: 6000, moq: 5, box_qty: 5, wb_price: 7990, stock: 85, weight_per_unit: 0.45, badge: 'Оригинал EAC', 
-                images: ['https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 5, price: 5400, label: '5-14 шт' }, { min: 15, price: 5100, label: '15-49 шт' }, { min: 50, price: 4850, label: 'от 50 шт' }]
-            }
+        let products = [
+            { id: 'p_watch_custom', cat: 'Электроника', title: 'Apple Watch Ultra 2 Black', price: 2500, moq: 10, images: ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80'] },
+            { id: 'p_1789469101', cat: 'Электроника', title: 'Apple Watch Series 9', price: 990, moq: 10, images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80'] },
+            { id: 'p1', cat: 'Одежда', title: 'Худи Oversize Premium 420g', price: 2500, moq: 10, images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80'] },
+            { id: 'p2', cat: 'Обувь', title: 'Кроссовки B2B Sport Runner PRO', price: 3200, moq: 8, images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'] }
         ];
 
-        let products = defaultProducts;
-        let favorites = [];
         let cart = {};
         let currentCat = 'all';
-        let currentModalProductId = null;
-        let isBrandingIncluded = false;
-        let isFulfillmentIncluded = false;
-        let isVatEnabled = false;
-
-        // Включение админских кнопок
-        if (isAdmin) {
-            document.getElementById('admin-mode-toggle').classList.remove('hidden');
-            document.getElementById('admin-indicator').classList.remove('hidden');
-        }
-
-        let isDarkMode = localStorage.getItem('galk_theme_mode') === 'dark';
-        function applyTheme(dark) {
-            isDarkMode = dark;
-            const btn = document.getElementById('theme-btn');
-            if (dark) {
-                document.documentElement.classList.add('dark');
-                if (btn) btn.innerText = '☀️';
-            } else {
-                document.documentElement.classList.remove('dark');
-                if (btn) btn.innerText = '🌙';
-            }
-            try { localStorage.setItem('galk_theme_mode', dark ? 'dark' : 'light'); } catch(e) {}
-        }
-
-        function toggleThemeMode() {
-            applyTheme(!isDarkMode);
-            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
-        }
 
         function showToast(text, icon = '⚡️') {
             const toast = document.getElementById('toast');
             document.getElementById('toast-text').innerText = text;
             document.getElementById('toast-icon').innerText = icon;
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
-            setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2'), 2400);
+            setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2'), 2200);
         }
 
         // ====================================================
-        // ЛОГИКА 1: ВСТРОЕННЫЙ LIVE-ЧАТ ДЛЯ КЛИЕНТА
+        // ЧАТ КЛИЕНТА (САППОРТ)
         // ====================================================
         let clientPollTimer = null;
 
@@ -731,7 +298,6 @@
             document.getElementById('client-chat-sheet').classList.remove('translate-y-full');
             loadClientMessages();
             clientPollTimer = setInterval(loadClientMessages, 2000);
-            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
         }
 
         function closeClientLiveChat() {
@@ -749,8 +315,8 @@
                 if (!data.messages || data.messages.length === 0) {
                     container.innerHTML = `
                         <div class="text-center py-8 space-y-1">
-                            <p class="font-bold text-strong">Диалог с отделом продаж</p>
-                            <p class="text-[11px] text-desc">Задайте вопрос по наличию, партии или запросите образцы</p>
+                            <p class="font-bold opacity-80">Чат с отделом продаж</p>
+                            <p class="text-[11px] opacity-50">Напишите вопрос по партии, отсрочке или образцам</p>
                         </div>
                     `;
                     return;
@@ -760,10 +326,10 @@
                     const isMe = m.sender === 'client';
                     return `
                         <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
-                            <div class="max-w-[82%] p-3 rounded-2xl ${isMe ? 'btn-primary' : 'surface-sub text-strong'} shadow-sm">
+                            <div class="max-w-[82%] p-3 rounded-2xl ${isMe ? 'btn-primary' : 'surface-sub'} shadow-sm">
                                 <p class="text-xs leading-relaxed font-medium">${m.text}</p>
                             </div>
-                            <span class="text-[9px] text-subtle mt-0.5 px-1 font-mono">${m.time}</span>
+                            <span class="text-[9px] opacity-50 mt-0.5 px-1 font-mono">${m.time}</span>
                         </div>
                     `;
                 }).join('');
@@ -790,7 +356,6 @@
                     })
                 });
                 loadClientMessages();
-                try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
             } catch(e) {
                 showToast("Ошибка отправки", "⚠️");
             }
@@ -802,7 +367,7 @@
         }
 
         // ====================================================
-        // ЛОГИКА 2: АДМИН-ПАНЕЛЬ ОБРАЩЕНИЙ (СПИСОК ЧАТОВ И ОТВЕТ)
+        // ЧАТ АДМИНИСТРАТОРА (ВЫБОР КЛИЕНТОВ)
         // ====================================================
         let adminPollTimer = null;
         let activeAdminUserId = null;
@@ -813,7 +378,6 @@
             backToThreadsList();
             loadAdminThreads();
             adminPollTimer = setInterval(loadAdminThreads, 3000);
-            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
         }
 
         function closeAdminThreadsModal() {
@@ -830,17 +394,17 @@
                 const container = document.getElementById('admin-threads-list');
 
                 if (!threads || threads.length === 0) {
-                    container.innerHTML = `<p class="text-center py-10 text-subtle">Нет активных обращений 🎉</p>`;
+                    container.innerHTML = `<p class="text-center py-10 opacity-50">Нет активных обращений 🎉</p>`;
                     return;
                 }
 
                 container.innerHTML = threads.map(t => `
                     <div onclick="openAdminChatWithUser('${t.user_id}', '${t.name}', '${t.username}')" class="surface-sub p-3.5 rounded-2xl cursor-pointer hover:border-black dark:hover:border-white smooth space-y-1">
                         <div class="flex justify-between items-center">
-                            <span class="font-bold text-strong text-xs">${t.name} ${t.username ? '(@' + t.username + ')' : ''}</span>
-                            <span class="text-[10px] text-subtle font-mono">${t.last_time ? t.last_time.slice(11, 16) : ''}</span>
+                            <span class="font-bold text-xs">${t.name} ${t.username ? '(@' + t.username + ')' : ''}</span>
+                            <span class="text-[10px] opacity-50 font-mono">${t.last_time ? t.last_time.slice(11, 16) : ''}</span>
                         </div>
-                        <p class="text-[11px] text-desc line-clamp-1">${t.last_message || 'Без текста'}</p>
+                        <p class="text-[11px] opacity-70 line-clamp-1">${t.last_message || 'Без текста'}</p>
                     </div>
                 `).join('');
             } catch(e) {}
@@ -881,10 +445,10 @@
                     const isManager = m.sender === 'manager';
                     return `
                         <div class="flex flex-col ${isManager ? 'items-end' : 'items-start'}">
-                            <div class="max-w-[82%] p-3 rounded-2xl ${isManager ? 'btn-primary' : 'surface-sub text-strong'} shadow-sm">
+                            <div class="max-w-[82%] p-3 rounded-2xl ${isManager ? 'btn-primary' : 'surface-sub'} shadow-sm">
                                 <p class="text-xs leading-relaxed font-medium">${m.text}</p>
                             </div>
-                            <span class="text-[9px] text-subtle mt-0.5 px-1 font-mono">${isManager ? 'Вы (Менеджер)' : 'Клиент'} • ${m.time}</span>
+                            <span class="text-[9px] opacity-50 mt-0.5 px-1 font-mono">${isManager ? 'Вы (Менеджер)' : 'Клиент'} • ${m.time}</span>
                         </div>
                     `;
                 }).join('');
@@ -910,756 +474,101 @@
                     })
                 });
                 loadAdminMessages();
-                try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
             } catch(e) {
                 showToast("Ошибка отправки", "⚠️");
             }
         }
 
         // ====================================================
-        // КАТАЛОГ, ФИЛЬТРЫ И КОРЗИНА
+        // КАТАЛОГ И ЗАКАЗЫ
         // ====================================================
-        function toggleFavorite(id, event) {
-            if (event) event.stopPropagation();
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(favId => favId !== id);
-                showToast("Удалено из избранного", "💔");
-            } else {
-                favorites.push(id);
-                showToast("Добавлено в избранное", "❤️");
-            }
-            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
-            filterProducts();
+        function renderProducts() {
+            const c = document.getElementById('products-container');
+            const q = (document.getElementById('search')?.value || '').toLowerCase();
+            const filtered = products.filter(p => (currentCat === 'all' || p.cat === currentCat) && p.title.toLowerCase().includes(q));
+
+            c.innerHTML = filtered.map(p => `
+                <div class="surface-card rounded-2xl p-3 flex flex-col justify-between shadow-sm smooth">
+                    <img src="${p.images[0]}" class="w-full aspect-[4/3] object-cover rounded-xl mb-2">
+                    <h3 class="font-bold text-xs line-clamp-2 mb-1">${p.title}</h3>
+                    <div class="font-black text-sm mb-2">${p.price} ₽</div>
+                    <button onclick="addToCart('${p.id}', ${p.moq || 10})" class="w-full py-2 btn-primary rounded-xl text-xs font-bold active:scale-95 smooth shadow-sm">
+                        В смету (${p.moq || 10} шт)
+                    </button>
+                </div>
+            `).join('');
         }
 
+        function filterProducts() { renderProducts(); }
         function setCategory(cat) {
             currentCat = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold surface-card text-desc smooth whitespace-nowrap';
-            });
-            const activeMap = { 'all': 'cat-all', 'favorites': 'cat-fav', 'Одежда': 'cat-clothes', 'Обувь': 'cat-shoes', 'Электроника': 'cat-tech', 'Сувениры': 'cat-merch' };
-            const targetBtn = document.getElementById(activeMap[cat]);
-            if (targetBtn) {
-                targetBtn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-bold btn-primary smooth whitespace-nowrap';
-            }
-            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
-            filterProducts();
+            renderProducts();
         }
 
-        function getBaseUnitPrice(product, qty) {
-            if (qty === 1) return product.price;
-            let unitPrice = (product.tiers && product.tiers[0]) ? product.tiers[0].price : product.price;
-            if (product.tiers && Array.isArray(product.tiers)) {
-                for (let t of product.tiers) {
-                    if (qty >= t.min) unitPrice = t.price;
-                }
-            }
-            return unitPrice;
-        }
-
-        function filterProducts() {
-            const query = (document.getElementById('search')?.value || '').toLowerCase();
-            const sortMode = document.getElementById('sort-select')?.value || 'default';
-
-            let filtered = products.filter(p => {
-                const matchCat = currentCat === 'all' 
-                    ? true 
-                    : (currentCat === 'favorites' ? favorites.includes(p.id) : p.cat === currentCat);
-                const matchSearch = (p.title || '').toLowerCase().includes(query) || (p.desc || '').toLowerCase().includes(query);
-                return matchCat && matchSearch;
-            });
-
-            if (sortMode === 'price_asc') {
-                filtered.sort((a, b) => (a.tiers?.[0]?.price || a.price) - (b.tiers?.[0]?.price || b.price));
-            } else if (sortMode === 'margin_desc') {
-                filtered.sort((a, b) => ((b.wb_price || 0) - (b.tiers?.[0]?.price || b.price)) - ((a.wb_price || 0) - (a.tiers?.[0]?.price || a.price)));
-            } else if (sortMode === 'stock_desc') {
-                filtered.sort((a, b) => (b.stock || 0) - (a.stock || 0));
-            }
-
-            renderProducts(filtered);
-        }
-
-        function renderProducts(items) {
-            const container = document.getElementById('products-container');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (!items || items.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-12 text-subtle font-bold text-xs">Позиции не найдены</div>`;
-                return;
-            }
-
-            items.forEach(p => {
-                const cartItem = cart[p.id];
-                const qty = cartItem ? cartItem.qty : 0;
-                const isFav = favorites.includes(p.id);
-
-                const rawImg = (p.images && p.images[0]) ? p.images[0] : '';
-                const img = resolveImageUrl(rawImg);
-                
-                const moq = Number(p.moq) || 1;
-                const boxQty = Number(p.box_qty) || moq;
-                const basePrice = Number(p.price) || 1000;
-                const tierPrice = (p.tiers && p.tiers[0] && p.tiers[0].price) ? Number(p.tiers[0].price) : basePrice;
-
-                const wbPrice = Number(p.wb_price) || Math.round(tierPrice * 1.8);
-                const marginPercent = tierPrice > 0 ? Math.round(((wbPrice - tierPrice) / tierPrice) * 100) : 0;
-                const stock = p.stock !== undefined ? p.stock : 100;
-                const badge = p.badge || 'Опт';
-
-                container.innerHTML += `
-                    <div class="surface-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md smooth relative group">
-                        <div class="absolute top-2 right-2 z-20 flex items-center">
-                            <button onclick="toggleFavorite('${p.id}', event)" class="w-7 h-7 rounded-lg surface-card flex items-center justify-center text-xs smooth active:scale-90">
-                                ${isFav ? '❤️' : '🤍'}
-                            </button>
-                        </div>
-
-                        <div onclick="openProductModal('${p.id}')" class="cursor-pointer">
-                            <div class="relative w-full aspect-[4/3] surface-sub overflow-hidden">
-                                <img src="${img}" alt="${p.title}" class="w-full h-full object-cover smooth group-hover:scale-105">
-                                <span class="absolute top-2 left-2 bg-neutral-900/85 dark:bg-black/85 text-white font-bold text-[9px] px-2 py-0.5 rounded-md tracking-wider">
-                                    ${badge}
-                                </span>
-                            </div>
-                            <div class="p-3 pb-1">
-                                <div class="flex items-center justify-between text-[10px] text-subtle font-semibold mb-1">
-                                    <span>${p.cat || 'Каталог'}</span>
-                                    <span class="text-emerald-600 dark:text-emerald-400 font-bold">${stock} шт</span>
-                                </div>
-                                <h3 class="font-bold text-xs leading-snug line-clamp-2 text-strong">${p.title}</h3>
-                                <div class="mt-2 surface-sub rounded-xl p-2">
-                                    <div class="flex items-baseline gap-1">
-                                        <span class="font-black text-sm text-strong">${tierPrice.toLocaleString('ru-RU')} ₽</span>
-                                        <span class="text-[10px] text-subtle line-through">${basePrice.toLocaleString('ru-RU')} ₽</span>
-                                    </div>
-                                    <div class="flex justify-between items-center mt-0.5">
-                                        <p class="text-[10px] text-desc font-semibold">От ${moq} шт</p>
-                                        <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded">+${marginPercent}% WB</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-3 pt-2">
-                            ${qty === 0 
-                                ? `<button onclick="updateCart('${p.id}', ${moq}); triggerFlyToCartAnimation(this);" class="w-full py-2 btn-primary rounded-xl text-xs font-bold smooth flex items-center justify-center gap-1 active:scale-95 shadow-sm">
-                                    <span>В смету</span>
-                                    <span class="text-[10px] opacity-75">(${moq} шт)</span>
-                                   </button>`
-                                : `<div class="flex items-center justify-between btn-primary rounded-xl p-1 shadow-sm">
-                                    <button onclick="updateCart('${p.id}', ${qty - boxQty})" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">-</button>
-                                    <span class="text-xs font-bold">${qty} шт</span>
-                                    <button onclick="updateCart('${p.id}', ${qty + boxQty}); triggerFlyToCartAnimation(this);" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">+</button>
-                                   </div>`
-                            }
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        async function syncCatalogWithServer() {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 4000);
-                const res = await fetch(`${API_SERVER_URL}/api/products?t=${Date.now()}`, { signal: controller.signal });
-                clearTimeout(timeoutId);
-
-                if (res.ok) {
-                    const serverCatalog = await res.json();
-                    if (Array.isArray(serverCatalog) && serverCatalog.length > 0) {
-                        products = serverCatalog;
-                        filterProducts();
-                    }
-                }
-            } catch(e) {}
-        }
-
-        function manualSync() {
-            showToast("Синхронизация с сервером...", "🔄");
-            syncCatalogWithServer().then(() => showToast("Каталог актуализирован!", "✅"));
-        }
-
-        async function exportPriceListExcel() {
-            showToast("Формируем прайс-лист...", "📊");
-            try {
-                const excelRows = products.map((p, idx) => ({
-                    "№": idx + 1,
-                    "Категория": p.cat,
-                    "Артикул": p.id,
-                    "Наименование позиции": p.title,
-                    "Остаток на складе (шт)": p.stock,
-                    "Квант короба (шт)": p.box_qty || p.moq,
-                    "Базовая цена (₽)": p.price,
-                    "Опт от MOQ": (p.tiers && p.tiers[0]) ? `${p.tiers[0].price} ₽` : `${p.price} ₽`,
-                    "РРЦ на WB/Ozon (₽)": p.wb_price || Math.round(p.price * 1.8)
-                }));
-
-                const worksheet = XLSX.utils.json_to_sheet(excelRows);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "Прайс-Лист");
-                const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'base64' });
-
-                const targetUid = currentUserId || ADMIN_TELEGRAM_ID;
-                const res = await fetch(`${API_SERVER_URL}/api/send_user_file`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_id: targetUid,
-                        filename: "Galk_B2B_Opt_PriceList.xlsx",
-                        file_base64: wbout,
-                        caption: "📊 <b>Оптовый прайс-лист Galk Supply (.xlsx)</b>"
-                    })
-                });
-
-                if (res.ok) {
-                    showToast("Прайс отправлен в чат бота! 📥", "✅");
-                } else {
-                    throw new Error("API Offline");
-                }
-            } catch(e) {
-                showToast("Нажмите '📊 Скачать прайс (Excel)' в боте!", "ℹ️");
-            }
-        }
-
-        function openProductModal(id) {
-            const p = products.find(item => item.id === id);
-            if (!p) return;
-            currentModalProductId = id;
-            
-            const cartItem = cart[p.id];
-            isBrandingIncluded = cartItem ? cartItem.branding : false;
-            isFulfillmentIncluded = cartItem ? cartItem.fulfillment : false;
-            
-            document.getElementById('branding-checkbox').checked = isBrandingIncluded;
-            document.getElementById('fulfillment-checkbox').checked = isFulfillmentIncluded;
-
-            const qty = cartItem ? cartItem.qty : (p.moq || 1);
-
-            document.getElementById('modal-badge').innerText = p.badge || 'Опт';
-            document.getElementById('modal-stock-text').innerText = `На складе: ${p.stock || 0} шт`;
-            
-            const rawImg = (p.images && p.images[0]) ? p.images[0] : '';
-            document.getElementById('modal-main-img').src = resolveImageUrl(rawImg);
-            document.getElementById('modal-title').innerText = p.title;
-            document.getElementById('modal-desc').innerText = p.desc || '';
-
-            document.getElementById('roi-retail-price').value = p.wb_price || Math.round(p.price * 1.8);
-
-            const thumbsContainer = document.getElementById('modal-thumbnails');
-            thumbsContainer.innerHTML = '';
-            (p.images || []).forEach(imgUrl => {
-                const resolved = resolveImageUrl(imgUrl);
-                thumbsContainer.innerHTML += `
-                    <button onclick="document.getElementById('modal-main-img').src = '${resolved}'" class="w-12 h-12 rounded-xl overflow-hidden surface-card focus:ring-2 focus:ring-black dark:focus:ring-white smooth">
-                        <img src="${resolved}" class="w-full h-full object-cover">
-                    </button>
-                `;
-            });
-
-            const tiersBox = document.getElementById('modal-tiers-container');
-            tiersBox.innerHTML = '';
-            (p.tiers || [{ min: p.moq, price: p.price, label: 'Опт' }]).forEach(t => {
-                tiersBox.innerHTML += `
-                    <div class="surface-card rounded-xl p-2">
-                        <span class="text-[10px] text-subtle block font-semibold">${t.label}</span>
-                        <span class="font-extrabold text-xs text-strong">${t.price} ₽</span>
-                    </div>
-                `;
-            });
-
-            const slider = document.getElementById('modal-slider');
-            slider.min = 1;
-            slider.max = Math.max(p.stock || 100, (p.moq || 10) * 5);
-            slider.step = p.box_qty || p.moq || 1;
-            slider.value = qty;
-
-            document.getElementById('slider-number-input').value = qty;
-            document.getElementById('box-quantity-hint').innerText = `Квант короба: ${p.box_qty || p.moq || 1} шт`;
-
-            const chips = document.getElementById('quick-preset-chips');
-            chips.innerHTML = `
-                <button onclick="setModalQty(1)" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap text-strong">🧪 Образец 1 шт</button>
-                <button onclick="setModalQty(${p.moq || 10})" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap text-strong">Мин. ${p.moq || 10} шт</button>
-                <button onclick="setModalQty(${(p.box_qty || p.moq || 10) * 3})" class="px-2.5 py-1 rounded-lg surface-card text-[10px] font-bold active:scale-95 whitespace-nowrap text-strong">3 короба (${(p.box_qty || p.moq || 10) * 3} шт)</button>
-            `;
-
-            renderMatrixTab(p);
-            updateModalCalculations(p, qty);
-            switchTab('pricing');
-
-            const modal = document.getElementById('product-modal');
-            const sheet = document.getElementById('product-sheet');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('translate-y-full');
-            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
-        }
-
-        function switchTab(tab) {
-            const tabs = ['pricing', 'roi', 'matrix', 'branding', 'fulfillment', 'warehouses'];
-            tabs.forEach(t => {
-                const el = document.getElementById(`tab-${t}`);
-                const btn = document.getElementById(`tab-${t}-btn`);
-                if (el && btn) {
-                    if (t === tab) {
-                        el.classList.remove('hidden');
-                        btn.className = 'pb-2 border-b-2 border-neutral-900 dark:border-white font-bold whitespace-nowrap text-strong';
-                    } else {
-                        el.classList.add('hidden');
-                        btn.className = 'pb-2 border-b-2 border-transparent text-subtle font-bold whitespace-nowrap';
-                    }
-                }
-            });
-            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
-        }
-
-        function calculateSellerROI() {
-            const p = products.find(item => item.id === currentModalProductId);
-            if (!p) return;
-
-            const retailPrice = parseInt(document.getElementById('roi-retail-price').value) || (p.wb_price || 3000);
-            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
-            
-            let unitCost = getBaseUnitPrice(p, qty);
-            if (isBrandingIncluded) unitCost += 250;
-            if (isFulfillmentIncluded) unitCost += 45;
-
-            const totalPurchaseCost = unitCost * qty;
-            const totalRevenue = retailPrice * qty;
-            const marketplaceCut = totalRevenue * 0.28;
-            const netProfit = Math.round(totalRevenue - totalPurchaseCost - marketplaceCut);
-            const roiPercent = Math.round((netProfit / totalPurchaseCost) * 100);
-
-            document.getElementById('roi-net-profit').innerText = `${netProfit.toLocaleString('ru-RU')} ₽`;
-            document.getElementById('roi-percent').innerText = `${roiPercent > 0 ? '+' : ''}${roiPercent}%`;
-        }
-
-        function toggleBranding(checked) {
-            isBrandingIncluded = checked;
-            const p = products.find(item => item.id === currentModalProductId);
-            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
-            updateModalCalculations(p, qty);
-        }
-
-        function toggleFulfillment(checked) {
-            isFulfillmentIncluded = checked;
-            const p = products.find(item => item.id === currentModalProductId);
-            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
-            updateModalCalculations(p, qty);
-        }
-
-        function renderMatrixTab(product) {
-            const container = document.getElementById('matrix-rows-container');
-            if (!product.matrix) {
-                container.innerHTML = `<div class="text-subtle text-center py-2">Для данной позиции ростовка не предусмотрена</div>`;
-                document.getElementById('matrix-total-qty').innerText = `${document.getElementById('modal-slider').value} шт`;
-                return;
-            }
-
-            container.innerHTML = '';
-            product.matrix.forEach((m, idx) => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between surface-card p-2 rounded-xl">
-                        <span class="font-bold text-strong">${m.size}</span>
-                        <span class="text-subtle text-[11px]">${m.inBox} шт/кор</span>
-                        <div class="flex items-center gap-1">
-                            <input type="number" min="0" value="${m.count || 0}" oninput="updateMatrixRow(${idx}, this.value)" class="w-12 text-center font-bold surface-sub text-strong rounded-md py-1">
-                            <span class="text-subtle text-[10px]">кор.</span>
-                        </div>
-                        <span class="font-black text-strong">${(m.count || 0) * m.inBox} шт</span>
-                    </div>
-                `;
-            });
-            calculateMatrixTotal(product);
-        }
-
-        function updateMatrixRow(idx, val) {
-            const p = products.find(item => item.id === currentModalProductId);
-            if (p && p.matrix) {
-                p.matrix[idx].count = parseInt(val) || 0;
-                renderMatrixTab(p);
-            }
-        }
-
-        function calculateMatrixTotal(product) {
-            if (!product.matrix) return;
-            let total = 0;
-            product.matrix.forEach(m => total += (m.count || 0) * m.inBox);
-            document.getElementById('matrix-total-qty').innerText = `${total} шт`;
-            if (total > 0) setModalQty(total);
-        }
-
-        function getMatrixSummary(product) {
-            if (!product.matrix) return '';
-            const list = product.matrix.filter(m => (m.count || 0) > 0).map(m => `${m.size}: ${m.count * m.inBox}шт`);
-            return list.length > 0 ? list.join(', ') : '';
-        }
-
-        function setModalQty(qty) {
-            document.getElementById('modal-slider').value = qty;
-            document.getElementById('slider-number-input').value = qty;
-            const p = products.find(item => item.id === currentModalProductId);
-            if (p) updateModalCalculations(p, qty);
-        }
-
-        function onSliderChange(val) {
-            const qty = parseInt(val) || 1;
-            document.getElementById('slider-number-input').value = qty;
-            const p = products.find(item => item.id === currentModalProductId);
-            if (p) updateModalCalculations(p, qty);
-        }
-
-        function onNumberInputChange(val) {
-            const qty = parseInt(val) || 1;
-            document.getElementById('modal-slider').value = qty;
-            const p = products.find(item => item.id === currentModalProductId);
-            if (p) updateModalCalculations(p, qty);
-        }
-
-        function updateModalCalculations(product, qty) {
-            let unitPrice = getBaseUnitPrice(product, qty);
-            if (isBrandingIncluded && qty > 1) unitPrice += 250;
-            if (isFulfillmentIncluded && qty > 1) unitPrice += 45;
-
-            const total = qty * unitPrice;
-            document.getElementById('tier-unit-price').innerText = `${unitPrice} ₽`;
-            document.getElementById('slider-total-price').innerText = `${total.toLocaleString('ru-RU')} ₽`;
-
-            const boxCount = Math.ceil(qty / (product.box_qty || 10));
-            const totalWeight = (qty * (product.weight_per_unit || 0.5)).toFixed(1);
-            document.getElementById('logistics-boxes-text').innerText = `${boxCount} ${boxCount === 1 ? 'короб' : 'коробок'}`;
-            document.getElementById('logistics-weight-text').innerText = `${totalWeight} кг`;
-
-            const nextTier = (product.tiers || []).find(t => t.min > qty);
-            const progressBar = document.getElementById('tier-progress-bar');
-            const hint = document.getElementById('tier-discount-hint');
-
-            if (nextTier) {
-                const diff = nextTier.min - qty;
-                hint.innerText = `Еще ${diff} шт до цены ${nextTier.price} ₽/шт!`;
-                const percent = Math.min(100, Math.round((qty / nextTier.min) * 100));
-                progressBar.style.width = `${percent}%`;
-            } else {
-                hint.innerText = 'Максимальная оптовая скидка! 🎉';
-                progressBar.style.width = '100%';
-            }
-
-            const slot = document.getElementById('modal-action-slot');
-            slot.innerHTML = `
-                <button onclick="commitModalToCart('${product.id}', ${qty}); closeProductModal(); triggerFlyToCartAnimation(this);" class="w-full py-3.5 btn-primary rounded-xl text-xs font-bold smooth flex items-center justify-center gap-2 active:scale-95 shadow-lg">
-                    <span>Добавить в спецификацию (${qty} шт)</span>
-                    <span>•</span>
-                    <span>${total.toLocaleString('ru-RU')} ₽</span>
-                </button>
-            `;
-            calculateSellerROI();
-        }
-
-        function commitModalToCart(id, qty) {
-            const p = products.find(item => item.id === id);
-            if (!p) return;
-            updateCart(id, qty, {
-                branding: isBrandingIncluded,
-                fulfillment: isFulfillmentIncluded,
-                matrixSummary: getMatrixSummary(p)
-            });
-            showToast("Спецификация обновлена");
-        }
-
-        function closeProductModal() {
-            document.getElementById('product-sheet').classList.add('translate-y-full');
-            document.getElementById('product-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function updateCart(id, newQty, options = null) {
-            const p = products.find(prod => prod.id === id);
-            if (!p) return;
-
-            if (newQty <= 0) {
-                delete cart[id];
-            } else {
-                const prev = cart[id] || {};
-                const branding = options ? options.branding : (prev.branding || false);
-                const fulfillment = options ? options.fulfillment : (prev.fulfillment || false);
-                const matrixSummary = options ? options.matrixSummary : (prev.matrixSummary || '');
-
-                let unitPrice = getBaseUnitPrice(p, newQty);
-                if (branding && newQty > 1) unitPrice += 250;
-                if (fulfillment && newQty > 1) unitPrice += 45;
-
-                cart[id] = {
-                    qty: newQty,
-                    unitPrice: unitPrice,
-                    branding: branding,
-                    fulfillment: fulfillment,
-                    matrixSummary: matrixSummary
-                };
-            }
-            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
-            filterProducts();
+        function addToCart(id, qty) {
+            const p = products.find(i => i.id === id);
+            cart[id] = { qty: (cart[id]?.qty || 0) + qty, price: p.price, title: p.title };
             updateCartUI();
-        }
-
-        function clearCart() {
-            cart = {};
-            hideCheckout();
-            filterProducts();
-            updateCartUI();
-            showToast("Спецификация очищена", "🗑");
-        }
-
-        function calculateSubtotal() {
-            let total = 0;
-            for (const [id, item] of Object.entries(cart)) total += item.unitPrice * item.qty;
-            return total;
+            showToast("Добавлено в смету");
         }
 
         function updateCartUI() {
-            const subtotal = calculateSubtotal();
-            const total = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
-            const totalItems = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
-            const cartBar = document.getElementById('cart-bar');
-
-            if (totalItems > 0) {
-                cartBar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-                document.getElementById('total-price').innerText = total.toLocaleString('ru-RU') + ' ₽';
+            const total = Object.values(cart).reduce((sum, i) => sum + (i.qty * i.price), 0);
+            const bar = document.getElementById('cart-bar');
+            if (total > 0) {
+                bar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                document.getElementById('total-price').innerText = `${total.toLocaleString('ru-RU')} ₽`;
             } else {
-                cartBar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+                bar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
             }
         }
-
-        function setVatMode(withVat) {
-            isVatEnabled = withVat;
-            const noneBtn = document.getElementById('vat-none-btn');
-            const withBtn = document.getElementById('vat-with-btn');
-            const desc = document.getElementById('vat-description-label');
-
-            if (withVat) {
-                withBtn.className = 'flex-1 py-1.5 rounded-lg btn-primary font-bold smooth';
-                noneBtn.className = 'flex-1 py-1.5 rounded-lg text-desc font-medium smooth';
-                desc.innerText = 'Включая НДС 20% • Пакет закрывающих УПД';
-            } else {
-                noneBtn.className = 'flex-1 py-1.5 rounded-lg btn-primary font-bold smooth';
-                withBtn.className = 'flex-1 py-1.5 rounded-lg text-desc font-medium smooth';
-                desc.innerText = 'Без НДС (УСН) • Прямой счет на оплату';
-            }
-            updateCartUI();
-            showCheckout();
-        }
-
-        function printQuotation() { window.print(); }
 
         function showCheckout() {
-            const subtotal = calculateSubtotal();
-            const total = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
-            document.getElementById('checkout-total').innerText = total.toLocaleString('ru-RU') + ' ₽';
-
-            const itemsContainer = document.getElementById('checkout-cart-items');
-            itemsContainer.innerHTML = '';
-            for (const [id, item] of Object.entries(cart)) {
-                const p = products.find(prod => prod.id === id);
-                if (p) {
-                    let badges = [];
-                    if (item.branding) badges.push('Мерч +250₽');
-                    if (item.fulfillment) badges.push('Фулфилмент +45₽');
-                    const badgesText = badges.length > 0 ? ` [${badges.join(', ')}]` : '';
-                    const matrixText = item.matrixSummary ? `<p class="text-[9px] text-subtle">${item.matrixSummary}</p>` : '';
-
-                    itemsContainer.innerHTML += `
-                        <div class="flex justify-between items-center surface-sub rounded-xl p-2.5 text-xs">
-                            <div>
-                                <p class="font-bold leading-tight text-strong">${p.title}${badgesText}</p>
-                                <p class="text-[10px] text-desc mt-0.5">${item.qty} шт × ${item.unitPrice} ₽</p>
-                                ${matrixText}
-                            </div>
-                            <span class="font-extrabold text-strong">${(item.qty * item.unitPrice).toLocaleString('ru-RU')} ₽</span>
-                        </div>
-                    `;
-                }
-            }
-
-            const modal = document.getElementById('checkout-form');
-            const sheet = document.getElementById('checkout-sheet');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('translate-y-full');
+            document.getElementById('checkout-form').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('checkout-sheet').classList.remove('translate-y-full');
         }
-
         function hideCheckout() {
             document.getElementById('checkout-sheet').classList.add('translate-y-full');
             document.getElementById('checkout-form').classList.add('opacity-0', 'pointer-events-none');
         }
 
         function sendOrderToBot() {
-            const company = document.getElementById('company').value.trim();
+            const comp = document.getElementById('company').value.trim();
             const city = document.getElementById('city').value.trim();
-            const contacts = document.getElementById('contacts').value.trim();
-            const tk = document.getElementById('tk-choice').value;
-            const terms = document.getElementById('payment-terms').value;
+            const cont = document.getElementById('contacts').value.trim();
+            if (!comp || !city || !cont) return showToast("Заполните реквизиты", "⚠️");
 
-            if (!company || !city || !contacts) {
-                showToast("Заполните реквизиты", "⚠️");
-                return;
-            }
+            const items = Object.values(cart).map(i => ({ title: i.title, qty: i.qty, total: i.qty * i.price }));
+            const total = items.reduce((s, i) => s + i.total, 0);
 
-            let orderItems = [];
-            let subtotal = calculateSubtotal();
-            let finalSum = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
-
-            for (const [id, item] of Object.entries(cart)) {
-                const p = products.find(prod => prod.id === id);
-                if (p) {
-                    let fullTitle = p.title;
-                    if (item.branding) fullTitle += " [+Печать лого]";
-                    if (item.fulfillment) fullTitle += " [+Фулфилмент]";
-                    if (item.matrixSummary) fullTitle += ` (${item.matrixSummary})`;
-
-                    orderItems.push({
-                        title: fullTitle,
-                        qty: item.qty,
-                        price: item.unitPrice,
-                        total: item.unitPrice * item.qty
-                    });
-                }
-            }
-
-            const payload = {
+            tg.sendData(JSON.stringify({
                 type: 'order',
-                vat: isVatEnabled ? 'С НДС 20%' : 'Без НДС (УСН)',
-                payment_terms: terms,
-                cart: orderItems,
-                total_sum: finalSum,
-                company: `${company} (${isVatEnabled ? 'НДС 20%' : 'УСН'}, ТК: ${tk}, Оплата: ${terms})`,
+                company: comp,
                 city: city,
-                contacts: contacts
-            };
-
-            tg.sendData(JSON.stringify(payload));
+                contacts: cont,
+                cart: items,
+                total_sum: total
+            }));
         }
 
-        function openLightbox() {
-            const currentImg = document.getElementById('modal-main-img').src;
-            if (!currentImg) return;
-            document.getElementById('lightbox-img').src = currentImg;
-            document.getElementById('lightbox-modal').classList.remove('opacity-0', 'pointer-events-none');
-            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
+        function toggleThemeMode() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            document.getElementById('theme-btn').innerText = isDark ? '☀️' : '🌙';
         }
 
-        function closeLightbox() {
-            document.getElementById('lightbox-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function openTrackerModal() {
-            document.getElementById('tracker-modal').classList.remove('opacity-0', 'pointer-events-none');
-            document.getElementById('tracker-sheet').classList.remove('translate-y-full');
-            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
-        }
-
-        function closeTrackerModal() {
-            document.getElementById('tracker-sheet').classList.add('translate-y-full');
-            document.getElementById('tracker-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function checkOrderStatus() {
-            const val = document.getElementById('track-input').value.trim();
-            if (!val) {
-                showToast("Введите номер счета", "⚠️");
-                return;
-            }
-            document.getElementById('track-id-display').innerText = `Счет #${val}`;
-            document.getElementById('tracker-result').classList.remove('hidden');
-        }
-
-        function triggerFlyToCartAnimation(btnElement) {
+        async function syncServerCatalog() {
             try {
-                const rect = btnElement.getBoundingClientRect();
-                const cartBar = document.getElementById('cart-bar');
-                const cartRect = cartBar.getBoundingClientRect();
-
-                const particle = document.createElement('div');
-                particle.className = 'fly-particle w-5 h-5 btn-primary rounded-full flex items-center justify-center text-[9px] font-black shadow-lg';
-                particle.innerText = '+1';
-                particle.style.left = `${rect.left + rect.width / 2 - 10}px`;
-                particle.style.top = `${rect.top + rect.height / 2 - 10}px`;
-                document.body.appendChild(particle);
-
-                const targetX = cartRect.left + cartRect.width / 2 - (rect.left + rect.width / 2);
-                const targetY = cartRect.top + cartRect.height / 2 - (rect.top + rect.height / 2);
-
-                requestAnimationFrame(() => {
-                    particle.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.2)`;
-                    particle.style.opacity = '0';
-                });
-
-                setTimeout(() => {
-                    particle.remove();
-                    cartBar.classList.add('scale-105');
-                    setTimeout(() => cartBar.classList.remove('scale-105'), 180);
-                }, 550);
-            } catch(e) {}
-        }
-
-        async function autoFillByInn() {
-            const rawInn = document.getElementById('inn-lookup-input').value.trim();
-            const inn = rawInn.replace(/\D/g, '');
-            const btnText = document.getElementById('inn-btn-text');
-
-            if (inn.length !== 10 && inn.length !== 12) {
-                showToast("ИНН должен содержать 10 или 12 цифр", "⚠️");
-                return;
-            }
-
-            btnText.innerText = 'Поиск...';
-            try {
-                const response = await fetch("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party", {
-                    method: "POST",
-                    mode: "cors",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": "Token 77e6df5b9e078e34891b98a3c8e4d29312c3f596"
-                    },
-                    body: JSON.stringify({ query: inn })
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.suggestions && result.suggestions.length > 0) {
-                        const party = result.suggestions[0].data;
-                        const shortName = party.name ? (party.name.short_with_opf || party.name.full_with_opf) : `Контрагент ИНН ${inn}`;
-                        const address = party.address ? party.address.value : '';
-
-                        document.getElementById('company').value = `${shortName}, ИНН ${inn}`;
-                        if (address) document.getElementById('city').value = address;
-                        showToast("Реквизиты найдены в ЕГРЮЛ!", "🔍");
-                        btnText.innerText = 'Найти';
-                        return;
-                    }
+                const res = await fetch(`${API_SERVER_URL}/api/products?t=${Date.now()}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) products = data;
                 }
-            } catch (err) {}
-
-            document.getElementById('company').value = inn.length === 10 ? `ООО «Партнер», ИНН ${inn}` : `ИП Закупщик, ИНН ${inn}`;
-            document.getElementById('city').value = `г. Москва, склад СДЭК`;
-            showToast("Реквизиты заполнены!", "🔍");
-            btnText.innerText = 'Найти';
+            } catch(e) {}
+            renderProducts();
         }
 
-        const tickerMessages = [
-            "Склад Южные Врата: отгружено 42 короба (СДЭК)",
-            "Поступление: Партия Худи Oversize 420g принята на паллеты",
-            "Оформлен счет: ООО «СнабТрейд» (Санкт-Петербург) • 120 шт.",
-            "Проверка качества: Декларации ТР ТС обновлены для электроники"
-        ];
-        let tickerIdx = 0;
-        setInterval(() => {
-            tickerIdx = (tickerIdx + 1) % tickerMessages.length;
-            const el = document.getElementById('ticker-text');
-            if (el) el.innerText = tickerMessages[tickerIdx];
-        }, 5000);
-
-        applyTheme(isDarkMode);
-        filterProducts();
-        syncCatalogWithServer();
+        renderProducts();
+        syncServerCatalog();
     </script>
 </body>
 </html>
