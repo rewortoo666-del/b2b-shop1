@@ -122,7 +122,12 @@
             </div>
             
             <div class="flex items-center gap-1.5">
-                <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl theme-card text-slate-600 font-bold flex items-center justify-center hover:scale-105 active:scale-90 transition shadow-sm" title="Сменить тему оформления">
+                <!-- Кнопка обновления каталога -->
+                <button onclick="manualSync()" class="w-8 h-8 rounded-xl theme-card text-slate-600 font-bold flex items-center justify-center hover:scale-105 active:scale-90 transition shadow-sm" title="Обновить остатки и товары">
+                    🔄
+                </button>
+                <!-- Тумблер темы -->
+                <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl theme-card text-slate-600 font-bold flex items-center justify-center hover:scale-105 active:scale-90 transition shadow-sm" title="Сменить тему">
                     ⚡️
                 </button>
                 <button onclick="openTrackerModal()" class="w-8 h-8 rounded-xl theme-card text-slate-600 font-bold flex items-center justify-center hover:scale-105 transition shadow-sm" title="Трекинг груза">
@@ -141,7 +146,7 @@
             <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 flex items-center justify-between shadow-sm">
                 <div>
                     <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-500 bg-amber-500/20 px-2 py-0.5 rounded">Режим Администратора</span>
-                    <p class="text-xs font-bold theme-text-main mt-1">Добавление позиций через меню бота</p>
+                    <p class="text-xs font-bold theme-text-main mt-1">Управление базой через меню Telegram-бота</p>
                 </div>
                 <div class="flex items-center gap-1.5">
                     <button onclick="logoutAdmin()" class="px-2.5 py-2 theme-card text-slate-400 rounded-xl text-xs font-bold transition active:scale-95">
@@ -228,7 +233,7 @@
         <!-- Сетка каталога -->
         <main class="p-4 pt-1 grid grid-cols-2 gap-3 flex-grow" id="products-container"></main>
 
-        <!-- Плавающий B2B-виджет сметы -->
+        <!-- Плавающий виджет сметы -->
         <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-slate-900/95 backdrop-blur-md rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl shadow-slate-900/50 border border-slate-700/50 opacity-0 pointer-events-none translate-y-4 transition-all duration-300 z-40 no-print">
             <div>
                 <div class="flex items-center gap-1.5">
@@ -243,7 +248,7 @@
             </button>
         </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО: PIN-код -->
+        <!-- Модалка PIN-кода -->
         <div id="pin-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 p-4 no-print">
             <div class="w-full max-w-xs theme-sheet rounded-3xl p-5 space-y-4 shadow-2xl text-center transform scale-95 transition-transform duration-300" id="pin-sheet">
                 <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-black text-xl mx-auto border border-amber-500/20">
@@ -251,7 +256,7 @@
                 </div>
                 <div>
                     <h3 class="text-sm font-black theme-text-main">Вход для администратора</h3>
-                    <p class="text-[11px] theme-text-sub mt-0.5">Введите PIN для управления товарами</p>
+                    <p class="text-[11px] theme-text-sub mt-0.5">Введите PIN для активации прав</p>
                 </div>
                 <input type="password" id="pin-input" maxlength="8" placeholder="Введите PIN (7777)" class="w-full text-center tracking-widest text-lg font-black theme-input rounded-xl p-3 outline-none focus:ring-2 focus:ring-amber-500/50">
                 <div class="flex gap-2">
@@ -261,7 +266,7 @@
             </div>
         </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО: Карточка товара -->
+        <!-- Модалка карточки товара -->
         <div id="product-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300 no-print">
             <div class="w-full max-w-md theme-sheet rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="product-sheet">
                 
@@ -341,7 +346,7 @@
                                 <span class="text-sm font-black text-blue-500" id="roi-percent">+0%</span>
                             </div>
                         </div>
-                        <p class="text-[10px] theme-text-sub leading-tight text-center">Расчет включает себестоимость, комиссию площадки (~28%) и фулфилмент.</p>
+                        <p class="text-[10px] theme-text-sub leading-tight text-center">Расчет включает себестоимость, комиссию маркетплейса (~28%) и фулфилмент.</p>
                     </div>
                 </div>
 
@@ -370,7 +375,7 @@
                             </label>
                             <span class="font-black text-blue-500" id="branding-price-tag">+ 250 ₽/шт</span>
                         </div>
-                        <p class="text-[11px] theme-text-sub">Стойкая печать или лазерная гравировка. Дизайн-макет согласуется перед тиражом.</p>
+                        <p class="text-[11px] theme-text-sub">Стойкая шелкография или лазерная гравировка. Дизайн-макет согласуется перед тиражом.</p>
                     </div>
                 </div>
 
@@ -619,17 +624,15 @@
         const ADMIN_TELEGRAM_ID = 8125122124;
         const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 0;
 
-        // Постоянный адрес Cloudflare туннеля (обновляйте при смене trycloudflare)
-        const API_SERVER_URL = "https://jones-ted-flow-homework.trycloudflare.com";
+        // Постоянный адрес активного Cloudflare туннеля
+        const API_SERVER_URL = "https://helmet-originally-jaguar-london.trycloudflare.com";
 
-        // Преобразование ссылки фото: если фото загружено через бота (/uploads/...), подставляем API_SERVER_URL
+        // Корректное преобразование адресов фото, сохраненных через бота
         function resolveImageUrl(url) {
-            if (!url) return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80';
-            if (url.startsWith('/uploads/') || url.startsWith('uploads/')) {
-                const clean = url.startsWith('/') ? url : '/' + url;
-                return `${API_SERVER_URL}${clean}`;
-            }
-            return url;
+            if (!url) return 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80';
+            if (url.startsWith('http://') || url.startsWith('https://')) return url;
+            const clean = url.startsWith('/') ? url : '/' + url;
+            return `${API_SERVER_URL}${clean}`;
         }
 
         let editingProductId = null;
@@ -691,13 +694,7 @@
                 id: 'p2', cat: 'Обувь', title: 'Кроссовки B2B Sport Runner PRO', desc: 'Дышащая сетка Ripstop, подошва EVA. Заводская ростовка с 40 по 45 размер. Каждая пара в коробке со штрихкодом.', 
                 price: 3200, moq: 8, box_qty: 8, wb_price: 6200, stock: 192, weight_per_unit: 0.9, badge: 'Сезон 2026', 
                 images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 8, price: 2800, label: '8-24 шт' }, { min: 25, price: 2600, label: '25-79 шт' }, { min: 80, price: 2400, label: 'от 80 шт' }],
-                matrix: [
-                    { size: '41 EU', inBox: 2, count: 0 },
-                    { size: '42 EU', inBox: 2, count: 0 },
-                    { size: '43 EU', inBox: 2, count: 0 },
-                    { size: '44 EU', inBox: 2, count: 0 }
-                ]
+                tiers: [{ min: 8, price: 2800, label: '8-24 шт' }, { min: 25, price: 2600, label: '25-79 шт' }, { min: 80, price: 2400, label: 'от 80 шт' }]
             },
             { 
                 id: 'p3', cat: 'Электроника', title: 'Яндекс Станция Мини 2 с часами', desc: 'Оригинальные станции в заводской слюде. Официальная гарантия 1 год. Подходят для корпоративных подарков и розницы.', 
@@ -719,16 +716,10 @@
             }
         ];
 
-        // Очищаем старый битый кэш
-        const CLEAN_CACHE_KEY = 'galk_b2b_products_v3';
+        // Очистка старого битого кэша
+        localStorage.removeItem('galk_b2b_products');
+        localStorage.removeItem('galk_b2b_products_v3');
         let products = defaultProducts;
-        try {
-            const saved = localStorage.getItem(CLEAN_CACHE_KEY);
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                if (Array.isArray(parsed) && parsed.length > 0) products = parsed;
-            }
-        } catch(e) {}
 
         let favorites = [];
         let cart = {};
@@ -1014,25 +1005,26 @@
 
         async function syncCatalogWithServer() {
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 4000);
-                const res = await fetch(`${API_SERVER_URL}/api/products?t=${Date.now()}`, {
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
+                const res = await fetch(`${API_SERVER_URL}/api/products?t=${Date.now()}`);
                 if (res.ok) {
                     const serverCatalog = await res.json();
                     if (Array.isArray(serverCatalog) && serverCatalog.length > 0) {
                         products = serverCatalog;
-                        try {
-                            localStorage.setItem(CLEAN_CACHE_KEY, JSON.stringify(products));
-                        } catch(e) {}
                         filterProducts();
+                        return;
                     }
                 }
             } catch(e) {
-                console.warn("Сервер временно оффлайн, работаем с локальным каталогом");
+                console.warn("API Offline, используем локальную базу");
             }
+            filterProducts();
+        }
+
+        function manualSync() {
+            showToast("Синхронизация с сервером...", "🔄");
+            syncCatalogWithServer().then(() => {
+                showToast("Каталог обновлен!", "✅");
+            });
         }
 
         // ==========================================
@@ -1077,7 +1069,7 @@
                     throw new Error("API Offline");
                 }
             } catch(e) {
-                showToast("Отправка в чат недоступна. Нажмите '📊 Скачать прайс' в меню бота!", "ℹ️");
+                showToast("Нажмите '📊 Скачать прайс (Excel)' в боте!", "ℹ️");
             }
         }
 
@@ -1116,7 +1108,7 @@
                     try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
                     showToast("КП отправлено документом в чат! 📄", "✅");
                 } else {
-                    showToast("Сервер не ответил. Проверьте запуск бота.", "❌");
+                    showToast("Сервер не ответил. Проверьте туннель.", "❌");
                 }
             } catch (err) {
                 showToast("Ошибка отправки КП", "❌");
