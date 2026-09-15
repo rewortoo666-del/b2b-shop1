@@ -122,7 +122,6 @@
             </div>
             
             <div class="flex items-center gap-1.5">
-                <!-- Тумблер темы: Светлый / Неоновый Dark Vibe -->
                 <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl theme-card text-slate-600 font-bold flex items-center justify-center hover:scale-105 active:scale-90 transition shadow-sm" title="Сменить тему оформления">
                     ⚡️
                 </button>
@@ -142,12 +141,9 @@
             <div class="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-3 flex items-center justify-between shadow-sm">
                 <div>
                     <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-500 bg-amber-500/20 px-2 py-0.5 rounded">Режим Администратора</span>
-                    <p class="text-xs font-bold theme-text-main mt-1">Добавление позиции в общую БД</p>
+                    <p class="text-xs font-bold theme-text-main mt-1">Добавление позиций через меню бота</p>
                 </div>
                 <div class="flex items-center gap-1.5">
-                    <button onclick="openAddProductModal()" class="px-3 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-black shadow-md transition active:scale-95">
-                        + Товар
-                    </button>
                     <button onclick="logoutAdmin()" class="px-2.5 py-2 theme-card text-slate-400 rounded-xl text-xs font-bold transition active:scale-95">
                         Выйти
                     </button>
@@ -155,7 +151,7 @@
             </div>
         </section>
 
-        <!-- Живой тикер активности склада -->
+        <!-- Живой тикер склада -->
         <section id="live-warehouse-ticker" class="px-4 pt-2.5 no-print">
             <div class="bg-slate-900 text-white px-3 py-1.5 rounded-xl flex items-center justify-between text-[10px] font-semibold shadow-sm border border-slate-800">
                 <div class="flex items-center gap-1.5 truncate">
@@ -183,7 +179,7 @@
             </div>
         </section>
 
-        <!-- B2B-панель: Отправка оптового прайс-листа Excel прямо в Telegram-чат -->
+        <!-- B2B-панель: Выгрузка прайс-листа -->
         <section id="b2b-action-bar" class="px-4 pt-2.5 no-print">
             <div class="flex items-center justify-between theme-card border border-slate-200/90 rounded-2xl p-2.5 shadow-sm transition-colors duration-300">
                 <div class="flex items-center gap-2 pl-1">
@@ -288,12 +284,6 @@
                     </div>
                     <div class="flex items-center gap-1.5">
                         <button onclick="exportSingleProductKP()" class="px-2.5 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-[10px] transition shadow-sm active:scale-95" title="Сформировать PDF и отправить в чат">📄 КП в чат</button>
-                        <button onclick="openEditCurrentProduct()" class="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] transition shadow-sm flex items-center gap-1 active:scale-95">
-                            <span>✏️</span><span>Изменить</span>
-                        </button>
-                        <button onclick="deleteCurrentProduct()" class="px-2 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-black text-[10px] transition shadow-sm flex items-center gap-1 active:scale-95">
-                            <span>🗑️</span><span>Удалить</span>
-                        </button>
                     </div>
                 </div>
 
@@ -531,86 +521,6 @@
             </div>
         </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО: Добавление и Редактирование товара -->
-        <div id="add-product-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300 no-print">
-            <div class="w-full max-w-md theme-sheet rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="add-product-sheet">
-                <div class="flex justify-between items-center pb-2 border-b theme-border">
-                    <div>
-                        <h2 id="editor-modal-title" class="text-base font-black theme-text-main">Добавить товар в каталог</h2>
-                        <p id="editor-modal-subtitle" class="text-[11px] theme-text-sub">Позиция сохранится в базу для всех клиентов</p>
-                    </div>
-                    <button onclick="closeAddProductModal()" class="w-8 h-8 rounded-full theme-card theme-text-sub font-bold flex items-center justify-center">✕</button>
-                </div>
-
-                <div class="space-y-2.5 text-xs">
-                    <div>
-                        <label class="block font-bold theme-text-main mb-1">Наименование товара *</label>
-                        <input type="text" id="new-prod-title" placeholder="Например: Свитшот Classic Oversize" class="w-full theme-input border rounded-xl p-2.5 font-medium outline-none focus:border-blue-600">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-bold theme-text-main mb-1">Категория *</label>
-                            <select id="new-prod-cat" class="w-full theme-input border rounded-xl p-2.5 font-medium outline-none">
-                                <option value="Одежда">Одежда</option>
-                                <option value="Обувь">Обувь</option>
-                                <option value="Электроника">Электроника</option>
-                                <option value="Сувениры">Сувениры</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block font-bold theme-text-main mb-1">Мин. заказ (MOQ) *</label>
-                            <input type="number" id="new-prod-moq" placeholder="10" class="w-full theme-input border rounded-xl p-2.5 font-medium outline-none focus:border-blue-600">
-                        </div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-bold text-blue-500 mb-1">Остаток на складе (шт) *</label>
-                            <input type="number" id="new-prod-stock" placeholder="480" value="480" class="w-full theme-input border border-blue-500/40 rounded-xl p-2.5 font-bold outline-none focus:border-blue-600">
-                        </div>
-                        <div>
-                            <label class="block font-bold theme-text-main mb-1">РРЦ на WB / Ozon (₽) *</label>
-                            <input type="number" id="new-prod-wb" placeholder="4900" class="w-full theme-input border rounded-xl p-2.5 font-medium outline-none focus:border-blue-600">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block font-bold theme-text-main mb-1">Базовая цена (руб) *</label>
-                            <input type="number" id="new-prod-price" placeholder="2500" class="w-full theme-input border rounded-xl p-2.5 font-medium outline-none focus:border-blue-600">
-                        </div>
-                        <div>
-                            <label class="block font-bold theme-text-main mb-1">Оптовая цена от MOQ *</label>
-                            <input type="number" id="new-prod-disc" placeholder="1950" class="w-full theme-input border rounded-xl p-2.5 font-medium outline-none focus:border-blue-600">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block font-bold theme-text-main mb-1">Фото товара (из галереи) *</label>
-                        <div class="flex items-center gap-3 theme-card border rounded-xl p-2.5">
-                            <label class="cursor-pointer bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold px-3 py-2 rounded-lg shadow-sm transition whitespace-nowrap active:scale-95">
-                                <span>📷 Выбрать фото</span>
-                                <input type="file" id="new-prod-file" accept="image/*" class="hidden" onchange="handleImagePreview(event)">
-                            </label>
-                            <span id="file-chosen-text" class="text-[11px] theme-text-sub truncate">Файл не выбран</span>
-                        </div>
-                        <div id="image-preview-container" class="hidden mt-2 relative w-20 h-20 rounded-xl overflow-hidden border border-slate-200 shadow-sm">
-                            <img id="image-preview" src="" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block font-bold theme-text-main mb-1">Описание партии</label>
-                        <textarea id="new-prod-desc" rows="2" placeholder="Состав, особенности упаковки, сертификаты..." class="w-full theme-input border rounded-xl p-2.5 font-medium outline-none resize-none focus:border-blue-600"></textarea>
-                    </div>
-                </div>
-
-                <button onclick="saveProductLive()" id="save-prod-btn" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-600/30 transition">
-                    Опубликовать товар во всей сети
-                </button>
-            </div>
-        </div>
-
         <!-- МОДАЛЬНОЕ ОКНО: Оформление счета -->
         <div id="checkout-form" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300">
             <div class="w-full max-w-md theme-sheet rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="checkout-sheet">
@@ -709,13 +619,23 @@
         const ADMIN_TELEGRAM_ID = 8125122124;
         const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 0;
 
-        // Постоянный адрес Cloudflare туннеля
+        // Постоянный адрес Cloudflare туннеля (обновляйте при смене trycloudflare)
         const API_SERVER_URL = "https://jones-ted-flow-homework.trycloudflare.com";
+
+        // Преобразование ссылки фото: если фото загружено через бота (/uploads/...), подставляем API_SERVER_URL
+        function resolveImageUrl(url) {
+            if (!url) return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80';
+            if (url.startsWith('/uploads/') || url.startsWith('uploads/')) {
+                const clean = url.startsWith('/') ? url : '/' + url;
+                return `${API_SERVER_URL}${clean}`;
+            }
+            return url;
+        }
 
         let editingProductId = null;
 
         // ==========================================
-        // УПРАВЛЕНИЕ ТЕМОЙ (LIGHT / NEON DARK)
+        // УПРАВЛЕНИЕ ТЕМОЙ
         // ==========================================
         let isNeonTheme = localStorage.getItem('galk_theme_neon') === 'true';
 
@@ -747,7 +667,7 @@
             }
         }
 
-        // Базовый каталог товаров
+        // Базовый чистый каталог
         const defaultProducts = [
             { 
                 id: 'p_watch', cat: 'Электроника', title: 'Apple Watch Ultra Titanium (Фабричный оригинал)', desc: 'Премиальная фабричная комплектация 1:1, титановый корпус, AMOLED-экран, серийники бьются. Идеально под Wildberries и Ozon.', 
@@ -789,12 +709,7 @@
                 id: 'p5', cat: 'Одежда', title: 'Футболка Heavy Cotton 240g', desc: 'Плотный 100% гребенной хлопок. Спущенное плечо, воротник стойка с лайкрой, не дает усадку после стирки.', 
                 price: 1100, moq: 20, box_qty: 20, wb_price: 2400, stock: 650, weight_per_unit: 0.28, badge: 'Базовый мерч', 
                 images: ['https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 20, price: 790, label: '20-49 шт' }, { min: 50, price: 690, label: '50-199 шт' }, { min: 200, price: 590, label: 'от 200 шт' }],
-                matrix: [
-                    { size: 'M (48)', inBox: 6, count: 0 },
-                    { size: 'L (50)', inBox: 8, count: 0 },
-                    { size: 'XL (52)', inBox: 6, count: 0 }
-                ]
+                tiers: [{ min: 20, price: 790, label: '20-49 шт' }, { min: 50, price: 690, label: '50-199 шт' }, { min: 200, price: 590, label: 'от 200 шт' }]
             },
             { 
                 id: 'p6', cat: 'Сувениры', title: 'Термокружка Soft-Touch 500ml', desc: 'Двойные стенки из пищевой стали 304. Вакуумная изоляция держит тепло 8 часов. Идеально под лазерную гравировку.', 
@@ -804,14 +719,14 @@
             }
         ];
 
+        // Очищаем старый битый кэш
+        const CLEAN_CACHE_KEY = 'galk_b2b_products_v3';
         let products = defaultProducts;
         try {
-            const saved = localStorage.getItem('galk_b2b_products');
+            const saved = localStorage.getItem(CLEAN_CACHE_KEY);
             if (saved) {
                 const parsed = JSON.parse(saved);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    products = parsed;
-                }
+                if (Array.isArray(parsed) && parsed.length > 0) products = parsed;
             }
         } catch(e) {}
 
@@ -826,9 +741,7 @@
         function cloudSave(key, value) {
             try {
                 if (tg.isVersionAtLeast && tg.isVersionAtLeast('6.9') && tg.CloudStorage) {
-                    tg.CloudStorage.setItem(key, JSON.stringify(value), (err) => {
-                        if (err) localStorage.setItem(key, JSON.stringify(value));
-                    });
+                    tg.CloudStorage.setItem(key, JSON.stringify(value), () => {});
                     return;
                 }
             } catch(e) {}
@@ -1011,7 +924,6 @@
             renderProducts(filtered);
         }
 
-        // Защищенный рендеринг карточек каталога
         function renderProducts(items) {
             const container = document.getElementById('products-container');
             if (!container) return;
@@ -1022,17 +934,14 @@
                 return;
             }
 
-            const adminActive = isUserAdmin();
-
             items.forEach(p => {
                 try {
                     const cartItem = cart[p.id];
                     const qty = cartItem ? cartItem.qty : 0;
                     const isFav = favorites.includes(p.id);
 
-                    const img = (p.images && p.images.length > 0 && p.images[0]) 
-                        ? p.images[0] 
-                        : 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80';
+                    const rawImg = (p.images && p.images.length > 0 && p.images[0]) ? p.images[0] : '';
+                    const img = resolveImageUrl(rawImg);
                     
                     const moq = Number(p.moq) || 1;
                     const boxQty = Number(p.box_qty) || moq;
@@ -1051,12 +960,7 @@
                     container.innerHTML += `
                         <div class="theme-card rounded-2xl border border-slate-200/80 overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition relative group">
                             
-                            <!-- Кнопки управления админа на каждой карточке -->
                             <div class="absolute top-2 right-2 z-20 flex items-center gap-1">
-                                ${adminActive ? `
-                                    <button onclick="openEditProductModal('${p.id}', event)" class="w-7 h-7 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold flex items-center justify-center text-xs shadow-md active:scale-90 transition" title="Редактировать">✏️</button>
-                                    <button onclick="confirmDeleteProduct('${p.id}', event)" class="w-7 h-7 rounded-lg bg-rose-600 hover:bg-rose-700 text-white font-bold flex items-center justify-center text-xs shadow-md active:scale-90 transition" title="Удалить">🗑️</button>
-                                ` : ''}
                                 <button onclick="toggleFavorite('${p.id}', event)" class="w-7 h-7 rounded-lg bg-white/90 backdrop-blur-sm flex items-center justify-center text-xs shadow-sm transition active:scale-90">
                                     ${isFav ? '❤️' : '🤍'}
                                 </button>
@@ -1103,7 +1007,7 @@
                         </div>
                     `;
                 } catch(errItem) {
-                    console.error("Ошибка отрисовки карточки:", p, errItem);
+                    console.error("Ошибка рендеринга:", errItem);
                 }
             });
         }
@@ -1121,18 +1025,18 @@
                     if (Array.isArray(serverCatalog) && serverCatalog.length > 0) {
                         products = serverCatalog;
                         try {
-                            localStorage.setItem('galk_b2b_products', JSON.stringify(products));
+                            localStorage.setItem(CLEAN_CACHE_KEY, JSON.stringify(products));
                         } catch(e) {}
                         filterProducts();
                     }
                 }
             } catch(e) {
-                console.warn("API сервер недоступен, работаем с локальной базой:", e);
+                console.warn("Сервер временно оффлайн, работаем с локальным каталогом");
             }
         }
 
         // ==========================================
-        // ОТПРАВКА ФАЙЛОВ В ЧАТ TELEGRAM
+        // ОТПРАВКА ФАЙЛОВ В ЧАТ
         // ==========================================
         async function exportPriceListExcel() {
             showToast("Отправка прайс-листа в чат...", "📊");
@@ -1143,22 +1047,13 @@
                     "Артикул": p.id,
                     "Наименование позиции": p.title,
                     "Остаток на складе (шт)": p.stock,
-                    "Квант короба (шт)": p.box_qty,
+                    "Квант короба (шт)": p.box_qty || p.moq,
                     "Базовая цена (₽)": p.price,
-                    "Опт 1": (p.tiers && p.tiers[0]) ? `${p.tiers[0].label}: ${p.tiers[0].price} ₽` : '',
-                    "Опт 2": (p.tiers && p.tiers[1]) ? `${p.tiers[1].label}: ${p.tiers[1].price} ₽` : '',
-                    "Крупный опт": (p.tiers && p.tiers[2]) ? `${p.tiers[2].label}: ${p.tiers[2].price} ₽` : '',
-                    "РРЦ на WB/Ozon (₽)": p.wb_price,
-                    "Вес ед. (кг)": p.weight_per_unit || 0.5
+                    "Опт от MOQ": (p.tiers && p.tiers[0]) ? `${p.tiers[0].price} ₽` : `${p.price} ₽`,
+                    "РРЦ на WB/Ozon (₽)": p.wb_price || Math.round(p.price * 1.8)
                 }));
 
                 const worksheet = XLSX.utils.json_to_sheet(excelRows);
-                worksheet['!cols'] = [
-                    { wch: 4 }, { wch: 14 }, { wch: 10 }, { wch: 42 }, 
-                    { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 18 }, 
-                    { wch: 18 }, { wch: 18 }, { wch: 16 }, { wch: 12 }
-                ];
-
                 const workbook = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(workbook, worksheet, "Оптовый Прайс-Лист");
                 const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'base64' });
@@ -1171,19 +1066,18 @@
                         user_id: targetUid,
                         filename: "Galk_B2B_Opt_PriceList.xlsx",
                         file_base64: wbout,
-                        caption: "📊 <b>Ваш оптовый прайс-лист Galk B2B Supply (.xlsx)</b>\nВсе градации цен, складские остатки и кванты коробок актуальны на сегодня."
+                        caption: "📊 <b>Оптовый прайс-лист Galk Supply (.xlsx)</b>\nВсе градации цен и актуальные складские остатки."
                     })
                 });
 
                 if (res.ok) {
                     try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
-                    showToast("Прайс-лист отправлен вам в чат бота! 📥", "✅");
+                    showToast("Прайс-лист отправлен в чат бота! 📥", "✅");
                 } else {
-                    showToast("Ошибка отправки прайса", "❌");
+                    throw new Error("API Offline");
                 }
             } catch(e) {
-                console.error(e);
-                showToast("Ошибка формирования файла", "❌");
+                showToast("Отправка в чат недоступна. Нажмите '📊 Скачать прайс' в меню бота!", "ℹ️");
             }
         }
 
@@ -1222,11 +1116,10 @@
                     try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
                     showToast("КП отправлено документом в чат! 📄", "✅");
                 } else {
-                    showToast("Ошибка отправки КП", "❌");
+                    showToast("Сервер не ответил. Проверьте запуск бота.", "❌");
                 }
             } catch (err) {
-                console.error(err);
-                showToast("Ошибка формирования КП", "❌");
+                showToast("Ошибка отправки КП", "❌");
             }
         }
 
@@ -1246,7 +1139,9 @@
 
             document.getElementById('modal-badge').innerText = p.badge || 'Опт';
             document.getElementById('modal-stock-text').innerText = `На складе: ${p.stock || 0} шт`;
-            document.getElementById('modal-main-img').src = (p.images && p.images[0]) ? p.images[0] : '';
+            
+            const rawImg = (p.images && p.images[0]) ? p.images[0] : '';
+            document.getElementById('modal-main-img').src = resolveImageUrl(rawImg);
             document.getElementById('modal-title').innerText = p.title;
             document.getElementById('modal-desc').innerText = p.desc || '';
 
@@ -1264,9 +1159,10 @@
             const thumbsContainer = document.getElementById('modal-thumbnails');
             thumbsContainer.innerHTML = '';
             (p.images || []).forEach(imgUrl => {
+                const resolved = resolveImageUrl(imgUrl);
                 thumbsContainer.innerHTML += `
-                    <button onclick="document.getElementById('modal-main-img').src = '${imgUrl}'" class="w-12 h-12 rounded-xl overflow-hidden border-2 theme-border focus:border-blue-600 transition">
-                        <img src="${imgUrl}" class="w-full h-full object-cover">
+                    <button onclick="document.getElementById('modal-main-img').src = '${resolved}'" class="w-12 h-12 rounded-xl overflow-hidden border-2 theme-border focus:border-blue-600 transition">
+                        <img src="${resolved}" class="w-full h-full object-cover">
                     </button>
                 `;
             });
@@ -1675,22 +1571,6 @@
             tg.sendData(JSON.stringify(payload));
         }
 
-        let selectedImageFile = null;
-
-        function handleImagePreview(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            selectedImageFile = file;
-            document.getElementById('file-chosen-text').innerText = file.name;
-
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                document.getElementById('image-preview').src = evt.target.result;
-                document.getElementById('image-preview-container').classList.remove('hidden');
-            };
-            reader.readAsDataURL(file);
-        }
-
         function openLightbox() {
             const currentImg = document.getElementById('modal-main-img').src;
             if (!currentImg) return;
@@ -1731,209 +1611,6 @@
                     setTimeout(() => cartBar.classList.remove('scale-105'), 180);
                 }, 650);
             } catch(e) {}
-        }
-
-        function openAddProductModal() {
-            editingProductId = null;
-            selectedImageFile = null;
-
-            document.getElementById('editor-modal-title').innerText = 'Добавить товар в каталог';
-            document.getElementById('editor-modal-subtitle').innerText = 'Позиция сразу сохранится в единую базу для всех клиентов';
-            document.getElementById('save-prod-btn').innerText = 'Опубликовать товар во всей сети';
-
-            document.getElementById('new-prod-title').value = '';
-            document.getElementById('new-prod-cat').value = 'Одежда';
-            document.getElementById('new-prod-moq').value = '10';
-            document.getElementById('new-prod-stock').value = '480';
-            document.getElementById('new-prod-wb').value = '4900';
-            document.getElementById('new-prod-price').value = '2500';
-            document.getElementById('new-prod-disc').value = '1950';
-            document.getElementById('new-prod-desc').value = '';
-            document.getElementById('file-chosen-text').innerText = 'Файл не выбран';
-            document.getElementById('image-preview-container').classList.add('hidden');
-
-            const modal = document.getElementById('add-product-modal');
-            const sheet = document.getElementById('add-product-sheet');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('translate-y-full');
-        }
-
-        function openEditProductModal(id, event) {
-            if (event) event.stopPropagation();
-            const p = products.find(item => item.id === id);
-            if (!p) return;
-
-            editingProductId = id;
-            selectedImageFile = null;
-
-            document.getElementById('editor-modal-title').innerText = 'Редактировать позицию';
-            document.getElementById('editor-modal-subtitle').innerText = `Изменение данных для: ${p.title}`;
-            document.getElementById('save-prod-btn').innerText = 'Сохранить изменения в сети';
-
-            document.getElementById('new-prod-title').value = p.title || '';
-            document.getElementById('new-prod-cat').value = p.cat || 'Одежда';
-            document.getElementById('new-prod-moq').value = p.moq || 10;
-            document.getElementById('new-prod-stock').value = p.stock || 480;
-            document.getElementById('new-prod-wb').value = p.wb_price || Math.round(p.price * 1.8);
-            document.getElementById('new-prod-price').value = p.price || 2000;
-            document.getElementById('new-prod-disc').value = (p.tiers && p.tiers[0]) ? p.tiers[0].price : Math.round(p.price * 0.8);
-            document.getElementById('new-prod-desc').value = p.desc || '';
-            
-            document.getElementById('file-chosen-text').innerText = 'Текущее фото сохранено';
-            document.getElementById('image-preview').src = (p.images && p.images[0]) ? p.images[0] : '';
-            document.getElementById('image-preview-container').classList.remove('hidden');
-
-            const modal = document.getElementById('add-product-modal');
-            const sheet = document.getElementById('add-product-sheet');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('translate-y-full');
-            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
-        }
-
-        function openEditCurrentProduct() {
-            if (!currentModalProductId) return;
-            closeProductModal();
-            openEditProductModal(currentModalProductId);
-        }
-
-        function confirmDeleteProduct(id, event) {
-            if (event) event.stopPropagation();
-            const p = products.find(item => item.id === id);
-            if (!p) return;
-
-            const isConfirmed = confirm(`Удалить товар "${p.title}" из каталога?`);
-            if (!isConfirmed) return;
-
-            products = products.filter(item => item.id !== id);
-            try {
-                localStorage.setItem('galk_b2b_products', JSON.stringify(products));
-            } catch(e) {}
-            filterProducts();
-
-            try {
-                fetch(`${API_SERVER_URL}/api/products/${id}`, { method: 'DELETE' });
-            } catch(e) {}
-
-            try {
-                tg.sendData(JSON.stringify({
-                    type: 'delete_product',
-                    product_id: id
-                }));
-            } catch(e) {}
-
-            try { tg.HapticFeedback.notificationOccurred('warning'); } catch(e) {}
-            showToast("Товар удален из каталога", "🗑️");
-        }
-
-        function deleteCurrentProduct() {
-            if (!currentModalProductId) return;
-            const targetId = currentModalProductId;
-            closeProductModal();
-            confirmDeleteProduct(targetId);
-        }
-
-        function closeAddProductModal() {
-            document.getElementById('add-product-sheet').classList.add('translate-y-full');
-            document.getElementById('add-product-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        async function saveProductLive() {
-            const title = document.getElementById('new-prod-title').value.trim();
-            const cat = document.getElementById('new-prod-cat').value;
-            const moq = parseInt(document.getElementById('new-prod-moq').value) || 10;
-            const stock = parseInt(document.getElementById('new-prod-stock').value) || 480;
-            const wbPrice = parseInt(document.getElementById('new-prod-wb').value) || 4900;
-            const price = parseInt(document.getElementById('new-prod-price').value) || 2000;
-            const discPrice = parseInt(document.getElementById('new-prod-disc').value) || 1600;
-            const desc = document.getElementById('new-prod-desc').value.trim() || 'Прямые поставки от производителя. Контроль качества партии.';
-            const saveBtn = document.getElementById('save-prod-btn');
-
-            if (!title) {
-                showToast("Укажите наименование", "⚠️");
-                return;
-            }
-
-            saveBtn.innerText = 'Сохранение...';
-            showToast("Обновление каталога...", "⏳");
-
-            let imgUrl = "https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80";
-            if (editingProductId) {
-                const existing = products.find(item => item.id === editingProductId);
-                if (existing && existing.images && existing.images[0]) imgUrl = existing.images[0];
-            }
-
-            if (selectedImageFile) {
-                const formData = new FormData();
-                formData.append("image", selectedImageFile);
-                try {
-                    const uploadRes = await fetch(`${API_SERVER_URL}/api/upload`, {
-                        method: "POST",
-                        body: formData
-                    });
-                    if (uploadRes.ok) {
-                        const uploadData = await uploadRes.json();
-                        imgUrl = `${API_SERVER_URL}${uploadData.url}`;
-                    }
-                } catch(err) {
-                    console.warn("Ошибка загрузки фото:", err);
-                }
-            }
-
-            const prodPayload = {
-                id: editingProductId ? editingProductId : ('p_' + Date.now()),
-                cat: cat,
-                title: title,
-                desc: desc,
-                price: price,
-                moq: moq,
-                box_qty: moq,
-                wb_price: wbPrice,
-                stock: stock,
-                weight_per_unit: 0.5,
-                badge: editingProductId ? 'Обновлено' : 'Новинка',
-                images: [imgUrl],
-                tiers: [
-                    { min: moq, price: discPrice, label: `от ${moq} шт` },
-                    { min: moq * 3, price: Math.round(discPrice * 0.9), label: `от ${moq * 3} шт` },
-                    { min: moq * 6, price: Math.round(discPrice * 0.8), label: `от ${moq * 6} шт` }
-                ]
-            };
-
-            if (editingProductId) {
-                const index = products.findIndex(item => item.id === editingProductId);
-                if (index !== -1) {
-                    products[index] = prodPayload;
-                }
-            } else {
-                products.unshift(prodPayload);
-            }
-
-            try {
-                localStorage.setItem('galk_b2b_products', JSON.stringify(products));
-            } catch(e) {}
-
-            filterProducts();
-            closeAddProductModal();
-            saveBtn.innerText = 'Опубликовать товар во всей сети';
-
-            try {
-                await fetch(`${API_SERVER_URL}/api/products`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(prodPayload)
-                });
-            } catch(e) {}
-
-            try {
-                tg.sendData(JSON.stringify({
-                    type: editingProductId ? 'edit_product' : 'add_product',
-                    product: prodPayload
-                }));
-            } catch(e) {}
-
-            try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
-            showToast(editingProductId ? "Товар успешно обновлен!" : "Товар добавлен во все устройства!");
-            editingProductId = null;
         }
 
         async function autoFillByInn() {
@@ -2046,7 +1723,6 @@
             tg.sendData(JSON.stringify(payload));
         }
 
-        // Живой тикер склада
         const tickerMessages = [
             "Склад Южные Врата: отгружено 42 короба (СДЭК)",
             "Поступление: Партия Худи Oversize 420g принята на паллеты",
@@ -2060,10 +1736,8 @@
             if (el) el.innerText = tickerMessages[tickerIdx];
         }, 5000);
 
-        // Применение темы
         applyTheme(isNeonTheme);
 
-        // Старт портала
         if (isUserAdmin()) {
             applyAdminState(true);
         } else {
