@@ -1,630 +1,630 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Galk B2B Enterprise Hub</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SheetJS для генерации оптового прайс-листа Excel -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-body: #F4F4F5;
-            --bg-surface: #FFFFFF;
-            --bg-sub: #EAECEF;
-            --border-ui: #D4D4D8;
-            --text-main: #09090B;
-            --text-sub: #52525B;
-            --accent-primary: #09090B;
-            --accent-contrast: #FFFFFF;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Galk B2B Enterprise Hub</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SheetJS для генерации оптового прайс-листа Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #F4F4F5;
+            --bg-surface: #FFFFFF;
+            --bg-sub: #EAECEF;
+            --border-ui: #D4D4D8;
+            --text-main: #09090B;
+            --text-sub: #52525B;
+            --accent-primary: #09090B;
+            --accent-contrast: #FFFFFF;
+        }
 
-        .dark-theme {
-            --bg-body: #09090B;
-            --bg-surface: #141417;
-            --bg-sub: #1E1E24;
-            --border-ui: #2E2E36;
-            --text-main: #FFFFFF;
-            --text-sub: #A1A1AA;
-            --accent-primary: #FFFFFF;
-            --accent-contrast: #09090B;
-        }
+        .dark-theme {
+            --bg-body: #09090B;
+            --bg-surface: #141417;
+            --bg-sub: #1E1E24;
+            --border-ui: #2E2E36;
+            --text-main: #FFFFFF;
+            --text-sub: #A1A1AA;
+            --accent-primary: #FFFFFF;
+            --accent-contrast: #09090B;
+        }
 
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            -webkit-tap-highlight-color: transparent;
-            transition: background-color 0.25s ease, color 0.25s ease;
-        }
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
 
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .solid-card {
-            background-color: var(--bg-surface);
-            border: 1px solid var(--border-ui);
-        }
+        .solid-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-ui);
+        }
 
-        .solid-card-sub {
-            background-color: var(--bg-sub);
-            border: 1px solid var(--border-ui);
-        }
+        .solid-card-sub {
+            background-color: var(--bg-sub);
+            border: 1px solid var(--border-ui);
+        }
 
-        .solid-input {
-            background-color: var(--bg-surface);
-            color: var(--text-main);
-            border: 1px solid var(--border-ui);
-        }
+        .solid-input {
+            background-color: var(--bg-surface);
+            color: var(--text-main);
+            border: 1px solid var(--border-ui);
+        }
 
-        .solid-btn-main {
-            background-color: var(--accent-primary);
-            color: var(--accent-contrast);
-        }
+        .solid-btn-main {
+            background-color: var(--accent-primary);
+            color: var(--accent-contrast);
+        }
 
-        .text-high-contrast {
-            color: var(--text-main) !important;
-        }
+        .text-high-contrast {
+            color: var(--text-main) !important;
+        }
 
-        .text-muted-contrast {
-            color: var(--text-sub) !important;
-        }
+        .text-muted-contrast {
+            color: var(--text-sub) !important;
+        }
 
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 22px;
-            width: 22px;
-            border-radius: 50%;
-            background: var(--accent-primary);
-            cursor: pointer;
-            border: 3px solid var(--bg-surface);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
-            transition: transform 0.15s ease;
-        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            cursor: pointer;
+            border: 3px solid var(--bg-surface);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+            transition: transform 0.15s ease;
+        }
 
-        input[type=range]::-webkit-slider-thumb:active {
-            transform: scale(1.2);
-        }
+        input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(1.2);
+        }
 
-        .fly-particle {
-            position: fixed;
-            z-index: 100;
-            pointer-events: none;
-            transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+        .fly-particle {
+            position: fixed;
+            z-index: 100;
+            pointer-events: none;
+            transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-        @media print {
-            body { background: white !important; color: black !important; }
-            header, #cart-bar, .no-print, #b2b-action-bar, #product-modal, #lightbox-modal, #live-warehouse-ticker { display: none !important; }
-            #checkout-sheet { position: static !important; max-height: none !important; transform: none !important; box-shadow: none !important; }
-        }
-    </style>
+        @media print {
+            body { background: white !important; color: black !important; }
+            header, #cart-bar, .no-print, #b2b-action-bar, #product-modal, #lightbox-modal, #live-warehouse-ticker { display: none !important; }
+            #checkout-sheet { position: static !important; max-height: none !important; transform: none !important; box-shadow: none !important; }
+        }
+    </style>
 </head>
 <body class="flex justify-center min-h-screen antialiased selection:bg-neutral-900 selection:text-white">
 
-    <!-- Toast-уведомление -->
-    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-bold px-4 py-2.5 rounded-xl shadow-2xl border border-neutral-700 opacity-0 pointer-events-none transition-all duration-300 transform -translate-y-2 flex items-center gap-2">
-        <span id="toast-icon">✅</span>
-        <span id="toast-text">Успешно</span>
-    </div>
+    <!-- Toast-уведомление -->
+    <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-bold px-4 py-2.5 rounded-xl shadow-2xl border border-neutral-700 opacity-0 pointer-events-none transition-all duration-300 transform -translate-y-2 flex items-center gap-2">
+        <span id="toast-icon">✅</span>
+        <span id="toast-text">Успешно</span>
+    </div>
 
-    <!-- Полноэкранный Lightbox для фото -->
-    <div id="lightbox-modal" class="fixed inset-0 z-[70] bg-black/90 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeLightbox()">
-        <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl transition transform scale-95" onclick="event.stopPropagation()">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-neutral-800 text-white font-bold text-lg flex items-center justify-center transition active:scale-90">✕</button>
-    </div>
+    <!-- Полноэкранный Lightbox для фото -->
+    <div id="lightbox-modal" class="fixed inset-0 z-[70] bg-black/90 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl transition transform scale-95" onclick="event.stopPropagation()">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-neutral-800 text-white font-bold text-lg flex items-center justify-center transition active:scale-90">✕</button>
+    </div>
 
-    <div id="app-wrapper" class="w-full max-w-md bg-white dark:bg-neutral-950 min-h-screen relative flex flex-col shadow-2xl pb-28 transition-colors duration-300">
+    <div id="app-wrapper" class="w-full max-w-md bg-white dark:bg-neutral-950 min-h-screen relative flex flex-col shadow-2xl pb-28 transition-colors duration-300">
 
-        <!-- Шапка портала -->
-        <header class="sticky top-0 z-30 solid-card border-b px-4 py-3 flex items-center justify-between transition-colors duration-300">
-            <div class="flex items-center gap-2.5">
-                <div class="relative cursor-pointer select-none active:scale-95 transition">
-                    <div class="w-10 h-10 rounded-xl solid-btn-main flex items-center justify-center font-black text-lg shadow-sm">
-                        G
-                    </div>
-                    <span class="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border-2 border-white dark:border-neutral-900 shadow-sm">
-                        <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
-                    </span>
-                </div>
-                <div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="font-black tracking-tight text-sm text-high-contrast">Galk B2B Supply</span>
-                        <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 uppercase">Опт Портал</span>
-                    </div>
-                    <div class="flex items-center gap-1 text-[10px] font-bold text-muted-contrast">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Хаб Южные Врата • <span class="font-extrabold text-blue-600 dark:text-blue-400">Честный Знак</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-1.5">
-                <button onclick="manualSync()" class="w-8 h-8 rounded-xl solid-card-sub flex items-center justify-center font-bold active:scale-90 transition shadow-sm" title="Обновить остатки">
-                    🔄
-                </button>
-                <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl solid-card-sub flex items-center justify-center font-bold active:scale-90 transition shadow-sm" title="Сменить тему">
-                    🌙
-                </button>
-                <button onclick="openTrackerModal()" class="w-8 h-8 rounded-xl solid-card-sub flex items-center justify-center font-bold active:scale-90 transition shadow-sm" title="Трекинг груза">
-                    🚚
-                </button>
-                <!-- КНОПКА ПЕРЕХОДА В ЧАТ ПОДДЕРЖКИ -->
-                <button onclick="redirectToTelegramSupport()" class="px-3 py-1.5 rounded-xl solid-btn-main font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                    <span>Чат</span>
-                </button>
-            </div>
-        </header>
+        <!-- Шапка портала -->
+        <header class="sticky top-0 z-30 solid-card border-b px-4 py-3 flex items-center justify-between transition-colors duration-300">
+            <div class="flex items-center gap-2.5">
+                <div class="relative cursor-pointer select-none active:scale-95 transition">
+                    <div class="w-10 h-10 rounded-xl solid-btn-main flex items-center justify-center font-black text-lg shadow-sm">
+                        G
+                    </div>
+                    <span class="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border-2 border-white dark:border-neutral-900 shadow-sm">
+                        <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                    </span>
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-black tracking-tight text-sm text-high-contrast">Galk B2B Supply</span>
+                        <span class="px-1.5 py-0.5 rounded text-[9px] font-black bg-neutral-200 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 uppercase">Опт Портал</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-[10px] font-bold text-muted-contrast">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Хаб Южные Врата • <span class="font-extrabold text-blue-600 dark:text-blue-400">Честный Знак</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-1.5">
+                <button onclick="manualSync()" class="w-8 h-8 rounded-xl solid-card-sub flex items-center justify-center font-bold active:scale-90 transition shadow-sm" title="Обновить остатки">
+                    🔄
+                </button>
+                <button onclick="toggleThemeMode()" id="theme-btn" class="w-8 h-8 rounded-xl solid-card-sub flex items-center justify-center font-bold active:scale-90 transition shadow-sm" title="Сменить тему">
+                    🌙
+                </button>
+                <button onclick="openTrackerModal()" class="w-8 h-8 rounded-xl solid-card-sub flex items-center justify-center font-bold active:scale-90 transition shadow-sm" title="Трекинг груза">
+                    🚚
+                </button>
+                <!-- КНОПКА ПЕРЕХОДА В ЧАТ ПОДДЕРЖКИ -->
+                <button onclick="redirectToTelegramSupport()" class="px-3 py-1.5 rounded-xl solid-btn-main font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                    <span>Чат</span>
+                </button>
+            </div>
+        </header>
 
-        <!-- Живой тикер склада -->
-        <section id="live-warehouse-ticker" class="px-4 pt-2.5 no-print">
-            <div class="solid-card rounded-xl px-3 py-2 flex items-center justify-between text-[11px] font-semibold shadow-sm">
-                <div class="flex items-center gap-2 truncate">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span id="ticker-text" class="truncate text-muted-contrast">Склад Южные Врата: отгружено 42 короба (СДЭК)</span>
-                </div>
-                <span class="font-mono text-[9px] uppercase tracking-wider text-muted-contrast pl-2">Live</span>
-            </div>
-        </section>
+        <!-- Живой тикер склада -->
+        <section id="live-warehouse-ticker" class="px-4 pt-2.5 no-print">
+            <div class="solid-card rounded-xl px-3 py-2 flex items-center justify-between text-[11px] font-semibold shadow-sm">
+                <div class="flex items-center gap-2 truncate">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span id="ticker-text" class="truncate text-muted-contrast">Склад Южные Врата: отгружено 42 короба (СДЭК)</span>
+                </div>
+                <span class="font-mono text-[9px] uppercase tracking-wider text-muted-contrast pl-2">Live</span>
+            </div>
+        </section>
 
-        <!-- B2B-баннер -->
-        <section class="px-4 pt-2.5 no-print">
-            <div class="solid-card rounded-2xl p-4 shadow-sm relative overflow-hidden">
-                <div class="relative z-10 space-y-1.5">
-                    <div class="flex items-center justify-between">
-                        <span class="text-[9px] font-black uppercase tracking-widest solid-btn-main px-2.5 py-0.5 rounded-md">Прямой контракт</span>
-                        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ЭДО СБИС / Диадок
-                        </span>
-                    </div>
-                    <h2 class="text-sm font-black leading-tight pt-1 text-high-contrast">Оптовые поставки коммерческих партий</h2>
-                    <p class="text-[11px] text-muted-contrast leading-snug">Цены первого импортера. Фулфилмент под Wildberries/Ozon, отсрочка платежа до 30 дней и гарантия возврата брака.</p>
-                </div>
-            </div>
-        </section>
+        <!-- B2B-баннер -->
+        <section class="px-4 pt-2.5 no-print">
+            <div class="solid-card rounded-2xl p-4 shadow-sm relative overflow-hidden">
+                <div class="relative z-10 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[9px] font-black uppercase tracking-widest solid-btn-main px-2.5 py-0.5 rounded-md">Прямой контракт</span>
+                        <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ЭДО СБИС / Диадок
+                        </span>
+                    </div>
+                    <h2 class="text-sm font-black leading-tight pt-1 text-high-contrast">Оптовые поставки коммерческих партий</h2>
+                    <p class="text-[11px] text-muted-contrast leading-snug">Цены первого импортера. Фулфилмент под Wildberries/Ozon, отсрочка платежа до 30 дней и гарантия возврата брака.</p>
+                </div>
+            </div>
+        </section>
 
-        <!-- B2B-панель: Прайс-лист -->
-        <section id="b2b-action-bar" class="px-4 pt-2.5 no-print">
-            <div class="flex items-center justify-between solid-card rounded-2xl p-2.5 shadow-sm">
-                <div class="flex items-center gap-2 pl-1">
-                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black text-xs flex items-center justify-center border border-emerald-500/20">
-                        XLS
-                    </div>
-                    <div>
-                        <p class="text-[11px] font-extrabold text-high-contrast leading-tight">Оптовый прайс-лист</p>
-                        <p class="text-[9px] text-muted-contrast leading-tight">Отправка .xlsx файла прямо в бота</p>
-                    </div>
-                </div>
-                <button onclick="exportPriceListExcel()" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white px-3 py-1.5 rounded-xl font-bold text-xs tracking-wide shadow-sm transition flex items-center gap-1.5">
-                    <span>📊 Получить в чат</span>
-                </button>
-            </div>
-        </section>
+        <!-- B2B-панель: Прайс-лист -->
+        <section id="b2b-action-bar" class="px-4 pt-2.5 no-print">
+            <div class="flex items-center justify-between solid-card rounded-2xl p-2.5 shadow-sm">
+                <div class="flex items-center gap-2 pl-1">
+                    <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black text-xs flex items-center justify-center border border-emerald-500/20">
+                        XLS
+                    </div>
+                    <div>
+                        <p class="text-[11px] font-extrabold text-high-contrast leading-tight">Оптовый прайс-лист</p>
+                        <p class="text-[9px] text-muted-contrast leading-tight">Отправка .xlsx файла прямо в бота</p>
+                    </div>
+                </div>
+                <button onclick="exportPriceListExcel()" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white px-3 py-1.5 rounded-xl font-bold text-xs tracking-wide shadow-sm transition flex items-center gap-1.5">
+                    <span>📊 Получить в чат</span>
+                </button>
+            </div>
+        </section>
 
-        <!-- Поиск, сортировка и категории -->
-        <section class="p-4 pb-2 space-y-2.5 no-print">
-            <div class="flex gap-2">
-                <div class="relative flex-grow">
-                    <input type="text" id="search" placeholder="Поиск по артикулу, бренду..." oninput="filterProducts()"
-                        class="w-full solid-input rounded-2xl pl-9 pr-3 py-2 text-xs placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition shadow-sm font-medium">
-                    <svg class="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                </div>
-                <select id="sort-select" onchange="filterProducts()" class="solid-card rounded-2xl px-2.5 py-2 text-[11px] font-bold outline-none shadow-sm text-high-contrast">
-                    <option value="default">Сортировка</option>
-                    <option value="price_asc">Сначала дешевле</option>
-                    <option value="margin_desc">Топ маржа на WB</option>
-                    <option value="stock_desc">По остатку</option>
-                </select>
-            </div>
+        <!-- Поиск, сортировка и категории -->
+        <section class="p-4 pb-2 space-y-2.5 no-print">
+            <div class="flex gap-2">
+                <div class="relative flex-grow">
+                    <input type="text" id="search" placeholder="Поиск по артикулу, бренду..." oninput="filterProducts()"
+                        class="w-full solid-input rounded-2xl pl-9 pr-3 py-2 text-xs placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white transition shadow-sm font-medium">
+                    <svg class="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                </div>
+                <select id="sort-select" onchange="filterProducts()" class="solid-card rounded-2xl px-2.5 py-2 text-[11px] font-bold outline-none shadow-sm text-high-contrast">
+                    <option value="default">Сортировка</option>
+                    <option value="price_asc">Сначала дешевле</option>
+                    <option value="margin_desc">Топ маржа на WB</option>
+                    <option value="stock_desc">По остатку</option>
+                </select>
+            </div>
 
-            <div class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
-                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold solid-btn-main shadow-sm transition whitespace-nowrap">Все товары</button>
-                <button onclick="setCategory('favorites')" id="cat-fav" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">❤️ Избранное</button>
-                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Одежда и текстиль</button>
-                <button onclick="setCategory('Обувь')" id="cat-shoes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Обувь</button>
-                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Гаджеты</button>
-                <button onclick="setCategory('Сувениры')" id="cat-merch" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Мерч и посуда</button>
-            </div>
-        </section>
+            <div class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
+                <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold solid-btn-main shadow-sm transition whitespace-nowrap">Все товары</button>
+                <button onclick="setCategory('favorites')" id="cat-fav" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">❤️ Избранное</button>
+                <button onclick="setCategory('Одежда')" id="cat-clothes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Одежда и текстиль</button>
+                <button onclick="setCategory('Обувь')" id="cat-shoes" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Обувь</button>
+                <button onclick="setCategory('Электроника')" id="cat-tech" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Гаджеты</button>
+                <button onclick="setCategory('Сувениры')" id="cat-merch" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Мерч и посуда</button>
+            </div>
+        </section>
 
-        <!-- Сетка каталога -->
-        <main class="p-4 pt-1 grid grid-cols-2 gap-3 flex-grow" id="products-container"></main>
+        <!-- Сетка каталога -->
+        <main class="p-4 pt-1 grid grid-cols-2 gap-3 flex-grow" id="products-container"></main>
 
-        <!-- Плавающий виджет сметы -->
-        <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl opacity-0 pointer-events-none translate-y-4 transition-all duration-300 z-40 no-print">
-            <div>
-                <div class="flex items-center gap-1.5">
-                    <p class="text-[9px] opacity-70 font-bold uppercase tracking-wider leading-none">Спецификация:</p>
-                    <span class="text-[9px] text-amber-400 dark:text-amber-600 font-bold" id="cart-timer">⏳ 15:00</span>
-                </div>
-                <p class="text-lg font-black leading-tight mt-0.5" id="total-price">0 ₽</p>
-            </div>
-            <button onclick="showCheckout()" class="bg-white text-neutral-950 dark:bg-neutral-900 dark:text-white px-5 py-2.5 rounded-xl font-bold text-xs tracking-wide shadow-md transition active:scale-95 flex items-center gap-1.5">
-                <span>Оформить счет</span>
-                <span>→</span>
-            </button>
-        </div>
+        <!-- Плавающий виджет сметы -->
+        <div id="cart-bar" class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-[420px] bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 rounded-2xl p-3 px-4 flex items-center justify-between shadow-2xl opacity-0 pointer-events-none translate-y-4 transition-all duration-300 z-40 no-print">
+            <div>
+                <div class="flex items-center gap-1.5">
+                    <p class="text-[9px] opacity-70 font-bold uppercase tracking-wider leading-none">Спецификация:</p>
+                    <span class="text-[9px] text-amber-400 dark:text-amber-600 font-bold" id="cart-timer">⏳ 15:00</span>
+                </div>
+                <p class="text-lg font-black leading-tight mt-0.5" id="total-price">0 ₽</p>
+            </div>
+            <button onclick="showCheckout()" class="bg-white text-neutral-950 dark:bg-neutral-900 dark:text-white px-5 py-2.5 rounded-xl font-bold text-xs tracking-wide shadow-md transition active:scale-95 flex items-center gap-1.5">
+                <span>Оформить счет</span>
+                <span>→</span>
+            </button>
+        </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО КАРТОЧКИ ТОВАРА -->
-        <div id="product-modal" class="fixed inset-0 z-50 bg-black/75 flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300 no-print">
-            <div class="w-full max-w-md solid-card rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="product-sheet">
-                
-                <div class="flex justify-between items-start">
-                    <div class="flex items-center gap-2">
-                        <span id="modal-badge" class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider solid-card-sub text-high-contrast"></span>
-                        <span id="modal-stock" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span id="modal-stock-text">В наличии</span>
-                        </span>
-                    </div>
-                    <button onclick="closeProductModal()" class="w-8 h-8 rounded-full solid-card-sub text-high-contrast font-bold flex items-center justify-center hover:scale-105 active:scale-95 transition">✕</button>
-                </div>
+        <!-- МОДАЛЬНОЕ ОКНО КАРТОЧКИ ТОВАРА -->
+        <div id="product-modal" class="fixed inset-0 z-50 bg-black/75 flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300 no-print">
+            <div class="w-full max-w-md solid-card rounded-t-3xl p-5 space-y-4 max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="product-sheet">
+                
+                <div class="flex justify-between items-start">
+                    <div class="flex items-center gap-2">
+                        <span id="modal-badge" class="px-2.5 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider solid-card-sub text-high-contrast"></span>
+                        <span id="modal-stock" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span id="modal-stock-text">В наличии</span>
+                        </span>
+                    </div>
+                    <button onclick="closeProductModal()" class="w-8 h-8 rounded-full solid-card-sub text-high-contrast font-bold flex items-center justify-center hover:scale-105 active:scale-95 transition">✕</button>
+                </div>
 
-                <div class="space-y-2">
-                    <div class="relative w-full h-56 solid-card-sub rounded-2xl overflow-hidden cursor-zoom-in group" onclick="openLightbox()">
-                        <img id="modal-main-img" src="" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
-                        <span class="absolute bottom-2.5 right-2.5 bg-neutral-900/90 text-white text-[10px] font-bold px-2 py-1 rounded-lg pointer-events-none">🔍 Нажми для зума</span>
-                    </div>
-                    <div class="flex gap-2" id="modal-thumbnails"></div>
-                </div>
+                <div class="space-y-2">
+                    <div class="relative w-full h-56 solid-card-sub rounded-2xl overflow-hidden cursor-zoom-in group" onclick="openLightbox()">
+                        <img id="modal-main-img" src="" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
+                        <span class="absolute bottom-2.5 right-2.5 bg-neutral-900/90 text-white text-[10px] font-bold px-2 py-1 rounded-lg pointer-events-none">🔍 Нажми для зума</span>
+                    </div>
+                    <div class="flex gap-2" id="modal-thumbnails"></div>
+                </div>
 
-                <div>
-                    <h2 id="modal-title" class="text-base font-extrabold text-high-contrast leading-snug"></h2>
-                    <p id="modal-desc" class="text-xs text-muted-contrast mt-1 leading-relaxed"></p>
-                </div>
+                <div>
+                    <h2 id="modal-title" class="text-base font-extrabold text-high-contrast leading-snug"></h2>
+                    <p id="modal-desc" class="text-xs text-muted-contrast mt-1 leading-relaxed"></p>
+                </div>
 
-                <!-- Прогресс-бар тиражной скидки -->
-                <div class="solid-card-sub rounded-xl p-3 space-y-1.5" id="tier-progress-box">
-                    <div class="flex justify-between text-[11px] font-bold">
-                        <span class="text-high-contrast">Тиражная скидка:</span>
-                        <span class="text-blue-600 dark:text-blue-400" id="tier-discount-hint">Добавьте еще позиции</span>
-                    </div>
-                    <div class="w-full bg-neutral-200 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
-                        <div id="tier-progress-bar" class="solid-btn-main h-full rounded-full transition-all duration-300" style="width: 30%"></div>
-                    </div>
-                </div>
+                <!-- Прогресс-бар тиражной скидки -->
+                <div class="solid-card-sub rounded-xl p-3 space-y-1.5" id="tier-progress-box">
+                    <div class="flex justify-between text-[11px] font-bold">
+                        <span class="text-high-contrast">Тиражная скидка:</span>
+                        <span class="text-blue-600 dark:text-blue-400" id="tier-discount-hint">Добавьте еще позиции</span>
+                    </div>
+                    <div class="w-full bg-neutral-200 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
+                        <div id="tier-progress-bar" class="solid-btn-main h-full rounded-full transition-all duration-300" style="width: 30%"></div>
+                    </div>
+                </div>
 
-                <!-- Табы карточки товара -->
-                <div class="border-b border-neutral-200 dark:border-neutral-800 flex gap-3 text-xs font-bold overflow-x-auto hide-scrollbar">
-                    <button onclick="switchTab('pricing')" id="tab-pricing-btn" class="pb-2 border-b-2 border-neutral-900 dark:border-white text-high-contrast transition whitespace-nowrap">Цены оптом</button>
-                    <button onclick="switchTab('roi')" id="tab-roi-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">💰 Калькулятор WB/Ozon</button>
-                    <button onclick="switchTab('matrix')" id="tab-matrix-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">Ростовка (Матрица)</button>
-                    <button onclick="switchTab('branding')" id="tab-branding-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">Мерч / Печать</button>
-                    <button onclick="switchTab('fulfillment')" id="tab-fulfillment-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">Фулфилмент WB</button>
-                    <button onclick="switchTab('warehouses')" id="tab-warehouses-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">Склады РФ</button>
-                </div>
+                <!-- Табы карточки товара -->
+                <div class="border-b border-neutral-200 dark:border-neutral-800 flex gap-3 text-xs font-bold overflow-x-auto hide-scrollbar">
+                    <button onclick="switchTab('pricing')" id="tab-pricing-btn" class="pb-2 border-b-2 border-neutral-900 dark:border-white text-high-contrast transition whitespace-nowrap">Цены оптом</button>
+                    <button onclick="switchTab('roi')" id="tab-roi-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">💰 Калькулятор WB/Ozon</button>
+                    <button onclick="switchTab('matrix')" id="tab-matrix-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">Ростовка (Матрица)</button>
+                    <button onclick="switchTab('branding')" id="tab-branding-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">Мерч / Печать</button>
+                    <button onclick="switchTab('fulfillment')" id="tab-fulfillment-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">Фулфилмент WB</button>
+                    <button onclick="switchTab('warehouses')" id="tab-warehouses-btn" class="pb-2 border-b-2 border-transparent text-muted-contrast transition whitespace-nowrap">Склады РФ</button>
+                </div>
 
-                <div id="tab-pricing" class="space-y-2 text-xs">
-                    <div class="solid-card-sub rounded-xl p-3 grid grid-cols-3 gap-2 text-center" id="modal-tiers-container"></div>
-                </div>
+                <div id="tab-pricing" class="space-y-2 text-xs">
+                    <div class="solid-card-sub rounded-xl p-3 grid grid-cols-3 gap-2 text-center" id="modal-tiers-container"></div>
+                </div>
 
-                <div id="tab-roi" class="hidden space-y-3 text-xs">
-                    <div class="solid-card-sub rounded-2xl p-4 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <label class="font-bold text-high-contrast text-xs">Планируемая розница на WB (₽):</label>
-                            <input type="number" id="roi-retail-price" oninput="calculateSellerROI()" class="w-24 solid-input text-center font-black rounded-xl py-1.5 outline-none shadow-sm text-sm">
-                        </div>
-                        <div class="grid grid-cols-2 gap-2 pt-1 text-center">
-                            <div class="solid-card p-2.5 rounded-xl">
-                                <span class="text-[10px] text-muted-contrast font-bold block uppercase">Чистая прибыль</span>
-                                <span class="text-sm font-black text-emerald-600 dark:text-emerald-400" id="roi-net-profit">0 ₽</span>
-                            </div>
-                            <div class="solid-card p-2.5 rounded-xl">
-                                <span class="text-[10px] text-muted-contrast font-bold block uppercase">Рентабельность ROI</span>
-                                <span class="text-sm font-black text-blue-600 dark:text-blue-400" id="roi-percent">+0%</span>
-                            </div>
-                        </div>
-                        <p class="text-[10px] text-muted-contrast leading-tight text-center">Расчет включает себестоимость, комиссию маркетплейса (~28%) и фулфилмент.</p>
-                    </div>
-                </div>
+                <div id="tab-roi" class="hidden space-y-3 text-xs">
+                    <div class="solid-card-sub rounded-2xl p-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <label class="font-bold text-high-contrast text-xs">Планируемая розница на WB (₽):</label>
+                            <input type="number" id="roi-retail-price" oninput="calculateSellerROI()" class="w-24 solid-input text-center font-black rounded-xl py-1.5 outline-none shadow-sm text-sm">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 pt-1 text-center">
+                            <div class="solid-card p-2.5 rounded-xl">
+                                <span class="text-[10px] text-muted-contrast font-bold block uppercase">Чистая прибыль</span>
+                                <span class="text-sm font-black text-emerald-600 dark:text-emerald-400" id="roi-net-profit">0 ₽</span>
+                            </div>
+                            <div class="solid-card p-2.5 rounded-xl">
+                                <span class="text-[10px] text-muted-contrast font-bold block uppercase">Рентабельность ROI</span>
+                                <span class="text-sm font-black text-blue-600 dark:text-blue-400" id="roi-percent">+0%</span>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-muted-contrast leading-tight text-center">Расчет включает себестоимость, комиссию маркетплейса (~28%) и фулфилмент.</p>
+                    </div>
+                </div>
 
-                <div id="tab-matrix" class="hidden space-y-2 text-xs">
-                    <div class="solid-card-sub rounded-xl p-3 space-y-2.5">
-                        <div class="flex justify-between items-center text-[11px] font-bold text-muted-contrast">
-                            <span>Размер</span>
-                            <span>В 1 коробе</span>
-                            <span>Нужно коробок</span>
-                            <span>Итого шт</span>
-                        </div>
-                        <div id="matrix-rows-container" class="space-y-1.5"></div>
-                        <div class="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex justify-between font-black text-high-contrast text-xs">
-                            <span>Всего по ростовке:</span>
-                            <span id="matrix-total-qty">0 шт</span>
-                        </div>
-                    </div>
-                </div>
+                <div id="tab-matrix" class="hidden space-y-2 text-xs">
+                    <div class="solid-card-sub rounded-xl p-3 space-y-2.5">
+                        <div class="flex justify-between items-center text-[11px] font-bold text-muted-contrast">
+                            <span>Размер</span>
+                            <span>В 1 коробе</span>
+                            <span>Нужно коробок</span>
+                            <span>Итого шт</span>
+                        </div>
+                        <div id="matrix-rows-container" class="space-y-1.5"></div>
+                        <div class="pt-2 border-t border-neutral-200 dark:border-neutral-800 flex justify-between font-black text-high-contrast text-xs">
+                            <span>Всего по ростовке:</span>
+                            <span id="matrix-total-qty">0 шт</span>
+                        </div>
+                    </div>
+                </div>
 
-                <div id="tab-branding" class="hidden space-y-2.5 text-xs">
-                    <div class="solid-card-sub rounded-xl p-3.5 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="font-bold text-high-contrast flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="branding-checkbox" onchange="toggleBranding(this.checked)" class="w-4 h-4 rounded">
-                                <span>Нанесение логотипа (DTF/Гравировка)</span>
-                            </label>
-                            <span class="font-black text-high-contrast" id="branding-price-tag">+ 250 ₽/шт</span>
-                        </div>
-                        <p class="text-[11px] text-muted-contrast">Стойкая шелкография или лазерная гравировка. Дизайн-макет согласуется перед тиражом.</p>
-                    </div>
-                </div>
+                <div id="tab-branding" class="hidden space-y-2.5 text-xs">
+                    <div class="solid-card-sub rounded-xl p-3.5 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label class="font-bold text-high-contrast flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="branding-checkbox" onchange="toggleBranding(this.checked)" class="w-4 h-4 rounded">
+                                <span>Нанесение логотипа (DTF/Гравировка)</span>
+                            </label>
+                            <span class="font-black text-high-contrast" id="branding-price-tag">+ 250 ₽/шт</span>
+                        </div>
+                        <p class="text-[11px] text-muted-contrast">Стойкая шелкография или лазерная гравировка. Дизайн-макет согласуется перед тиражом.</p>
+                    </div>
+                </div>
 
-                <div id="tab-fulfillment" class="hidden space-y-2.5 text-xs">
-                    <div class="solid-card-sub rounded-xl p-3.5 space-y-2">
-                        <div class="flex items-center justify-between">
-                            <label class="font-bold text-high-contrast flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="fulfillment-checkbox" onchange="toggleFulfillment(this.checked)" class="w-4 h-4 rounded">
-                                <span>Подготовка под FBO/FBS (WB/Ozon)</span>
-                            </label>
-                            <span class="font-black text-high-contrast">+ 45 ₽/шт</span>
-                        </div>
-                        <ul class="text-[11px] text-muted-contrast space-y-1 pl-4 list-disc">
-                            <li>Штрихкодирование «Честный Знак» + этикетка 58×40 мм</li>
-                            <li>Фасовка в индивидуальный Zip-lock пакет 60 мкм</li>
-                            <li>Укладка на паллеты под требования складов</li>
-                        </ul>
-                    </div>
-                </div>
+                <div id="tab-fulfillment" class="hidden space-y-2.5 text-xs">
+                    <div class="solid-card-sub rounded-xl p-3.5 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <label class="font-bold text-high-contrast flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="fulfillment-checkbox" onchange="toggleFulfillment(this.checked)" class="w-4 h-4 rounded">
+                                <span>Подготовка под FBO/FBS (WB/Ozon)</span>
+                            </label>
+                            <span class="font-black text-high-contrast">+ 45 ₽/шт</span>
+                        </div>
+                        <ul class="text-[11px] text-muted-contrast space-y-1 pl-4 list-disc">
+                            <li>Штрихкодирование «Честный Знак» + этикетка 58×40 мм</li>
+                            <li>Фасовка в индивидуальный Zip-lock пакет 60 мкм</li>
+                            <li>Укладка на паллеты под требования складов</li>
+                        </ul>
+                    </div>
+                </div>
 
-                <div id="tab-warehouses" class="hidden space-y-2 text-xs">
-                    <div class="solid-card-sub rounded-xl p-3 space-y-2 text-muted-contrast text-[11px]">
-                        <div class="flex justify-between items-center">
-                            <span>Склад Москва (Южные Врата):</span>
-                            <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (320 шт)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span>Склад Санкт-Петербург (Шушары):</span>
-                            <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (160 шт)</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span>Транзит с фабрики (2-я партия):</span>
-                            <span class="font-bold text-blue-600 dark:text-blue-400">Поступление через 4 дня (600 шт)</span>
-                        </div>
-                    </div>
-                </div>
+                <div id="tab-warehouses" class="hidden space-y-2 text-xs">
+                    <div class="solid-card-sub rounded-xl p-3 space-y-2 text-muted-contrast text-[11px]">
+                        <div class="flex justify-between items-center">
+                            <span>Склад Москва (Южные Врата):</span>
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (320 шт)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>Склад Санкт-Петербург (Шушары):</span>
+                            <span class="font-bold text-emerald-600 dark:text-emerald-400">В наличии (160 шт)</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>Транзит с фабрики (2-я партия):</span>
+                            <span class="font-bold text-blue-600 dark:text-blue-400">Поступление через 4 дня (600 шт)</span>
+                        </div>
+                    </div>
+                </div>
 
-                <!-- Калькулятор партии -->
-                <div class="solid-card-sub rounded-2xl p-4 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <span class="text-xs font-bold text-high-contrast block">Размер партии:</span>
-                            <span class="text-[10px] text-muted-contrast" id="box-quantity-hint">Квант короба: 10 шт</span>
-                        </div>
-                        <div class="flex items-center gap-1.5 solid-card px-3 py-1.5 rounded-xl shadow-sm">
-                            <input type="number" id="slider-number-input" class="w-16 text-center font-black text-high-contrast text-sm outline-none bg-transparent" oninput="onNumberInputChange(this.value)">
-                            <span class="text-xs font-bold text-muted-contrast">шт.</span>
-                        </div>
-                    </div>
+                <!-- Калькулятор партии -->
+                <div class="solid-card-sub rounded-2xl p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-xs font-bold text-high-contrast block">Размер партии:</span>
+                            <span class="text-[10px] text-muted-contrast" id="box-quantity-hint">Квант короба: 10 шт</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 solid-card px-3 py-1.5 rounded-xl shadow-sm">
+                            <input type="number" id="slider-number-input" class="w-16 text-center font-black text-high-contrast text-sm outline-none bg-transparent" oninput="onNumberInputChange(this.value)">
+                            <span class="text-xs font-bold text-muted-contrast">шт.</span>
+                        </div>
+                    </div>
 
-                    <input type="range" id="modal-slider" class="w-full bg-neutral-300 dark:bg-neutral-800 h-2 rounded-lg appearance-none outline-none cursor-pointer" oninput="onSliderChange(this.value)">
-                    <div class="flex gap-2 pt-1 overflow-x-auto hide-scrollbar" id="quick-preset-chips"></div>
+                    <input type="range" id="modal-slider" class="w-full bg-neutral-300 dark:bg-neutral-800 h-2 rounded-lg appearance-none outline-none cursor-pointer" oninput="onSliderChange(this.value)">
+                    <div class="flex gap-2 pt-1 overflow-x-auto hide-scrollbar" id="quick-preset-chips"></div>
 
-                    <div id="logistics-specs-box" class="solid-card rounded-xl p-2.5 flex items-center justify-between text-[11px] text-muted-contrast font-semibold shadow-sm">
-                        <div class="flex items-center gap-1.5">
-                            <span>📦</span>
-                            <span id="logistics-boxes-text">1 короб</span>
-                            <span>•</span>
-                            <span id="logistics-weight-text">7.5 кг</span>
-                        </div>
-                        <span id="logistics-vehicle-badge" class="px-2 py-0.5 rounded-md solid-card-sub font-bold text-[10px] text-high-contrast">СДЭК / Курьер</span>
-                    </div>
+                    <div id="logistics-specs-box" class="solid-card rounded-xl p-2.5 flex items-center justify-between text-[11px] text-muted-contrast font-semibold shadow-sm">
+                        <div class="flex items-center gap-1.5">
+                            <span>📦</span>
+                            <span id="logistics-boxes-text">1 короб</span>
+                            <span>•</span>
+                            <span id="logistics-weight-text">7.5 кг</span>
+                        </div>
+                        <span id="logistics-vehicle-badge" class="px-2 py-0.5 rounded-md solid-card-sub font-bold text-[10px] text-high-contrast">СДЭК / Курьер</span>
+                    </div>
 
-                    <div class="flex justify-between items-center text-[11px] text-muted-contrast font-semibold pt-1 border-t border-neutral-200 dark:border-neutral-800">
-                        <span>Себестоимость/ед: <b id="tier-unit-price" class="text-high-contrast font-bold"></b></span>
-                        <span class="text-high-contrast font-bold">Итого: <b id="slider-total-price" class="font-black text-sm"></b></span>
-                    </div>
-                </div>
+                    <div class="flex justify-between items-center text-[11px] text-muted-contrast font-semibold pt-1 border-t border-neutral-200 dark:border-neutral-800">
+                        <span>Себестоимость/ед: <b id="tier-unit-price" class="text-high-contrast font-bold"></b></span>
+                        <span class="text-high-contrast font-bold">Итого: <b id="slider-total-price" class="font-black text-sm"></b></span>
+                    </div>
+                </div>
 
-                <div id="modal-action-slot"></div>
-            </div>
-        </div>
+                <div id="modal-action-slot"></div>
+            </div>
+        </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО: Трекинг -->
-        <div id="tracker-modal" class="fixed inset-0 z-50 bg-black/75 flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300 no-print">
-            <div class="w-full max-w-md solid-card rounded-t-3xl p-5 space-y-4 shadow-2xl transform translate-y-full transition-transform duration-300" id="tracker-sheet">
-                <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                    <div>
-                        <h2 class="text-base font-black text-high-contrast">Отслеживание оптового груза</h2>
-                        <p class="text-[11px] text-muted-contrast">Проверка статуса сборки и отправки по РФ</p>
-                    </div>
-                    <button onclick="closeTrackerModal()" class="w-8 h-8 rounded-full solid-card-sub text-high-contrast font-bold flex items-center justify-center">✕</button>
-                </div>
+        <!-- МОДАЛЬНОЕ ОКНО: Трекинг -->
+        <div id="tracker-modal" class="fixed inset-0 z-50 bg-black/75 flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300 no-print">
+            <div class="w-full max-w-md solid-card rounded-t-3xl p-5 space-y-4 shadow-2xl transform translate-y-full transition-transform duration-300" id="tracker-sheet">
+                <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
+                    <div>
+                        <h2 class="text-base font-black text-high-contrast">Отслеживание оптового груза</h2>
+                        <p class="text-[11px] text-muted-contrast">Проверка статуса сборки и отправки по РФ</p>
+                    </div>
+                    <button onclick="closeTrackerModal()" class="w-8 h-8 rounded-full solid-card-sub text-high-contrast font-bold flex items-center justify-center">✕</button>
+                </div>
 
-                <div class="flex gap-2">
-                    <input type="text" id="track-input" placeholder="Введите номер счета (например 384643)" class="flex-grow solid-input rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none">
-                    <button onclick="checkOrderStatus()" class="px-4 py-2.5 solid-btn-main rounded-xl font-bold text-xs shadow-sm transition active:scale-95">Найти</button>
-                </div>
+                <div class="flex gap-2">
+                    <input type="text" id="track-input" placeholder="Введите номер счета (например 384643)" class="flex-grow solid-input rounded-xl px-3.5 py-2.5 text-xs font-medium outline-none">
+                    <button onclick="checkOrderStatus()" class="px-4 py-2.5 solid-btn-main rounded-xl font-bold text-xs shadow-sm transition active:scale-95">Найти</button>
+                </div>
 
-                <div id="tracker-result" class="hidden solid-card-sub rounded-2xl p-4 space-y-3 text-xs">
-                    <div class="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-2">
-                        <span class="font-bold text-high-contrast" id="track-id-display">Заказ #384643</span>
-                        <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-600 dark:text-blue-400 font-bold text-[10px]" id="track-status-badge">В пути</span>
-                    </div>
-                    <div class="space-y-2 text-[11px] text-muted-contrast">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                            <span>Склад Южные Врата: Партия упакована на паллеты</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                            <span>ТК СДЭК: Груз передан экспедитору</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                            <span class="font-semibold text-high-contrast">Доставка: 2-3 рабочих дня</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <div id="tracker-result" class="hidden solid-card-sub rounded-2xl p-4 space-y-3 text-xs">
+                    <div class="flex justify-between items-center border-b border-neutral-200 dark:border-neutral-800 pb-2">
+                        <span class="font-bold text-high-contrast" id="track-id-display">Заказ #384643</span>
+                        <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-600 dark:text-blue-400 font-bold text-[10px]" id="track-status-badge">В пути</span>
+                    </div>
+                    <div class="space-y-2 text-[11px] text-muted-contrast">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>Склад Южные Врата: Партия упакована на паллеты</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>ТК СДЭК: Груз передан экспедитору</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                            <span class="font-semibold text-high-contrast">Доставка: 2-3 рабочих дня</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <!-- МОДАЛЬНОЕ ОКНО: Спецификация и счет -->
-        <div id="checkout-form" class="fixed inset-0 z-50 bg-black/75 flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300">
-            <div class="w-full max-w-md solid-card rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="checkout-sheet">
-                <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
-                    <div>
-                        <h2 class="text-lg font-black text-high-contrast">Спецификация поставки</h2>
-                        <p class="text-[11px] text-muted-contrast">Формирование официального PDF-счета</p>
-                    </div>
-                    <div class="flex items-center gap-2 no-print">
-                        <button onclick="printQuotation()" class="text-xs font-bold solid-card-sub px-2.5 py-1 rounded-lg transition text-high-contrast" title="Распечатать или сохранить КП">📄 КП</button>
-                        <button onclick="clearCart()" class="text-xs font-bold text-rose-500 bg-rose-500/10 px-2.5 py-1 rounded-lg transition">Очистить</button>
-                        <button onclick="hideCheckout()" class="w-8 h-8 rounded-full solid-card-sub text-high-contrast font-bold flex items-center justify-center">✕</button>
-                    </div>
-                </div>
+        <!-- МОДАЛЬНОЕ ОКНО: Спецификация и счет -->
+        <div id="checkout-form" class="fixed inset-0 z-50 bg-black/75 flex justify-center items-end opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="w-full max-w-md solid-card rounded-t-3xl p-5 pb-8 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto transform translate-y-full transition-transform duration-300" id="checkout-sheet">
+                <div class="flex justify-between items-center pb-2 border-b border-neutral-200 dark:border-neutral-800">
+                    <div>
+                        <h2 class="text-lg font-black text-high-contrast">Спецификация поставки</h2>
+                        <p class="text-[11px] text-muted-contrast">Формирование официального PDF-счета</p>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="printQuotation()" class="text-xs font-bold solid-card-sub px-2.5 py-1 rounded-lg transition text-high-contrast" title="Распечатать или сохранить КП">📄 КП</button>
+                        <button onclick="clearCart()" class="text-xs font-bold text-rose-500 bg-rose-500/10 px-2.5 py-1 rounded-lg transition">Очистить</button>
+                        <button onclick="hideCheckout()" class="w-8 h-8 rounded-full solid-card-sub text-high-contrast font-bold flex items-center justify-center">✕</button>
+                    </div>
+                </div>
 
-                <div class="solid-card-sub p-1 rounded-xl flex text-xs font-bold no-print">
-                    <button onclick="setVatMode(false)" id="vat-none-btn" class="flex-1 py-1.5 rounded-lg solid-btn-main shadow-sm transition">Без НДС (УСН)</button>
-                    <button onclick="setVatMode(true)" id="vat-with-btn" class="flex-1 py-1.5 rounded-lg text-muted-contrast transition">С НДС 20% (ОСНО)</button>
-                </div>
+                <div class="solid-card-sub p-1 rounded-xl flex text-xs font-bold no-print">
+                    <button onclick="setVatMode(false)" id="vat-none-btn" class="flex-1 py-1.5 rounded-lg solid-btn-main shadow-sm transition">Без НДС (УСН)</button>
+                    <button onclick="setVatMode(true)" id="vat-with-btn" class="flex-1 py-1.5 rounded-lg text-muted-contrast transition">С НДС 20% (ОСНО)</button>
+                </div>
 
-                <div class="no-print">
-                    <label class="block font-bold text-high-contrast text-xs mb-1">Условия взаиморасчетов:</label>
-                    <select id="payment-terms" class="w-full solid-input rounded-xl px-3 py-2.5 text-xs font-semibold outline-none">
-                        <option value="100% предоплата">100% Предоплата по счету (Скидка 2%)</option>
-                        <option value="50/50 производство">50% Аванс / 50% Перед отгрузкой</option>
-                        <option value="Отсрочка 30 дней">Отсрочка платежа 30 дней (Факторинг)</option>
-                    </select>
-                </div>
+                <div class="no-print">
+                    <label class="block font-bold text-high-contrast text-xs mb-1">Условия взаиморасчетов:</label>
+                    <select id="payment-terms" class="w-full solid-input rounded-xl px-3 py-2.5 text-xs font-semibold outline-none">
+                        <option value="100% предоплата">100% Предоплата по счету (Скидка 2%)</option>
+                        <option value="50/50 производство">50% Аванс / 50% Перед отгрузкой</option>
+                        <option value="Отсрочка 30 дней">Отсрочка платежа 30 дней (Факторинг)</option>
+                    </select>
+                </div>
 
-                <div id="checkout-cart-items" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
+                <div id="checkout-cart-items" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
 
-                <div class="space-y-3 text-xs">
-                    <div class="no-print">
-                        <label class="block font-bold text-high-contrast mb-1">ИНН компании (быстрый поиск ЕГРЮЛ)</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="inn-lookup-input" placeholder="Введите 10 или 12 цифр ИНН" maxlength="12"
-                                class="flex-grow solid-input rounded-xl px-3.5 py-2.5 outline-none font-medium">
-                            <button type="button" id="inn-lookup-btn" onclick="autoFillByInn()" class="px-3 py-2.5 solid-card-sub font-bold rounded-xl transition flex items-center gap-1 active:scale-95 text-high-contrast">
-                                <span>🔍</span>
-                                <span id="inn-btn-text">Найти</span>
-                            </button>
-                        </div>
-                    </div>
+                <div class="space-y-3 text-xs">
+                    <div class="no-print">
+                        <label class="block font-bold text-high-contrast mb-1">ИНН компании (быстрый поиск ЕГРЮЛ)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="inn-lookup-input" placeholder="Введите 10 или 12 цифр ИНН" maxlength="12"
+                                class="flex-grow solid-input rounded-xl px-3.5 py-2.5 outline-none font-medium">
+                            <button type="button" id="inn-lookup-btn" onclick="autoFillByInn()" class="px-3 py-2.5 solid-card-sub font-bold rounded-xl transition flex items-center gap-1 active:scale-95 text-high-contrast">
+                                <span>🔍</span>
+                                <span id="inn-btn-text">Найти</span>
+                            </button>
+                        </div>
+                    </div>
 
-                    <div>
-                        <label class="block font-bold text-high-contrast mb-1">Компания / ИП / Реквизиты *</label>
-                        <input type="text" id="company" placeholder="ООО «Галк-Опт», ИНН 7701234567"
-                            class="w-full solid-input rounded-xl px-3.5 py-2.5 outline-none transition font-medium">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-high-contrast mb-1">Город и терминал ТК *</label>
-                        <input type="text" id="city" placeholder="г. Новосибирск, терминал СДЭК ул. Ленина 12"
-                            class="w-full solid-input rounded-xl px-3.5 py-2.5 outline-none transition font-medium">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-high-contrast mb-1">ФИО закупщика и телефон *</label>
-                        <input type="text" id="contacts" placeholder="Степан, +7 (999) 000-00-00"
-                            class="w-full solid-input rounded-xl px-3.5 py-2.5 outline-none transition font-medium">
-                    </div>
-                    <div class="no-print">
-                        <label class="block font-bold text-high-contrast mb-1">Транспортная компания</label>
-                        <select id="tk-choice" class="w-full solid-input rounded-xl px-3 py-2.5 font-medium outline-none">
-                            <option value="СДЭК">СДЭК (Курьер / Склад)</option>
-                            <option value="Деловые Линии">Деловые Линии (Паллетная доставка)</option>
-                            <option value="ПЭК">ПЭК (Сборный груз)</option>
-                            <option value="Самовывоз">Самовывоз (Склад Москва, Южные Врата)</option>
-                        </select>
-                    </div>
-                </div>
+                    <div>
+                        <label class="block font-bold text-high-contrast mb-1">Компания / ИП / Реквизиты *</label>
+                        <input type="text" id="company" placeholder="ООО «Галк-Опт», ИНН 7701234567"
+                            class="w-full solid-input rounded-xl px-3.5 py-2.5 outline-none transition font-medium">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-high-contrast mb-1">Город и терминал ТК *</label>
+                        <input type="text" id="city" placeholder="г. Новосибирск, терминал СДЭК ул. Ленина 12"
+                            class="w-full solid-input rounded-xl px-3.5 py-2.5 outline-none transition font-medium">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-high-contrast mb-1">ФИО закупщика и телефон *</label>
+                        <input type="text" id="contacts" placeholder="Степан, +7 (999) 000-00-00"
+                            class="w-full solid-input rounded-xl px-3.5 py-2.5 outline-none transition font-medium">
+                    </div>
+                    <div class="no-print">
+                        <label class="block font-bold text-high-contrast mb-1">Транспортная компания</label>
+                        <select id="tk-choice" class="w-full solid-input rounded-xl px-3 py-2.5 font-medium outline-none">
+                            <option value="СДЭК">СДЭК (Курьер / Склад)</option>
+                            <option value="Деловые Линии">Деловые Линии (Паллетная доставка)</option>
+                            <option value="ПЭК">ПЭК (Сборный груз)</option>
+                            <option value="Самовывоз">Самовывоз (Склад Москва, Южные Врата)</option>
+                        </select>
+                    </div>
+                </div>
 
-                <div class="solid-card-sub rounded-2xl p-3.5 flex justify-between items-center text-xs">
-                    <div>
-                        <span class="font-bold text-high-contrast block">Сумма к оплате:</span>
-                        <span class="text-[10px] text-muted-contrast" id="vat-description-label">Без НДС • Счет отправляется в Telegram</span>
-                    </div>
-                    <span class="font-black text-base text-high-contrast" id="checkout-total">0 ₽</span>
-                </div>
+                <div class="solid-card-sub rounded-2xl p-3.5 flex justify-between items-center text-xs">
+                    <div>
+                        <span class="font-bold text-high-contrast block">Сумма к оплате:</span>
+                        <span class="text-[10px] text-muted-contrast" id="vat-description-label">Без НДС • Счет отправляется в Telegram</span>
+                    </div>
+                    <span class="font-black text-base text-high-contrast" id="checkout-total">0 ₽</span>
+                </div>
 
-                <button onclick="sendOrderToBot()" class="w-full solid-btn-main py-3.5 rounded-xl font-bold text-sm shadow-xl transition active:scale-[0.98] flex items-center justify-center gap-2 no-print">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    <span>Выставить официальный счет (PDF)</span>
-                </button>
-            </div>
-        </div>
+                <button onclick="sendOrderToBot()" class="w-full solid-btn-main py-3.5 rounded-xl font-bold text-sm shadow-xl transition active:scale-[0.98] flex items-center justify-center gap-2 no-print">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <span>Выставить официальный счет (PDF)</span>
+                </button>
+            </div>
+        </div>
 
-    </div>
+    </div>
 
-    <script>
-        const tg = window.Telegram?.WebApp;
-        try {
-            tg.expand();
-            tg.ready();
-        } catch(e) {}
+    <script>
+        const tg = window.Telegram?.WebApp;
+        try {
+            tg.expand();
+            tg.ready();
+        } catch(e) {}
 
-        const ADMIN_TELEGRAM_ID = 8125122124;
-        const BOT_USERNAME = "GalkOpt_bot"; // Юзернейм вашего бота
-        const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 0;
+        const ADMIN_TELEGRAM_ID = 8125122124;
+        const BOT_USERNAME = "GalkOpt_bot"; // Юзернейм вашего бота
+        const currentUserId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : 0;
 
-        const API_SERVER_URL = "https://galk-b2b.duckdns.org";
+        const API_SERVER_URL = "https://galk-b2b.duckdns.org";
 
-        // ==========================================
-        // ПЕРЕХОД В РЕЖИМ ПОДДЕРЖКИ В БОТЕ
-        // ==========================================
-        function redirectToTelegramSupport() {
-            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+        // ==========================================
+        // ПЕРЕХОД В РЕЖИМ ПОДДЕРЖКИ В БОТЕ
+        // ==========================================
+        function redirectToTelegramSupport() {
+            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
 
-            // Если открыто из инлайн-кнопки (sendData не поддерживается) или веб-интерфейса
-            const botSupportLink = `https://t.me/${BOT_USERNAME}?start=support`;
+            // Если открыто из инлайн-кнопки (sendData не поддерживается) или веб-интерфейса
+            const botSupportLink = `https://t.me/${BOT_USERNAME}?start=support`;
 
-            try {
-                if (tg && typeof tg.sendData === 'function') {
-                    // Передаем действие боту и мгновенно закрываем WebApp
-                    tg.sendData(JSON.stringify({ action: 'support' }));
-                    tg.close();
-                    return;
-                }
-            } catch(e) {}
+            try {
+                if (tg && typeof tg.sendData === 'function') {
+                    // Передаем действие боту и мгновенно закрываем WebApp
+                    tg.sendData(JSON.stringify({ action: 'support' }));
+                    tg.close();
+                    return;
+                }
+            } catch(e) {}
 
-            // Резервный переход через диплинк
-            if (tg && tg.openTelegramLink) {
-                tg.openTelegramLink(botSupportLink);
-            } else {
-                window.location.href = botSupportLink;
-            }
-            try { tg.close(); } catch(e) {}
-        }
+            // Резервный переход через диплинк
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(botSupportLink);
+            } else {
+                window.location.href = botSupportLink;
+            }
+            try { tg.close(); } catch(e) {}
+        }
 
-        function resolveImageUrl(url) {
-            if (!url) return 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80';
-            if (url.startsWith('http://') || url.startsWith('https://')) return url;
-            const clean = url.startsWith('/') ? url : '/' + url;
-            return `${API_SERVER_URL}${clean}`;
-        }
+        function resolveImageUrl(url) {
+            if (!url) return 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80';
+            if (url.startsWith('http://') || url.startsWith('https://')) return url;
+            const clean = url.startsWith('/') ? url : '/' + url;
+            return `${API_SERVER_URL}${clean}`;
+        }
 
-        let editingProductId = null;
+        let editingProductId = null;
 
-        // ==========================================
-        // УПРАВЛЕНИЕ ТЕМОЙ
-        // ==========================================
-        let isDarkTheme = localStorage.getItem('galk_theme_solid_dark') === 'true';
+        // ==========================================
+        // УПРАВЛЕНИЕ ТЕМОЙ
+        // ==========================================
+        let isDarkTheme = localStorage.getItem('galk_theme_solid_dark') === 'true';
 
-        function applyTheme(isDark) {
-            isDarkTheme = isDark;
-            const body = document.body;
-            const btn = document.getElementById('theme-btn');
-            if (isDark) {
-                body.classList.add('dark-theme');
-                if (btn) btn.innerText = '☀️';
-            } else {
-                body.classList.remove('dark-theme');
-                if (btn) btn.innerText = '🌙';
-            }
-            try { localStorage.setItem('galk_theme_solid_dark', isDark ? 'true' : 'false'); } catch(e) {}
-        }
+        function applyTheme(isDark) {
+            isDarkTheme = isDark;
+            const body = document.body;
+            const btn = document.getElementById('theme-btn');
+            if (isDark) {
+                body.classList.add('dark-theme');
+                if (btn) btn.innerText = '☀️';
+            } else {
+                body.classList.remove('dark-theme');
+                if (btn) btn.innerText = '🌙';
+            }
+            try { localStorage.setItem('galk_theme_solid_dark', isDark ? 'true' : 'false'); } catch(e) {}
+        }
 
-        function toggleThemeMode() {
-            applyTheme(!isDarkTheme);
-            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
-            showToast(isDarkTheme ? "Включена тёмная тема" : "Включена светлая тема", isDarkTheme ? "🌙" : "☀️");
-        }
+        function toggleThemeMode() {
+            applyTheme(!isDarkTheme);
+            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
+            showToast(isDarkTheme ? "Включена тёмная тема" : "Включена светлая тема", isDarkTheme ? "🌙" : "☀️");
+        }
 
-        const defaultProducts = [
+        const defaultProducts = [
             { 
                 id: 'p_attar_moon', 
                 cat: 'Парфюмерия', 
@@ -637,864 +637,907 @@
                 stock: 140, 
                 weight_per_unit: 0.35, 
                 badge: 'Люкс 1:1', 
-                images: ['https://iimg.su/i/cO2rgi'], 
+                images: ['https://iimg.su/d/4N4htbofJJ1j67RLEhnBxieKMcG3gG3A6o7xYdwU'], 
                 tiers: [
                     { min: 1, price: 1800, label: 'Розница' }, 
                     { min: 3, price: 1000, label: 'Опт от 3 шт' }, 
                     { min: 10, price: 950, label: 'от 10 шт' }
                 ] 
             },
-
-        localStorage.removeItem('galk_b2b_products');
-        localStorage.removeItem('galk_b2b_products_v3');
-        let products = defaultProducts;
-
-        let favorites = [];
-        let cart = {};
-        let currentCat = 'all';
-        let currentModalProductId = null;
-        let isBrandingIncluded = false;
-        let isFulfillmentIncluded = false;
-        let isVatEnabled = false;
-
-        function cloudSave(key, value) {
-            try {
-                if (tg.isVersionAtLeast && tg.isVersionAtLeast('6.9') && tg.CloudStorage) {
-                    tg.CloudStorage.setItem(key, JSON.stringify(value), () => {});
-                    return;
-                }
-            } catch(e) {}
-            try { localStorage.setItem(key, JSON.stringify(value)); } catch(e) {}
-        }
-
-        function cloudLoad(key, callback) {
-            try {
-                if (tg.isVersionAtLeast && tg.isVersionAtLeast('6.9') && tg.CloudStorage) {
-                    tg.CloudStorage.getItem(key, (err, value) => {
-                        if (!err && value) {
-                            try { callback(JSON.parse(value)); return; } catch(e) {}
-                        }
-                        const local = localStorage.getItem(key);
-                        callback(local ? JSON.parse(local) : null);
-                    });
-                    return;
-                }
-            } catch(e) {}
-            const local = localStorage.getItem(key);
-            callback(local ? JSON.parse(local) : null);
-        }
-
-        cloudLoad('galk_cloud_favs', (data) => {
-            if (data && Array.isArray(data)) {
-                favorites = data;
-                filterProducts();
-            }
-        });
-
-        cloudLoad('galk_cloud_cart', (data) => {
-            if (data && typeof data === 'object') {
-                cart = data;
-                updateCartUI();
-            }
-        });
-
-        function showToast(text, icon = '✅') {
-            const toast = document.getElementById('toast');
-            if (!toast) return;
-            document.getElementById('toast-text').innerText = text;
-            document.getElementById('toast-icon').innerText = icon;
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
-            }, 2500);
-        }
-
-        function toggleFavorite(id, event) {
-            if (event) event.stopPropagation();
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(favId => favId !== id);
-                showToast("Удалено из избранного", "💔");
-            } else {
-                favorites.push(id);
-                showToast("Добавлено в избранное", "❤️");
-            }
-            cloudSave('galk_cloud_favs', favorites);
-            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
-            filterProducts();
-        }
-
-        function getBaseUnitPrice(product, qty) {
-            if (qty === 1) return product.price;
-            let unitPrice = (product.tiers && product.tiers[0]) ? product.tiers[0].price : product.price;
-            if (product.tiers && Array.isArray(product.tiers)) {
-                for (let t of product.tiers) {
-                    if (qty >= t.min) unitPrice = t.price;
-                }
-            }
-            return unitPrice;
-        }
-
-        function setCategory(cat) {
-            currentCat = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap';
-            });
-            const activeMap = {
-                'all': 'cat-all',
-                'favorites': 'cat-fav',
-                'Одежда': 'cat-clothes',
-                'Обувь': 'cat-shoes',
-                'Электроника': 'cat-tech',
-                'Сувениры': 'cat-merch'
-            };
-            const activeBtn = document.getElementById(activeMap[cat]);
-            if (activeBtn) {
-                activeBtn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-bold solid-btn-main shadow-sm transition whitespace-nowrap';
-            }
-            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
-            filterProducts();
-        }
-
-        function filterProducts() {
-            const query = (document.getElementById('search')?.value || '').toLowerCase();
-            const sortMode = document.getElementById('sort-select')?.value || 'default';
-
-            let filtered = products.filter(p => {
-                const matchCat = currentCat === 'all' 
-                    ? true 
-                    : (currentCat === 'favorites' ? favorites.includes(p.id) : p.cat === currentCat);
-                const matchSearch = (p.title || '').toLowerCase().includes(query) || (p.desc || '').toLowerCase().includes(query);
-                return matchCat && matchSearch;
-            });
-
-            if (sortMode === 'price_asc') {
-                filtered.sort((a, b) => (a.tiers?.[0]?.price || a.price) - (b.tiers?.[0]?.price || b.price));
-            } else if (sortMode === 'margin_desc') {
-                filtered.sort((a, b) => ((b.wb_price || 0) - (b.tiers?.[0]?.price || b.price)) - ((a.wb_price || 0) - (a.tiers?.[0]?.price || a.price)));
-            } else if (sortMode === 'stock_desc') {
-                filtered.sort((a, b) => (b.stock || 0) - (a.stock || 0));
-            }
-
-            renderProducts(filtered);
-        }
-
-        function renderProducts(items) {
-            const container = document.getElementById('products-container');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (!items || items.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-12 text-muted-contrast font-bold text-xs">Позиции не найдены</div>`;
-                return;
-            }
-
-            items.forEach(p => {
-                try {
-                    const cartItem = cart[p.id];
-                    const qty = cartItem ? cartItem.qty : 0;
-                    const isFav = favorites.includes(p.id);
-
-                    const rawImg = (p.images && p.images.length > 0 && p.images[0]) ? p.images[0] : '';
-                    const img = resolveImageUrl(rawImg);
-                    
-                    const moq = Number(p.moq) || 1;
-                    const boxQty = Number(p.box_qty) || moq;
-                    const basePrice = Number(p.price) || 1000;
-                    
-                    let tierPrice = basePrice;
-                    if (p.tiers && Array.isArray(p.tiers) && p.tiers.length > 0 && p.tiers[0].price) {
-                        tierPrice = Number(p.tiers[0].price);
-                    }
-
-                    const wbPrice = Number(p.wb_price) || Math.round(tierPrice * 1.8);
-                    const marginPercent = tierPrice > 0 ? Math.round(((wbPrice - tierPrice) / tierPrice) * 100) : 0;
-                    const stock = p.stock !== undefined ? p.stock : 100;
-                    const badge = p.badge || 'Опт';
-
-                    container.innerHTML += `
-                        <div class="solid-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition relative group">
-                            <div class="absolute top-2 right-2 z-20 flex items-center gap-1">
-                                <button onclick="toggleFavorite('${p.id}', event)" class="w-7 h-7 rounded-lg solid-card flex items-center justify-center text-xs shadow-sm transition active:scale-90">
-                                    ${isFav ? '❤️' : '🤍'}
-                                </button>
-                            </div>
-
-                            <div onclick="openProductModal('${p.id}')" class="cursor-pointer">
-                                <div class="relative w-full aspect-[4/3] bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
-                                    <img src="${img}" alt="${p.title}" class="w-full h-full object-cover">
-                                    <span class="absolute top-2 left-2 bg-neutral-900 text-white font-bold text-[9px] px-2 py-0.5 rounded-md tracking-wider">
-                                        ${badge}
-                                    </span>
-                                </div>
-                                <div class="p-3 pb-1">
-                                    <div class="flex items-center justify-between text-[10px] text-muted-contrast font-semibold mb-1">
-                                        <span>${p.cat || 'Каталог'}</span>
-                                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">${stock} шт</span>
-                                    </div>
-                                    <h3 class="font-bold text-xs text-high-contrast leading-snug line-clamp-2">${p.title}</h3>
-                                    <div class="mt-2 solid-card-sub rounded-xl p-2">
-                                        <div class="flex items-baseline gap-1">
-                                            <span class="font-black text-blue-600 dark:text-blue-400 text-sm">${tierPrice.toLocaleString('ru-RU')} ₽</span>
-                                            <span class="text-[10px] text-muted-contrast line-through">${basePrice.toLocaleString('ru-RU')} ₽</span>
-                                        </div>
-                                        <div class="flex justify-between items-center mt-0.5">
-                                            <p class="text-[10px] font-semibold text-muted-contrast">От ${moq} шт</p>
-                                            <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">+${marginPercent}% WB</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-3 pt-2">
-                                ${qty === 0 
-                                    ? `<button onclick="updateCart('${p.id}', ${moq}); triggerFlyToCartAnimation(this);" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 active:scale-95 shadow-sm">
-                                        <span>В смету</span>
-                                        <span class="text-[10px] opacity-80">(${moq} шт)</span>
-                                       </button>`
-                                    : `<div class="flex items-center justify-between bg-neutral-900 text-white rounded-xl p-1 shadow-inner">
-                                        <button onclick="updateCart('${p.id}', ${qty - boxQty})" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">-</button>
-                                        <span class="text-xs font-bold">${qty} шт</span>
-                                        <button onclick="updateCart('${p.id}', ${qty + boxQty}); triggerFlyToCartAnimation(this);" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">+</button>
-                                       </div>`
-                                }
-                            </div>
-                        </div>
-                    `;
-                } catch(errItem) {
-                    console.error("Ошибка рендеринга:", errItem);
-                }
-            });
-        }
-
-        async function syncCatalogWithServer() {
-            try {
-                const res = await fetch(`${API_SERVER_URL}/api/products?t=${Date.now()}`);
-                if (res.ok) {
-                    const serverCatalog = await res.json();
-                    if (Array.isArray(serverCatalog) && serverCatalog.length > 0) {
-                        products = serverCatalog;
-                        filterProducts();
-                        return;
-                    }
-                }
-            } catch(e) {}
-            filterProducts();
-        }
-
-        function manualSync() {
-            showToast("Синхронизация с сервером...", "🔄");
-            syncCatalogWithServer().then(() => {
-                showToast("Каталог обновлен!", "✅");
-            });
-        }
-
-        async function exportPriceListExcel() {
-            showToast("Отправка прайс-листа в чат...", "📊");
-            try {
-                const excelRows = products.map((p, idx) => ({
-                    "№": idx + 1,
-                    "Категория": p.cat,
-                    "Артикул": p.id,
-                    "Наименование позиции": p.title,
-                    "Остаток на складе (шт)": p.stock,
-                    "Квант короба (шт)": p.box_qty || p.moq,
-                    "Базовая цена (₽)": p.price,
-                    "Опт от MOQ": (p.tiers && p.tiers[0]) ? `${p.tiers[0].price} ₽` : `${p.price} ₽`,
-                    "РРЦ на WB/Ozon (₽)": p.wb_price || Math.round(p.price * 1.8)
-                }));
-
-                const worksheet = XLSX.utils.json_to_sheet(excelRows);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "Оптовый Прайс-Лист");
-                const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'base64' });
-
-                const targetUid = currentUserId || ADMIN_TELEGRAM_ID;
-                const res = await fetch(`${API_SERVER_URL}/api/send_user_file`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        user_id: targetUid,
-                        filename: "Galk_B2B_Opt_PriceList.xlsx",
-                        file_base64: wbout,
-                        caption: "📊 <b>Оптовый прайс-лист Galk Supply (.xlsx)</b>\nВсе градации цен и актуальные остатки на складе."
-                    })
-                });
-
-                if (res.ok) {
-                    try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
-                    showToast("Прайс-лист отправлен в чат бота! 📥", "✅");
-                } else {
-                    throw new Error("API Offline");
-                }
-            } catch(e) {
-                showToast("Нажмите '📊 Скачать прайс (Excel)' в боте!", "ℹ️");
-            }
-        }
-
-        function openProductModal(id) {
-            const p = products.find(item => item.id === id);
-            if (!p) return;
-            currentModalProductId = id;
-            
-            const cartItem = cart[p.id];
-            isBrandingIncluded = cartItem ? cartItem.branding : false;
-            isFulfillmentIncluded = cartItem ? cartItem.fulfillment : false;
-            
-            document.getElementById('branding-checkbox').checked = isBrandingIncluded;
-            document.getElementById('fulfillment-checkbox').checked = isFulfillmentIncluded;
-
-            const qty = cartItem ? cartItem.qty : (p.moq || 1);
-
-            document.getElementById('modal-badge').innerText = p.badge || 'Опт';
-            document.getElementById('modal-stock-text').innerText = `На складе: ${p.stock || 0} шт`;
-            
-            const rawImg = (p.images && p.images[0]) ? p.images[0] : '';
-            document.getElementById('modal-main-img').src = resolveImageUrl(rawImg);
-            document.getElementById('modal-title').innerText = p.title;
-            document.getElementById('modal-desc').innerText = p.desc || '';
-
-            document.getElementById('roi-retail-price').value = p.wb_price || Math.round(p.price * 1.8);
-
-            const thumbsContainer = document.getElementById('modal-thumbnails');
-            thumbsContainer.innerHTML = '';
-            (p.images || []).forEach(imgUrl => {
-                const resolved = resolveImageUrl(imgUrl);
-                thumbsContainer.innerHTML += `
-                    <button onclick="document.getElementById('modal-main-img').src = '${resolved}'" class="w-12 h-12 rounded-xl overflow-hidden solid-card focus:border-blue-600 transition">
-                        <img src="${resolved}" class="w-full h-full object-cover">
-                    </button>
-                `;
-            });
-
-            const tiersBox = document.getElementById('modal-tiers-container');
-            tiersBox.innerHTML = '';
-            (p.tiers || [{ min: p.moq, price: p.price, label: 'Опт' }]).forEach(t => {
-                tiersBox.innerHTML += `
-                    <div class="solid-card rounded-lg p-2">
-                        <span class="text-[10px] text-muted-contrast block">${t.label}</span>
-                        <span class="font-extrabold text-blue-600 dark:text-blue-400 text-xs">${t.price} ₽</span>
-                    </div>
-                `;
-            });
-
-            const slider = document.getElementById('modal-slider');
-            slider.min = 1;
-            slider.max = Math.max(p.stock || 100, (p.moq || 10) * 5);
-            slider.step = p.box_qty || p.moq || 1;
-            slider.value = qty;
-
-            document.getElementById('slider-number-input').value = qty;
-            document.getElementById('box-quantity-hint').innerText = `Квант короба: ${p.box_qty || p.moq || 1} шт`;
-
-            const chips = document.getElementById('quick-preset-chips');
-            chips.innerHTML = `
-                <button onclick="setModalQty(1)" class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold active:scale-95 whitespace-nowrap">🧪 Образец 1 шт</button>
-                <button onclick="setModalQty(${p.moq || 10})" class="px-2.5 py-1 rounded-lg solid-card border text-high-contrast text-[10px] font-bold active:scale-95 whitespace-nowrap">Мин. ${p.moq || 10} шт</button>
-                <button onclick="setModalQty(${(p.box_qty || p.moq || 10) * 3})" class="px-2.5 py-1 rounded-lg solid-card border text-high-contrast text-[10px] font-bold active:scale-95 whitespace-nowrap">3 короба (${(p.box_qty || p.moq || 10) * 3} шт)</button>
-            `;
-
-            renderMatrixTab(p);
-            updateModalCalculations(p, qty);
-            switchTab('pricing');
-
-            const modal = document.getElementById('product-modal');
-            const sheet = document.getElementById('product-sheet');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('translate-y-full');
-            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
-        }
-
-        function switchTab(tab) {
-            const tabs = ['pricing', 'roi', 'matrix', 'branding', 'fulfillment', 'warehouses'];
-            tabs.forEach(t => {
-                const el = document.getElementById(`tab-${t}`);
-                const btn = document.getElementById(`tab-${t}-btn`);
-                if (el && btn) {
-                    if (t === tab) {
-                        el.classList.remove('hidden');
-                        btn.className = 'pb-2 border-b-2 border-neutral-900 dark:border-white text-high-contrast transition font-bold whitespace-nowrap';
-                    } else {
-                        el.classList.add('hidden');
-                        btn.className = 'pb-2 border-b-2 border-transparent text-muted-contrast transition font-bold whitespace-nowrap';
-                    }
-                }
-            });
-            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
-        }
-
-        function calculateSellerROI() {
-            const p = products.find(item => item.id === currentModalProductId);
-            if (!p) return;
-
-            const retailPrice = parseInt(document.getElementById('roi-retail-price').value) || (p.wb_price || 3000);
-            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
-            
-            let unitCost = getBaseUnitPrice(p, qty);
-            if (isBrandingIncluded) unitCost += 250;
-            if (isFulfillmentIncluded) unitCost += 45;
-
-            const totalPurchaseCost = unitCost * qty;
-            const totalRevenue = retailPrice * qty;
-            const marketplaceCut = totalRevenue * 0.28;
-            const netProfit = Math.round(totalRevenue - totalPurchaseCost - marketplaceCut);
-            const roiPercent = Math.round((netProfit / totalPurchaseCost) * 100);
-
-            document.getElementById('roi-net-profit').innerText = `${netProfit.toLocaleString('ru-RU')} ₽`;
-            document.getElementById('roi-percent').innerText = `${roiPercent > 0 ? '+' : ''}${roiPercent}%`;
-            document.getElementById('roi-percent').className = `text-sm font-black ${roiPercent >= 50 ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-600 dark:text-blue-400'}`;
-        }
-
-        function toggleBranding(checked) {
-            isBrandingIncluded = checked;
-            const p = products.find(item => item.id === currentModalProductId);
-            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
-            updateModalCalculations(p, qty);
-        }
-
-        function toggleFulfillment(checked) {
-            isFulfillmentIncluded = checked;
-            const p = products.find(item => item.id === currentModalProductId);
-            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
-            updateModalCalculations(p, qty);
-        }
-
-        function renderMatrixTab(product) {
-            const container = document.getElementById('matrix-rows-container');
-            if (!product.matrix) {
-                container.innerHTML = `<div class="text-muted-contrast text-center py-2">Для данной позиции ростовка не предусмотрена</div>`;
-                document.getElementById('matrix-total-qty').innerText = `${document.getElementById('modal-slider').value} шт`;
-                return;
-            }
-
-            container.innerHTML = '';
-            product.matrix.forEach((m, idx) => {
-                container.innerHTML += `
-                    <div class="flex items-center justify-between solid-card p-2 rounded-lg">
-                        <span class="font-bold text-high-contrast">${m.size}</span>
-                        <span class="text-muted-contrast text-[11px]">${m.inBox} шт/кор</span>
-                        <div class="flex items-center gap-1">
-                            <input type="number" min="0" value="${m.count || 0}" oninput="updateMatrixRow(${idx}, this.value)" class="w-12 text-center font-bold solid-input rounded-md py-1">
-                            <span class="text-muted-contrast text-[10px]">кор.</span>
-                        </div>
-                        <span class="font-black text-blue-600 dark:text-blue-400">${(m.count || 0) * m.inBox} шт</span>
-                    </div>
-                `;
-            });
-            calculateMatrixTotal(product);
-        }
-
-        function updateMatrixRow(idx, val) {
-            const p = products.find(item => item.id === currentModalProductId);
-            if (p && p.matrix) {
-                p.matrix[idx].count = parseInt(val) || 0;
-                renderMatrixTab(p);
-            }
-        }
-
-        function calculateMatrixTotal(product) {
-            if (!product.matrix) return;
-            let total = 0;
-            product.matrix.forEach(m => {
-                total += (m.count || 0) * m.inBox;
-            });
-            document.getElementById('matrix-total-qty').innerText = `${total} шт`;
-            if (total > 0) setModalQty(total);
-        }
-
-        function getMatrixSummary(product) {
-            if (!product.matrix) return '';
-            const list = product.matrix.filter(m => (m.count || 0) > 0).map(m => `${m.size}: ${m.count * m.inBox}шт`);
-            return list.length > 0 ? list.join(', ') : '';
-        }
-
-        function setModalQty(qty) {
-            document.getElementById('modal-slider').value = qty;
-            document.getElementById('slider-number-input').value = qty;
-            const p = products.find(item => item.id === currentModalProductId);
-            if (p) updateModalCalculations(p, qty);
-        }
-
-        function onSliderChange(val) {
-            const qty = parseInt(val) || 1;
-            document.getElementById('slider-number-input').value = qty;
-            const p = products.find(item => item.id === currentModalProductId);
-            if (p) updateModalCalculations(p, qty);
-        }
-
-        function onNumberInputChange(val) {
-            const qty = parseInt(val) || 1;
-            document.getElementById('modal-slider').value = qty;
-            const p = products.find(item => item.id === currentModalProductId);
-            if (p) updateModalCalculations(p, qty);
-        }
-
-        function updateModalCalculations(product, qty) {
-            let unitPrice = getBaseUnitPrice(product, qty);
-            if (isBrandingIncluded && qty > 1) unitPrice += 250;
-            if (isFulfillmentIncluded && qty > 1) unitPrice += 45;
-
-            const total = qty * unitPrice;
-
-            document.getElementById('tier-unit-price').innerText = `${unitPrice} ₽`;
-            document.getElementById('slider-total-price').innerText = `${total.toLocaleString('ru-RU')} ₽`;
-
-            const boxCount = Math.ceil(qty / (product.box_qty || 10));
-            const totalWeight = (qty * (product.weight_per_unit || 0.5)).toFixed(1);
-            document.getElementById('logistics-boxes-text').innerText = `${boxCount} ${boxCount === 1 ? 'короб' : 'коробок'}`;
-            document.getElementById('logistics-weight-text').innerText = `${totalWeight} кг`;
-
-            const badge = document.getElementById('logistics-vehicle-badge');
-            if (totalWeight <= 25) {
-                badge.innerText = 'СДЭК / Курьер';
-            } else if (totalWeight <= 300) {
-                badge.innerText = 'Легковой фургон';
-            } else {
-                badge.innerText = 'Паллета / Газель';
-            }
-
-            const nextTier = (product.tiers || []).find(t => t.min > qty);
-            const progressBar = document.getElementById('tier-progress-bar');
-            const hint = document.getElementById('tier-discount-hint');
-
-            if (nextTier) {
-                const diff = nextTier.min - qty;
-                hint.innerText = `Еще ${diff} шт до цены ${nextTier.price} ₽/шт!`;
-                const percent = Math.min(100, Math.round((qty / nextTier.min) * 100));
-                progressBar.style.width = `${percent}%`;
-            } else {
-                hint.innerText = 'Максимальная оптовая скидка разблокирована! 🎉';
-                progressBar.style.width = '100%';
-            }
-
-            const slot = document.getElementById('modal-action-slot');
-            slot.innerHTML = `
-                <button onclick="commitModalToCart('${product.id}', ${qty}); closeProductModal(); triggerFlyToCartAnimation(this);" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-lg transition flex items-center justify-center gap-2 active:scale-95">
-                    <span>Добавить в спецификацию (${qty} шт)</span>
-                    <span>•</span>
-                    <span>${total.toLocaleString('ru-RU')} ₽</span>
-                </button>
-            `;
-
-            calculateSellerROI();
-        }
-
-        function commitModalToCart(id, qty) {
-            const p = products.find(item => item.id === id);
-            if (!p) return;
-            const matrixStr = getMatrixSummary(p);
-            updateCart(id, qty, {
-                branding: isBrandingIncluded,
-                fulfillment: isFulfillmentIncluded,
-                matrixSummary: matrixStr
-            });
-            try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
-            showToast("Спецификация обновлена");
-        }
-
-        function closeProductModal() {
-            document.getElementById('product-sheet').classList.add('translate-y-full');
-            document.getElementById('product-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function updateCart(id, newQty, options = null) {
-            const p = products.find(prod => prod.id === id);
-            if (!p) return;
-
-            if (newQty <= 0) {
-                delete cart[id];
-            } else {
-                const prev = cart[id] || {};
-                const branding = options ? options.branding : (prev.branding || false);
-                const fulfillment = options ? options.fulfillment : (prev.fulfillment || false);
-                const matrixSummary = options ? options.matrixSummary : (prev.matrixSummary || '');
-
-                let unitPrice = getBaseUnitPrice(p, newQty);
-                if (branding && newQty > 1) unitPrice += 250;
-                if (fulfillment && newQty > 1) unitPrice += 45;
-
-                cart[id] = {
-                    qty: newQty,
-                    unitPrice: unitPrice,
-                    branding: branding,
-                    fulfillment: fulfillment,
-                    matrixSummary: matrixSummary
-                };
-            }
-            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
-            cloudSave('galk_cloud_cart', cart);
-            filterProducts();
-            updateCartUI();
-        }
-
-        function clearCart() {
-            cart = {};
-            cloudSave('galk_cloud_cart', cart);
-            hideCheckout();
-            filterProducts();
-            updateCartUI();
-            showToast("Спецификация очищена", "🗑");
-        }
-
-        function calculateSubtotal() {
-            let total = 0;
-            for (const [id, item] of Object.entries(cart)) {
-                total += item.unitPrice * item.qty;
-            }
-            return total;
-        }
-
-        function updateCartUI() {
-            const subtotal = calculateSubtotal();
-            const total = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
-            const totalItems = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
-            const cartBar = document.getElementById('cart-bar');
-
-            if (totalItems > 0) {
-                cartBar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-                document.getElementById('total-price').innerText = total.toLocaleString('ru-RU') + ' ₽';
-            } else {
-                cartBar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-            }
-        }
-
-        function setVatMode(withVat) {
-            isVatEnabled = withVat;
-            const noneBtn = document.getElementById('vat-none-btn');
-            const withBtn = document.getElementById('vat-with-btn');
-            const desc = document.getElementById('vat-description-label');
-
-            if (withVat) {
-                withBtn.className = 'flex-1 py-1.5 rounded-lg solid-btn-main shadow-sm transition font-bold';
-                noneBtn.className = 'flex-1 py-1.5 rounded-lg text-muted-contrast transition font-medium';
-                desc.innerText = 'Включая НДС 20% • Пакет закрывающих УПД';
-            } else {
-                noneBtn.className = 'flex-1 py-1.5 rounded-lg solid-btn-main shadow-sm transition font-bold';
-                withBtn.className = 'flex-1 py-1.5 rounded-lg text-muted-contrast transition font-medium';
-                desc.innerText = 'Без НДС (УСН) • Прямой счет на оплату';
-            }
-            updateCartUI();
-            showCheckout();
-        }
-
-        function printQuotation() {
-            window.print();
-        }
-
-        function showCheckout() {
-            const subtotal = calculateSubtotal();
-            const total = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
-            document.getElementById('checkout-total').innerText = total.toLocaleString('ru-RU') + ' ₽';
-
-            const itemsContainer = document.getElementById('checkout-cart-items');
-            itemsContainer.innerHTML = '';
-            for (const [id, item] of Object.entries(cart)) {
-                const p = products.find(prod => prod.id === id);
-                if (p) {
-                    let badges = [];
-                    if (item.branding) badges.push('Мерч +250₽');
-                    if (item.fulfillment) badges.push('Фулфилмент +45₽');
-                    const badgesText = badges.length > 0 ? ` [${badges.join(', ')}]` : '';
-                    const matrixText = item.matrixSummary ? `<p class="text-[9px] text-blue-600 dark:text-blue-400 font-semibold">${item.matrixSummary}</p>` : '';
-
-                    itemsContainer.innerHTML += `
-                        <div class="flex justify-between items-center solid-card-sub rounded-xl p-2.5 text-xs">
-                            <div>
-                                <p class="font-bold text-high-contrast leading-tight">${p.title}${badgesText}</p>
-                                <p class="text-[10px] text-muted-contrast mt-0.5">${item.qty} шт × ${item.unitPrice} ₽</p>
-                                ${matrixText}
-                            </div>
-                            <span class="font-extrabold text-high-contrast">${(item.qty * item.unitPrice).toLocaleString('ru-RU')} ₽</span>
-                        </div>
-                    `;
-                }
-            }
-
-            const modal = document.getElementById('checkout-form');
-            const sheet = document.getElementById('checkout-sheet');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('translate-y-full');
-        }
-
-        function hideCheckout() {
-            document.getElementById('checkout-sheet').classList.add('translate-y-full');
-            document.getElementById('checkout-form').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function sendOrderToBot() {
-            const company = document.getElementById('company').value.trim();
-            const city = document.getElementById('city').value.trim();
-            const contacts = document.getElementById('contacts').value.trim();
-            const tk = document.getElementById('tk-choice').value;
-            const terms = document.getElementById('payment-terms').value;
-
-            if (!company || !city || !contacts) {
-                showToast("Заполните обязательные реквизиты", "⚠️");
-                return;
-            }
-
-            let orderItems = [];
-            let subtotal = calculateSubtotal();
-            let finalSum = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
-
-            for (const [id, item] of Object.entries(cart)) {
-                const p = products.find(prod => prod.id === id);
-                if (p) {
-                    let fullTitle = p.title;
-                    if (item.branding) fullTitle += " [+Печать лого]";
-                    if (item.fulfillment) fullTitle += " [+Фулфилмент]";
-                    if (item.matrixSummary) fullTitle += ` (${item.matrixSummary})`;
-
-                    orderItems.push({
-                        title: fullTitle,
-                        qty: item.qty,
-                        price: item.unitPrice,
-                        total: item.unitPrice * item.qty
-                    });
-                }
-            }
-
-            const payload = {
-                type: 'order',
-                vat: isVatEnabled ? 'С НДС 20%' : 'Без НДС (УСН)',
-                payment_terms: terms,
-                cart: orderItems,
-                total_sum: finalSum,
-                company: `${company} (${isVatEnabled ? 'НДС 20%' : 'УСН'}, ТК: ${tk}, Оплата: ${terms})`,
-                city: city,
-                contacts: contacts
-            };
-
-            tg.sendData(JSON.stringify(payload));
-        }
-
-        function openLightbox() {
-            const currentImg = document.getElementById('modal-main-img').src;
-            if (!currentImg) return;
-            document.getElementById('lightbox-img').src = currentImg;
-            const modal = document.getElementById('lightbox-modal');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function triggerFlyToCartAnimation(btnElement) {
-            try {
-                const rect = btnElement.getBoundingClientRect();
-                const cartBar = document.getElementById('cart-bar');
-                const cartRect = cartBar.getBoundingClientRect();
-
-                const particle = document.createElement('div');
-                particle.className = 'fly-particle w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-[10px] font-black shadow-lg';
-                particle.innerText = '+1';
-                particle.style.left = `${rect.left + rect.width / 2 - 12}px`;
-                particle.style.top = `${rect.top + rect.height / 2 - 12}px`;
-                document.body.appendChild(particle);
-
-                const targetX = cartRect.left + cartRect.width / 2 - (rect.left + rect.width / 2);
-                const targetY = cartRect.top + cartRect.height / 2 - (rect.top + rect.height / 2);
-
-                requestAnimationFrame(() => {
-                    particle.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.2)`;
-                    particle.style.opacity = '0';
-                });
-
-                setTimeout(() => {
-                    particle.remove();
-                    cartBar.classList.add('scale-105');
-                    setTimeout(() => cartBar.classList.remove('scale-105'), 180);
-                }, 550);
-            } catch(e) {}
-        }
-
-        async function autoFillByInn() {
-            const rawInn = document.getElementById('inn-lookup-input').value.trim();
-            const inn = rawInn.replace(/\D/g, '');
-            const btnText = document.getElementById('inn-btn-text');
-
-            if (inn.length !== 10 && inn.length !== 12) {
-                showToast("ИНН должен содержать 10 или 12 цифр", "⚠️");
-                return;
-            }
-
-            btnText.innerText = 'Поиск...';
-            try {
-                const response = await fetch("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party", {
-                    method: "POST",
-                    mode: "cors",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "Authorization": "Token 77e6df5b9e078e34891b98a3c8e4d29312c3f596"
-                    },
-                    body: JSON.stringify({ query: inn })
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.suggestions && result.suggestions.length > 0) {
-                        const party = result.suggestions[0].data;
-                        const shortName = party.name ? (party.name.short_with_opf || party.name.full_with_opf) : `Контрагент ИНН ${inn}`;
-                        const address = party.address ? party.address.value : '';
-
-                        document.getElementById('company').value = `${shortName}, ИНН ${inn}`;
-                        if (address) document.getElementById('city').value = address;
-                        showToast("Реквизиты найдены в ЕГРЮЛ!", "🔍");
-                        btnText.innerText = 'Найти';
-                        return;
-                    }
-                }
-            } catch (err) {}
-
-            if (inn.length === 10) {
-                document.getElementById('company').value = `ООО «ОптТрейд Инвест», ИНН ${inn}`;
-                document.getElementById('city').value = `г. Москва, ул. Складочная, д. 3с1`;
-            } else {
-                document.getElementById('company').value = `ИП Смирнов А. В., ИНН ${inn}`;
-                document.getElementById('city').value = `г. Екатеринбург, терминал СДЭК ул. Малышева 51`;
-            }
-            showToast("Реквизиты подставлены!", "🔍");
-            btnText.innerText = 'Найти';
-        }
-
-        function openTrackerModal() {
-            const modal = document.getElementById('tracker-modal');
-            const sheet = document.getElementById('tracker-sheet');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            sheet.classList.remove('translate-y-full');
-        }
-
-        function closeTrackerModal() {
-            document.getElementById('tracker-sheet').classList.add('translate-y-full');
-            document.getElementById('tracker-modal').classList.add('opacity-0', 'pointer-events-none');
-        }
-
-        function checkOrderStatus() {
-            const val = document.getElementById('track-input').value.trim();
-            if (!val) {
-                showToast("Введите номер счета", "⚠️");
-                return;
-            }
-            document.getElementById('track-id-display').innerText = `Счет #${val}`;
-            document.getElementById('tracker-result').classList.remove('hidden');
-        }
-
-        const tickerMessages = [
-            "Склад Южные Врата: отгружено 42 короба (СДЭК)",
-            "Поступление: Партия Худи Oversize 420g принята на паллеты",
-            "Оформлен счет: ООО «СнабТрейд» (Санкт-Петербург) • 120 шт.",
-            "Проверка качества: Декларации ТР ТС обновлены для обуви"
-        ];
-        let tickerIdx = 0;
-        setInterval(() => {
-            tickerIdx = (tickerIdx + 1) % tickerMessages.length;
-            const el = document.getElementById('ticker-text');
-            if (el) el.innerText = tickerMessages[tickerIdx];
-        }, 5000);
-
-        applyTheme(isDarkTheme);
-        syncCatalogWithServer();
-    </script>
+            { 
+                id: 'p_watch', cat: 'Электроника', title: 'Apple Watch Ultra Titanium (Фабричный оригинал)', desc: 'Премиальная фабричная комплектация 1:1, титановый корпус, AMOLED-экран, серийники бьются. Идеально под Wildberries и Ozon.', 
+                price: 2200, moq: 5, box_qty: 5, wb_price: 5400, stock: 300, weight_per_unit: 0.18, badge: 'Топ маржа', 
+                images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80'],
+                tiers: [{ min: 5, price: 1850, label: '5-19 шт' }, { min: 20, price: 1650, label: '20-49 шт' }, { min: 50, price: 1490, label: 'от 50 шт' }]
+            },
+            { 
+                id: 'p1', cat: 'Одежда', title: 'Худи Oversize Premium (420g)', desc: 'Плотный футер 3-х нитка пенье с начесом. Высокое качество пошива, усиленная горловина, готовая база под мерч.', 
+                price: 2500, moq: 10, box_qty: 10, wb_price: 4900, stock: 480, weight_per_unit: 0.75, badge: 'Хит продаж', 
+                images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80'],
+                tiers: [{ min: 10, price: 2100, label: '10-29 шт' }, { min: 30, price: 1950, label: '30-99 шт' }, { min: 100, price: 1800, label: 'от 100 шт' }],
+                matrix: [
+                    { size: 'S (46)', inBox: 2, count: 0 },
+                    { size: 'M (48)', inBox: 3, count: 0 },
+                    { size: 'L (50)', inBox: 3, count: 0 },
+                    { size: 'XL (52)', inBox: 2, count: 0 }
+                ]
+            },
+            { 
+                id: 'p2', cat: 'Обувь', title: 'Кроссовки B2B Sport Runner PRO', desc: 'Дышащая сетка Ripstop, подошва EVA. Заводская ростовка с 40 по 45 размер. Каждая пара в коробке со штрихкодом.', 
+                price: 3200, moq: 8, box_qty: 8, wb_price: 6200, stock: 192, weight_per_unit: 0.9, badge: 'Сезон 2026', 
+                images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'],
+                tiers: [{ min: 8, price: 2800, label: '8-24 шт' }, { min: 25, price: 2600, label: '25-79 шт' }, { min: 80, price: 2400, label: 'от 80 шт' }]
+            },
+            { 
+                id: 'p3', cat: 'Электроника', title: 'Яндекс Станция Мини 2 с часами', desc: 'Оригинальные станции в заводской слюде. Официальная гарантия 1 год. Подходят для корпоративных подарков и розницы.', 
+                price: 6000, moq: 5, box_qty: 5, wb_price: 7990, stock: 85, weight_per_unit: 0.45, badge: 'Оригинал EAC', 
+                images: ['https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=600&q=80'],
+                tiers: [{ min: 5, price: 5400, label: '5-14 шт' }, { min: 15, price: 5100, label: '15-49 шт' }, { min: 50, price: 4850, label: 'от 50 шт' }]
+            },
+            { 
+                id: 'p5', cat: 'Одежда', title: 'Футболка Heavy Cotton 240g', desc: 'Плотный 100% гребенной хлопок. Спущенное плечо, воротник стойка с лайкрой, не дает усадку после стирки.', 
+                price: 1100, moq: 20, box_qty: 20, wb_price: 2400, stock: 650, weight_per_unit: 0.28, badge: 'Базовый мерч', 
+                images: ['https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80'],
+                tiers: [{ min: 20, price: 790, label: '20-49 шт' }, { min: 50, price: 690, label: '50-199 шт' }, { min: 200, price: 590, label: 'от 200 шт' }]
+            },
+            { 
+                id: 'p6', cat: 'Сувениры', title: 'Термокружка Soft-Touch 500ml', desc: 'Двойные стенки из пищевой стали 304. Вакуумная изоляция держит тепло 8 часов. Идеально под лазерную гравировку.', 
+                price: 950, moq: 25, box_qty: 25, wb_price: 1900, stock: 520, weight_per_unit: 0.35, badge: 'Корпоратив', 
+                images: ['https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80'],
+                tiers: [{ min: 25, price: 620, label: '25-49 шт' }, { min: 50, price: 540, label: '50-149 шт' }, { min: 150, price: 470, label: 'от 150 шт' }]
+            }
+        ];
+
+        localStorage.removeItem('galk_b2b_products');
+        localStorage.removeItem('galk_b2b_products_v3');
+        let products = defaultProducts;
+
+        let favorites = [];
+        let cart = {};
+        let currentCat = 'all';
+        let currentModalProductId = null;
+        let isBrandingIncluded = false;
+        let isFulfillmentIncluded = false;
+        let isVatEnabled = false;
+
+        function cloudSave(key, value) {
+            try {
+                if (tg.isVersionAtLeast && tg.isVersionAtLeast('6.9') && tg.CloudStorage) {
+                    tg.CloudStorage.setItem(key, JSON.stringify(value), () => {});
+                    return;
+                }
+            } catch(e) {}
+            try { localStorage.setItem(key, JSON.stringify(value)); } catch(e) {}
+        }
+
+        function cloudLoad(key, callback) {
+            try {
+                if (tg.isVersionAtLeast && tg.isVersionAtLeast('6.9') && tg.CloudStorage) {
+                    tg.CloudStorage.getItem(key, (err, value) => {
+                        if (!err && value) {
+                            try { callback(JSON.parse(value)); return; } catch(e) {}
+                        }
+                        const local = localStorage.getItem(key);
+                        callback(local ? JSON.parse(local) : null);
+                    });
+                    return;
+                }
+            } catch(e) {}
+            const local = localStorage.getItem(key);
+            callback(local ? JSON.parse(local) : null);
+        }
+
+        cloudLoad('galk_cloud_favs', (data) => {
+            if (data && Array.isArray(data)) {
+                favorites = data;
+                filterProducts();
+            }
+        });
+
+        cloudLoad('galk_cloud_cart', (data) => {
+            if (data && typeof data === 'object') {
+                cart = data;
+                updateCartUI();
+            }
+        });
+
+        function showToast(text, icon = '✅') {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            document.getElementById('toast-text').innerText = text;
+            document.getElementById('toast-icon').innerText = icon;
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+            }, 2500);
+        }
+
+        function toggleFavorite(id, event) {
+            if (event) event.stopPropagation();
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+                showToast("Удалено из избранного", "💔");
+            } else {
+                favorites.push(id);
+                showToast("Добавлено в избранное", "❤️");
+            }
+            cloudSave('galk_cloud_favs', favorites);
+            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
+            filterProducts();
+        }
+
+        function getBaseUnitPrice(product, qty) {
+            if (qty === 1) return product.price;
+            let unitPrice = (product.tiers && product.tiers[0]) ? product.tiers[0].price : product.price;
+            if (product.tiers && Array.isArray(product.tiers)) {
+                for (let t of product.tiers) {
+                    if (qty >= t.min) unitPrice = t.price;
+                }
+            }
+            return unitPrice;
+        }
+
+        function setCategory(cat) {
+            currentCat = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap';
+            });
+            const activeMap = {
+                'all': 'cat-all',
+                'favorites': 'cat-fav',
+                'Одежда': 'cat-clothes',
+                'Обувь': 'cat-shoes',
+                'Электроника': 'cat-tech',
+                'Сувениры': 'cat-merch'
+            };
+            const activeBtn = document.getElementById(activeMap[cat]);
+            if (activeBtn) {
+                activeBtn.className = 'cat-btn px-4 py-1.5 rounded-xl text-xs font-bold solid-btn-main shadow-sm transition whitespace-nowrap';
+            }
+            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const query = (document.getElementById('search')?.value || '').toLowerCase();
+            const sortMode = document.getElementById('sort-select')?.value || 'default';
+
+            let filtered = products.filter(p => {
+                const matchCat = currentCat === 'all' 
+                    ? true 
+                    : (currentCat === 'favorites' ? favorites.includes(p.id) : p.cat === currentCat);
+                const matchSearch = (p.title || '').toLowerCase().includes(query) || (p.desc || '').toLowerCase().includes(query);
+                return matchCat && matchSearch;
+            });
+
+            if (sortMode === 'price_asc') {
+                filtered.sort((a, b) => (a.tiers?.[0]?.price || a.price) - (b.tiers?.[0]?.price || b.price));
+            } else if (sortMode === 'margin_desc') {
+                filtered.sort((a, b) => ((b.wb_price || 0) - (b.tiers?.[0]?.price || b.price)) - ((a.wb_price || 0) - (a.tiers?.[0]?.price || a.price)));
+            } else if (sortMode === 'stock_desc') {
+                filtered.sort((a, b) => (b.stock || 0) - (a.stock || 0));
+            }
+
+            renderProducts(filtered);
+        }
+
+        function renderProducts(items) {
+            const container = document.getElementById('products-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (!items || items.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-12 text-muted-contrast font-bold text-xs">Позиции не найдены</div>`;
+                return;
+            }
+
+            items.forEach(p => {
+                try {
+                    const cartItem = cart[p.id];
+                    const qty = cartItem ? cartItem.qty : 0;
+                    const isFav = favorites.includes(p.id);
+
+                    const rawImg = (p.images && p.images.length > 0 && p.images[0]) ? p.images[0] : '';
+                    const img = resolveImageUrl(rawImg);
+                    
+                    const moq = Number(p.moq) || 1;
+                    const boxQty = Number(p.box_qty) || moq;
+                    const basePrice = Number(p.price) || 1000;
+                    
+                    let tierPrice = basePrice;
+                    if (p.tiers && Array.isArray(p.tiers) && p.tiers.length > 0 && p.tiers[0].price) {
+                        tierPrice = Number(p.tiers[0].price);
+                    }
+
+                    const wbPrice = Number(p.wb_price) || Math.round(tierPrice * 1.8);
+                    const marginPercent = tierPrice > 0 ? Math.round(((wbPrice - tierPrice) / tierPrice) * 100) : 0;
+                    const stock = p.stock !== undefined ? p.stock : 100;
+                    const badge = p.badge || 'Опт';
+
+                    container.innerHTML += `
+                        <div class="solid-card rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-md transition relative group">
+                            <div class="absolute top-2 right-2 z-20 flex items-center gap-1">
+                                <button onclick="toggleFavorite('${p.id}', event)" class="w-7 h-7 rounded-lg solid-card flex items-center justify-center text-xs shadow-sm transition active:scale-90">
+                                    ${isFav ? '❤️' : '🤍'}
+                                </button>
+                            </div>
+
+                            <div onclick="openProductModal('${p.id}')" class="cursor-pointer">
+                                <div class="relative w-full aspect-[4/3] bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+                                    <img src="${img}" alt="${p.title}" class="w-full h-full object-cover">
+                                    <span class="absolute top-2 left-2 bg-neutral-900 text-white font-bold text-[9px] px-2 py-0.5 rounded-md tracking-wider">
+                                        ${badge}
+                                    </span>
+                                </div>
+                                <div class="p-3 pb-1">
+                                    <div class="flex items-center justify-between text-[10px] text-muted-contrast font-semibold mb-1">
+                                        <span>${p.cat || 'Каталог'}</span>
+                                        <span class="text-emerald-600 dark:text-emerald-400 font-bold">${stock} шт</span>
+                                    </div>
+                                    <h3 class="font-bold text-xs text-high-contrast leading-snug line-clamp-2">${p.title}</h3>
+                                    <div class="mt-2 solid-card-sub rounded-xl p-2">
+                                        <div class="flex items-baseline gap-1">
+                                            <span class="font-black text-blue-600 dark:text-blue-400 text-sm">${tierPrice.toLocaleString('ru-RU')} ₽</span>
+                                            <span class="text-[10px] text-muted-contrast line-through">${basePrice.toLocaleString('ru-RU')} ₽</span>
+                                        </div>
+                                        <div class="flex justify-between items-center mt-0.5">
+                                            <p class="text-[10px] font-semibold text-muted-contrast">От ${moq} шт</p>
+                                            <span class="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.2 rounded border border-emerald-500/20">+${marginPercent}% WB</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 pt-2">
+                                ${qty === 0 
+                                    ? `<button onclick="updateCart('${p.id}', ${moq}); triggerFlyToCartAnimation(this);" class="w-full py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 active:scale-95 shadow-sm">
+                                        <span>В смету</span>
+                                        <span class="text-[10px] opacity-80">(${moq} шт)</span>
+                                       </button>`
+                                    : `<div class="flex items-center justify-between bg-neutral-900 text-white rounded-xl p-1 shadow-inner">
+                                        <button onclick="updateCart('${p.id}', ${qty - boxQty})" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">-</button>
+                                        <span class="text-xs font-bold">${qty} шт</span>
+                                        <button onclick="updateCart('${p.id}', ${qty + boxQty}); triggerFlyToCartAnimation(this);" class="w-7 h-7 flex items-center justify-center rounded-lg text-xs font-bold active:scale-90">+</button>
+                                       </div>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                } catch(errItem) {
+                    console.error("Ошибка рендеринга:", errItem);
+                }
+            });
+        }
+
+        async function syncCatalogWithServer() {
+            try {
+                const res = await fetch(`${API_SERVER_URL}/api/products?t=${Date.now()}`);
+                if (res.ok) {
+                    const serverCatalog = await res.json();
+                    if (Array.isArray(serverCatalog) && serverCatalog.length > 0) {
+                        products = serverCatalog;
+                        filterProducts();
+                        return;
+                    }
+                }
+            } catch(e) {}
+            filterProducts();
+        }
+
+        function manualSync() {
+            showToast("Синхронизация с сервером...", "🔄");
+            syncCatalogWithServer().then(() => {
+                showToast("Каталог обновлен!", "✅");
+            });
+        }
+
+        async function exportPriceListExcel() {
+            showToast("Отправка прайс-листа в чат...", "📊");
+            try {
+                const excelRows = products.map((p, idx) => ({
+                    "№": idx + 1,
+                    "Категория": p.cat,
+                    "Артикул": p.id,
+                    "Наименование позиции": p.title,
+                    "Остаток на складе (шт)": p.stock,
+                    "Квант короба (шт)": p.box_qty || p.moq,
+                    "Базовая цена (₽)": p.price,
+                    "Опт от MOQ": (p.tiers && p.tiers[0]) ? `${p.tiers[0].price} ₽` : `${p.price} ₽`,
+                    "РРЦ на WB/Ozon (₽)": p.wb_price || Math.round(p.price * 1.8)
+                }));
+
+                const worksheet = XLSX.utils.json_to_sheet(excelRows);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Оптовый Прайс-Лист");
+                const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'base64' });
+
+                const targetUid = currentUserId || ADMIN_TELEGRAM_ID;
+                const res = await fetch(`${API_SERVER_URL}/api/send_user_file`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: targetUid,
+                        filename: "Galk_B2B_Opt_PriceList.xlsx",
+                        file_base64: wbout,
+                        caption: "📊 <b>Оптовый прайс-лист Galk Supply (.xlsx)</b>\nВсе градации цен и актуальные остатки на складе."
+                    })
+                });
+
+                if (res.ok) {
+                    try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+                    showToast("Прайс-лист отправлен в чат бота! 📥", "✅");
+                } else {
+                    throw new Error("API Offline");
+                }
+            } catch(e) {
+                showToast("Нажмите '📊 Скачать прайс (Excel)' в боте!", "ℹ️");
+            }
+        }
+
+        function openProductModal(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+            currentModalProductId = id;
+            
+            const cartItem = cart[p.id];
+            isBrandingIncluded = cartItem ? cartItem.branding : false;
+            isFulfillmentIncluded = cartItem ? cartItem.fulfillment : false;
+            
+            document.getElementById('branding-checkbox').checked = isBrandingIncluded;
+            document.getElementById('fulfillment-checkbox').checked = isFulfillmentIncluded;
+
+            const qty = cartItem ? cartItem.qty : (p.moq || 1);
+
+            document.getElementById('modal-badge').innerText = p.badge || 'Опт';
+            document.getElementById('modal-stock-text').innerText = `На складе: ${p.stock || 0} шт`;
+            
+            const rawImg = (p.images && p.images[0]) ? p.images[0] : '';
+            document.getElementById('modal-main-img').src = resolveImageUrl(rawImg);
+            document.getElementById('modal-title').innerText = p.title;
+            document.getElementById('modal-desc').innerText = p.desc || '';
+
+            document.getElementById('roi-retail-price').value = p.wb_price || Math.round(p.price * 1.8);
+
+            const thumbsContainer = document.getElementById('modal-thumbnails');
+            thumbsContainer.innerHTML = '';
+            (p.images || []).forEach(imgUrl => {
+                const resolved = resolveImageUrl(imgUrl);
+                thumbsContainer.innerHTML += `
+                    <button onclick="document.getElementById('modal-main-img').src = '${resolved}'" class="w-12 h-12 rounded-xl overflow-hidden solid-card focus:border-blue-600 transition">
+                        <img src="${resolved}" class="w-full h-full object-cover">
+                    </button>
+                `;
+            });
+
+            const tiersBox = document.getElementById('modal-tiers-container');
+            tiersBox.innerHTML = '';
+            (p.tiers || [{ min: p.moq, price: p.price, label: 'Опт' }]).forEach(t => {
+                tiersBox.innerHTML += `
+                    <div class="solid-card rounded-lg p-2">
+                        <span class="text-[10px] text-muted-contrast block">${t.label}</span>
+                        <span class="font-extrabold text-blue-600 dark:text-blue-400 text-xs">${t.price} ₽</span>
+                    </div>
+                `;
+            });
+
+            const slider = document.getElementById('modal-slider');
+            slider.min = 1;
+            slider.max = Math.max(p.stock || 100, (p.moq || 10) * 5);
+            slider.step = p.box_qty || p.moq || 1;
+            slider.value = qty;
+
+            document.getElementById('slider-number-input').value = qty;
+            document.getElementById('box-quantity-hint').innerText = `Квант короба: ${p.box_qty || p.moq || 1} шт`;
+
+            const chips = document.getElementById('quick-preset-chips');
+            chips.innerHTML = `
+                <button onclick="setModalQty(1)" class="px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold active:scale-95 whitespace-nowrap">🧪 Образец 1 шт</button>
+                <button onclick="setModalQty(${p.moq || 10})" class="px-2.5 py-1 rounded-lg solid-card border text-high-contrast text-[10px] font-bold active:scale-95 whitespace-nowrap">Мин. ${p.moq || 10} шт</button>
+                <button onclick="setModalQty(${(p.box_qty || p.moq || 10) * 3})" class="px-2.5 py-1 rounded-lg solid-card border text-high-contrast text-[10px] font-bold active:scale-95 whitespace-nowrap">3 короба (${(p.box_qty || p.moq || 10) * 3} шт)</button>
+            `;
+
+            renderMatrixTab(p);
+            updateModalCalculations(p, qty);
+            switchTab('pricing');
+
+            const modal = document.getElementById('product-modal');
+            const sheet = document.getElementById('product-sheet');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            sheet.classList.remove('translate-y-full');
+            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+        }
+
+        function switchTab(tab) {
+            const tabs = ['pricing', 'roi', 'matrix', 'branding', 'fulfillment', 'warehouses'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const btn = document.getElementById(`tab-${t}-btn`);
+                if (el && btn) {
+                    if (t === tab) {
+                        el.classList.remove('hidden');
+                        btn.className = 'pb-2 border-b-2 border-neutral-900 dark:border-white text-high-contrast transition font-bold whitespace-nowrap';
+                    } else {
+                        el.classList.add('hidden');
+                        btn.className = 'pb-2 border-b-2 border-transparent text-muted-contrast transition font-bold whitespace-nowrap';
+                    }
+                }
+            });
+            try { tg.HapticFeedback.selectionChanged(); } catch(e) {}
+        }
+
+        function calculateSellerROI() {
+            const p = products.find(item => item.id === currentModalProductId);
+            if (!p) return;
+
+            const retailPrice = parseInt(document.getElementById('roi-retail-price').value) || (p.wb_price || 3000);
+            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
+            
+            let unitCost = getBaseUnitPrice(p, qty);
+            if (isBrandingIncluded) unitCost += 250;
+            if (isFulfillmentIncluded) unitCost += 45;
+
+            const totalPurchaseCost = unitCost * qty;
+            const totalRevenue = retailPrice * qty;
+            const marketplaceCut = totalRevenue * 0.28;
+            const netProfit = Math.round(totalRevenue - totalPurchaseCost - marketplaceCut);
+            const roiPercent = Math.round((netProfit / totalPurchaseCost) * 100);
+
+            document.getElementById('roi-net-profit').innerText = `${netProfit.toLocaleString('ru-RU')} ₽`;
+            document.getElementById('roi-percent').innerText = `${roiPercent > 0 ? '+' : ''}${roiPercent}%`;
+            document.getElementById('roi-percent').className = `text-sm font-black ${roiPercent >= 50 ? 'text-emerald-600 dark:text-emerald-400' : 'text-blue-600 dark:text-blue-400'}`;
+        }
+
+        function toggleBranding(checked) {
+            isBrandingIncluded = checked;
+            const p = products.find(item => item.id === currentModalProductId);
+            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
+            updateModalCalculations(p, qty);
+        }
+
+        function toggleFulfillment(checked) {
+            isFulfillmentIncluded = checked;
+            const p = products.find(item => item.id === currentModalProductId);
+            const qty = parseInt(document.getElementById('modal-slider').value) || (p.moq || 1);
+            updateModalCalculations(p, qty);
+        }
+
+        function renderMatrixTab(product) {
+            const container = document.getElementById('matrix-rows-container');
+            if (!product.matrix) {
+                container.innerHTML = `<div class="text-muted-contrast text-center py-2">Для данной позиции ростовка не предусмотрена</div>`;
+                document.getElementById('matrix-total-qty').innerText = `${document.getElementById('modal-slider').value} шт`;
+                return;
+            }
+
+            container.innerHTML = '';
+            product.matrix.forEach((m, idx) => {
+                container.innerHTML += `
+                    <div class="flex items-center justify-between solid-card p-2 rounded-lg">
+                        <span class="font-bold text-high-contrast">${m.size}</span>
+                        <span class="text-muted-contrast text-[11px]">${m.inBox} шт/кор</span>
+                        <div class="flex items-center gap-1">
+                            <input type="number" min="0" value="${m.count || 0}" oninput="updateMatrixRow(${idx}, this.value)" class="w-12 text-center font-bold solid-input rounded-md py-1">
+                            <span class="text-muted-contrast text-[10px]">кор.</span>
+                        </div>
+                        <span class="font-black text-blue-600 dark:text-blue-400">${(m.count || 0) * m.inBox} шт</span>
+                    </div>
+                `;
+            });
+            calculateMatrixTotal(product);
+        }
+
+        function updateMatrixRow(idx, val) {
+            const p = products.find(item => item.id === currentModalProductId);
+            if (p && p.matrix) {
+                p.matrix[idx].count = parseInt(val) || 0;
+                renderMatrixTab(p);
+            }
+        }
+
+        function calculateMatrixTotal(product) {
+            if (!product.matrix) return;
+            let total = 0;
+            product.matrix.forEach(m => {
+                total += (m.count || 0) * m.inBox;
+            });
+            document.getElementById('matrix-total-qty').innerText = `${total} шт`;
+            if (total > 0) setModalQty(total);
+        }
+
+        function getMatrixSummary(product) {
+            if (!product.matrix) return '';
+            const list = product.matrix.filter(m => (m.count || 0) > 0).map(m => `${m.size}: ${m.count * m.inBox}шт`);
+            return list.length > 0 ? list.join(', ') : '';
+        }
+
+        function setModalQty(qty) {
+            document.getElementById('modal-slider').value = qty;
+            document.getElementById('slider-number-input').value = qty;
+            const p = products.find(item => item.id === currentModalProductId);
+            if (p) updateModalCalculations(p, qty);
+        }
+
+        function onSliderChange(val) {
+            const qty = parseInt(val) || 1;
+            document.getElementById('slider-number-input').value = qty;
+            const p = products.find(item => item.id === currentModalProductId);
+            if (p) updateModalCalculations(p, qty);
+        }
+
+        function onNumberInputChange(val) {
+            const qty = parseInt(val) || 1;
+            document.getElementById('modal-slider').value = qty;
+            const p = products.find(item => item.id === currentModalProductId);
+            if (p) updateModalCalculations(p, qty);
+        }
+
+        function updateModalCalculations(product, qty) {
+            let unitPrice = getBaseUnitPrice(product, qty);
+            if (isBrandingIncluded && qty > 1) unitPrice += 250;
+            if (isFulfillmentIncluded && qty > 1) unitPrice += 45;
+
+            const total = qty * unitPrice;
+
+            document.getElementById('tier-unit-price').innerText = `${unitPrice} ₽`;
+            document.getElementById('slider-total-price').innerText = `${total.toLocaleString('ru-RU')} ₽`;
+
+            const boxCount = Math.ceil(qty / (product.box_qty || 10));
+            const totalWeight = (qty * (product.weight_per_unit || 0.5)).toFixed(1);
+            document.getElementById('logistics-boxes-text').innerText = `${boxCount} ${boxCount === 1 ? 'короб' : 'коробок'}`;
+            document.getElementById('logistics-weight-text').innerText = `${totalWeight} кг`;
+
+            const badge = document.getElementById('logistics-vehicle-badge');
+            if (totalWeight <= 25) {
+                badge.innerText = 'СДЭК / Курьер';
+            } else if (totalWeight <= 300) {
+                badge.innerText = 'Легковой фургон';
+            } else {
+                badge.innerText = 'Паллета / Газель';
+            }
+
+            const nextTier = (product.tiers || []).find(t => t.min > qty);
+            const progressBar = document.getElementById('tier-progress-bar');
+            const hint = document.getElementById('tier-discount-hint');
+
+            if (nextTier) {
+                const diff = nextTier.min - qty;
+                hint.innerText = `Еще ${diff} шт до цены ${nextTier.price} ₽/шт!`;
+                const percent = Math.min(100, Math.round((qty / nextTier.min) * 100));
+                progressBar.style.width = `${percent}%`;
+            } else {
+                hint.innerText = 'Максимальная оптовая скидка разблокирована! 🎉';
+                progressBar.style.width = '100%';
+            }
+
+            const slot = document.getElementById('modal-action-slot');
+            slot.innerHTML = `
+                <button onclick="commitModalToCart('${product.id}', ${qty}); closeProductModal(); triggerFlyToCartAnimation(this);" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-lg transition flex items-center justify-center gap-2 active:scale-95">
+                    <span>Добавить в спецификацию (${qty} шт)</span>
+                    <span>•</span>
+                    <span>${total.toLocaleString('ru-RU')} ₽</span>
+                </button>
+            `;
+
+            calculateSellerROI();
+        }
+
+        function commitModalToCart(id, qty) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+            const matrixStr = getMatrixSummary(p);
+            updateCart(id, qty, {
+                branding: isBrandingIncluded,
+                fulfillment: isFulfillmentIncluded,
+                matrixSummary: matrixStr
+            });
+            try { tg.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+            showToast("Спецификация обновлена");
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-sheet').classList.add('translate-y-full');
+            document.getElementById('product-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function updateCart(id, newQty, options = null) {
+            const p = products.find(prod => prod.id === id);
+            if (!p) return;
+
+            if (newQty <= 0) {
+                delete cart[id];
+            } else {
+                const prev = cart[id] || {};
+                const branding = options ? options.branding : (prev.branding || false);
+                const fulfillment = options ? options.fulfillment : (prev.fulfillment || false);
+                const matrixSummary = options ? options.matrixSummary : (prev.matrixSummary || '');
+
+                let unitPrice = getBaseUnitPrice(p, newQty);
+                if (branding && newQty > 1) unitPrice += 250;
+                if (fulfillment && newQty > 1) unitPrice += 45;
+
+                cart[id] = {
+                    qty: newQty,
+                    unitPrice: unitPrice,
+                    branding: branding,
+                    fulfillment: fulfillment,
+                    matrixSummary: matrixSummary
+                };
+            }
+            try { tg.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+            cloudSave('galk_cloud_cart', cart);
+            filterProducts();
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = {};
+            cloudSave('galk_cloud_cart', cart);
+            hideCheckout();
+            filterProducts();
+            updateCartUI();
+            showToast("Спецификация очищена", "🗑");
+        }
+
+        function calculateSubtotal() {
+            let total = 0;
+            for (const [id, item] of Object.entries(cart)) {
+                total += item.unitPrice * item.qty;
+            }
+            return total;
+        }
+
+        function updateCartUI() {
+            const subtotal = calculateSubtotal();
+            const total = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
+            const totalItems = Object.values(cart).reduce((sum, item) => sum + item.qty, 0);
+            const cartBar = document.getElementById('cart-bar');
+
+            if (totalItems > 0) {
+                cartBar.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                document.getElementById('total-price').innerText = total.toLocaleString('ru-RU') + ' ₽';
+            } else {
+                cartBar.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
+            }
+        }
+
+        function setVatMode(withVat) {
+            isVatEnabled = withVat;
+            const noneBtn = document.getElementById('vat-none-btn');
+            const withBtn = document.getElementById('vat-with-btn');
+            const desc = document.getElementById('vat-description-label');
+
+            if (withVat) {
+                withBtn.className = 'flex-1 py-1.5 rounded-lg solid-btn-main shadow-sm transition font-bold';
+                noneBtn.className = 'flex-1 py-1.5 rounded-lg text-muted-contrast transition font-medium';
+                desc.innerText = 'Включая НДС 20% • Пакет закрывающих УПД';
+            } else {
+                noneBtn.className = 'flex-1 py-1.5 rounded-lg solid-btn-main shadow-sm transition font-bold';
+                withBtn.className = 'flex-1 py-1.5 rounded-lg text-muted-contrast transition font-medium';
+                desc.innerText = 'Без НДС (УСН) • Прямой счет на оплату';
+            }
+            updateCartUI();
+            showCheckout();
+        }
+
+        function printQuotation() {
+            window.print();
+        }
+
+        function showCheckout() {
+            const subtotal = calculateSubtotal();
+            const total = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
+            document.getElementById('checkout-total').innerText = total.toLocaleString('ru-RU') + ' ₽';
+
+            const itemsContainer = document.getElementById('checkout-cart-items');
+            itemsContainer.innerHTML = '';
+            for (const [id, item] of Object.entries(cart)) {
+                const p = products.find(prod => prod.id === id);
+                if (p) {
+                    let badges = [];
+                    if (item.branding) badges.push('Мерч +250₽');
+                    if (item.fulfillment) badges.push('Фулфилмент +45₽');
+                    const badgesText = badges.length > 0 ? ` [${badges.join(', ')}]` : '';
+                    const matrixText = item.matrixSummary ? `<p class="text-[9px] text-blue-600 dark:text-blue-400 font-semibold">${item.matrixSummary}</p>` : '';
+
+                    itemsContainer.innerHTML += `
+                        <div class="flex justify-between items-center solid-card-sub rounded-xl p-2.5 text-xs">
+                            <div>
+                                <p class="font-bold text-high-contrast leading-tight">${p.title}${badgesText}</p>
+                                <p class="text-[10px] text-muted-contrast mt-0.5">${item.qty} шт × ${item.unitPrice} ₽</p>
+                                ${matrixText}
+                            </div>
+                            <span class="font-extrabold text-high-contrast">${(item.qty * item.unitPrice).toLocaleString('ru-RU')} ₽</span>
+                        </div>
+                    `;
+                }
+            }
+
+            const modal = document.getElementById('checkout-form');
+            const sheet = document.getElementById('checkout-sheet');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            sheet.classList.remove('translate-y-full');
+        }
+
+        function hideCheckout() {
+            document.getElementById('checkout-sheet').classList.add('translate-y-full');
+            document.getElementById('checkout-form').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function sendOrderToBot() {
+            const company = document.getElementById('company').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const contacts = document.getElementById('contacts').value.trim();
+            const tk = document.getElementById('tk-choice').value;
+            const terms = document.getElementById('payment-terms').value;
+
+            if (!company || !city || !contacts) {
+                showToast("Заполните обязательные реквизиты", "⚠️");
+                return;
+            }
+
+            let orderItems = [];
+            let subtotal = calculateSubtotal();
+            let finalSum = isVatEnabled ? Math.round(subtotal * 1.2) : subtotal;
+
+            for (const [id, item] of Object.entries(cart)) {
+                const p = products.find(prod => prod.id === id);
+                if (p) {
+                    let fullTitle = p.title;
+                    if (item.branding) fullTitle += " [+Печать лого]";
+                    if (item.fulfillment) fullTitle += " [+Фулфилмент]";
+                    if (item.matrixSummary) fullTitle += ` (${item.matrixSummary})`;
+
+                    orderItems.push({
+                        title: fullTitle,
+                        qty: item.qty,
+                        price: item.unitPrice,
+                        total: item.unitPrice * item.qty
+                    });
+                }
+            }
+
+            const payload = {
+                type: 'order',
+                vat: isVatEnabled ? 'С НДС 20%' : 'Без НДС (УСН)',
+                payment_terms: terms,
+                cart: orderItems,
+                total_sum: finalSum,
+                company: `${company} (${isVatEnabled ? 'НДС 20%' : 'УСН'}, ТК: ${tk}, Оплата: ${terms})`,
+                city: city,
+                contacts: contacts
+            };
+
+            tg.sendData(JSON.stringify(payload));
+        }
+
+        function openLightbox() {
+            const currentImg = document.getElementById('modal-main-img').src;
+            if (!currentImg) return;
+            document.getElementById('lightbox-img').src = currentImg;
+            const modal = document.getElementById('lightbox-modal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            try { tg.HapticFeedback.impactOccurred('light'); } catch(e) {}
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function triggerFlyToCartAnimation(btnElement) {
+            try {
+                const rect = btnElement.getBoundingClientRect();
+                const cartBar = document.getElementById('cart-bar');
+                const cartRect = cartBar.getBoundingClientRect();
+
+                const particle = document.createElement('div');
+                particle.className = 'fly-particle w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-white text-[10px] font-black shadow-lg';
+                particle.innerText = '+1';
+                particle.style.left = `${rect.left + rect.width / 2 - 12}px`;
+                particle.style.top = `${rect.top + rect.height / 2 - 12}px`;
+                document.body.appendChild(particle);
+
+                const targetX = cartRect.left + cartRect.width / 2 - (rect.left + rect.width / 2);
+                const targetY = cartRect.top + cartRect.height / 2 - (rect.top + rect.height / 2);
+
+                requestAnimationFrame(() => {
+                    particle.style.transform = `translate(${targetX}px, ${targetY}px) scale(0.2)`;
+                    particle.style.opacity = '0';
+                });
+
+                setTimeout(() => {
+                    particle.remove();
+                    cartBar.classList.add('scale-105');
+                    setTimeout(() => cartBar.classList.remove('scale-105'), 180);
+                }, 550);
+            } catch(e) {}
+        }
+
+        async function autoFillByInn() {
+            const rawInn = document.getElementById('inn-lookup-input').value.trim();
+            const inn = rawInn.replace(/\D/g, '');
+            const btnText = document.getElementById('inn-btn-text');
+
+            if (inn.length !== 10 && inn.length !== 12) {
+                showToast("ИНН должен содержать 10 или 12 цифр", "⚠️");
+                return;
+            }
+
+            btnText.innerText = 'Поиск...';
+            try {
+                const response = await fetch("https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party", {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "Authorization": "Token 77e6df5b9e078e34891b98a3c8e4d29312c3f596"
+                    },
+                    body: JSON.stringify({ query: inn })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.suggestions && result.suggestions.length > 0) {
+                        const party = result.suggestions[0].data;
+                        const shortName = party.name ? (party.name.short_with_opf || party.name.full_with_opf) : `Контрагент ИНН ${inn}`;
+                        const address = party.address ? party.address.value : '';
+
+                        document.getElementById('company').value = `${shortName}, ИНН ${inn}`;
+                        if (address) document.getElementById('city').value = address;
+                        showToast("Реквизиты найдены в ЕГРЮЛ!", "🔍");
+                        btnText.innerText = 'Найти';
+                        return;
+                    }
+                }
+            } catch (err) {}
+
+            if (inn.length === 10) {
+                document.getElementById('company').value = `ООО «ОптТрейд Инвест», ИНН ${inn}`;
+                document.getElementById('city').value = `г. Москва, ул. Складочная, д. 3с1`;
+            } else {
+                document.getElementById('company').value = `ИП Смирнов А. В., ИНН ${inn}`;
+                document.getElementById('city').value = `г. Екатеринбург, терминал СДЭК ул. Малышева 51`;
+            }
+            showToast("Реквизиты подставлены!", "🔍");
+            btnText.innerText = 'Найти';
+        }
+
+        function openTrackerModal() {
+            const modal = document.getElementById('tracker-modal');
+            const sheet = document.getElementById('tracker-sheet');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            sheet.classList.remove('translate-y-full');
+        }
+
+        function closeTrackerModal() {
+            document.getElementById('tracker-sheet').classList.add('translate-y-full');
+            document.getElementById('tracker-modal').classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function checkOrderStatus() {
+            const val = document.getElementById('track-input').value.trim();
+            if (!val) {
+                showToast("Введите номер счета", "⚠️");
+                return;
+            }
+            document.getElementById('track-id-display').innerText = `Счет #${val}`;
+            document.getElementById('tracker-result').classList.remove('hidden');
+        }
+
+        const tickerMessages = [
+            "Склад Южные Врата: отгружено 42 короба (СДЭК)",
+            "Поступление: Партия Худи Oversize 420g принята на паллеты",
+            "Оформлен счет: ООО «СнабТрейд» (Санкт-Петербург) • 120 шт.",
+            "Проверка качества: Декларации ТР ТС обновлены для обуви"
+        ];
+        let tickerIdx = 0;
+        setInterval(() => {
+            tickerIdx = (tickerIdx + 1) % tickerMessages.length;
+            const el = document.getElementById('ticker-text');
+            if (el) el.innerText = tickerMessages[tickerIdx];
+        }, 5000);
+
+        applyTheme(isDarkTheme);
+        syncCatalogWithServer();
+    </script>
 </body>
 </html>
