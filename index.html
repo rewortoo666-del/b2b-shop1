@@ -626,48 +626,24 @@
 
         const defaultProducts = [
             { 
-                id: 'p_watch', cat: 'Электроника', title: 'Apple Watch Ultra Titanium (Фабричный оригинал)', desc: 'Премиальная фабричная комплектация 1:1, титановый корпус, AMOLED-экран, серийники бьются. Идеально под Wildberries и Ozon.', 
-                price: 2200, moq: 5, box_qty: 5, wb_price: 5400, stock: 300, weight_per_unit: 0.18, badge: 'Топ маржа', 
-                images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 5, price: 1850, label: '5-19 шт' }, { min: 20, price: 1650, label: '20-49 шт' }, { min: 50, price: 1490, label: 'от 50 шт' }]
+                id: 'p_attar_moon', 
+                cat: 'Парфюмерия', 
+                title: 'Attar Collection Moon Blanche (100 ml)', 
+                desc: 'Качество люкс. Объем 100 мл. Премиальный стойкий аромат, полная фабричная комплектация. ТЯК Москва (1000 мелочей 1-23 / Б-15).', 
+                price: 1800, 
+                moq: 1, 
+                box_qty: 1, 
+                wb_price: 3800, 
+                stock: 140, 
+                weight_per_unit: 0.35, 
+                badge: 'Люкс 1:1', 
+                images: ['https://iimg.su/i/cO2rgi'], 
+                tiers: [
+                    { min: 1, price: 1800, label: 'Розница' }, 
+                    { min: 3, price: 1000, label: 'Опт от 3 шт' }, 
+                    { min: 10, price: 950, label: 'от 10 шт' }
+                ] 
             },
-            { 
-                id: 'p1', cat: 'Одежда', title: 'Худи Oversize Premium (420g)', desc: 'Плотный футер 3-х нитка пенье с начесом. Высокое качество пошива, усиленная горловина, готовая база под мерч.', 
-                price: 2500, moq: 10, box_qty: 10, wb_price: 4900, stock: 480, weight_per_unit: 0.75, badge: 'Хит продаж', 
-                images: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 10, price: 2100, label: '10-29 шт' }, { min: 30, price: 1950, label: '30-99 шт' }, { min: 100, price: 1800, label: 'от 100 шт' }],
-                matrix: [
-                    { size: 'S (46)', inBox: 2, count: 0 },
-                    { size: 'M (48)', inBox: 3, count: 0 },
-                    { size: 'L (50)', inBox: 3, count: 0 },
-                    { size: 'XL (52)', inBox: 2, count: 0 }
-                ]
-            },
-            { 
-                id: 'p2', cat: 'Обувь', title: 'Кроссовки B2B Sport Runner PRO', desc: 'Дышащая сетка Ripstop, подошва EVA. Заводская ростовка с 40 по 45 размер. Каждая пара в коробке со штрихкодом.', 
-                price: 3200, moq: 8, box_qty: 8, wb_price: 6200, stock: 192, weight_per_unit: 0.9, badge: 'Сезон 2026', 
-                images: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 8, price: 2800, label: '8-24 шт' }, { min: 25, price: 2600, label: '25-79 шт' }, { min: 80, price: 2400, label: 'от 80 шт' }]
-            },
-            { 
-                id: 'p3', cat: 'Электроника', title: 'Яндекс Станция Мини 2 с часами', desc: 'Оригинальные станции в заводской слюде. Официальная гарантия 1 год. Подходят для корпоративных подарков и розницы.', 
-                price: 6000, moq: 5, box_qty: 5, wb_price: 7990, stock: 85, weight_per_unit: 0.45, badge: 'Оригинал EAC', 
-                images: ['https://images.unsplash.com/photo-1543512214-318c7553f230?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 5, price: 5400, label: '5-14 шт' }, { min: 15, price: 5100, label: '15-49 шт' }, { min: 50, price: 4850, label: 'от 50 шт' }]
-            },
-            { 
-                id: 'p5', cat: 'Одежда', title: 'Футболка Heavy Cotton 240g', desc: 'Плотный 100% гребенной хлопок. Спущенное плечо, воротник стойка с лайкрой, не дает усадку после стирки.', 
-                price: 1100, moq: 20, box_qty: 20, wb_price: 2400, stock: 650, weight_per_unit: 0.28, badge: 'Базовый мерч', 
-                images: ['https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 20, price: 790, label: '20-49 шт' }, { min: 50, price: 690, label: '50-199 шт' }, { min: 200, price: 590, label: 'от 200 шт' }]
-            },
-            { 
-                id: 'p6', cat: 'Сувениры', title: 'Термокружка Soft-Touch 500ml', desc: 'Двойные стенки из пищевой стали 304. Вакуумная изоляция держит тепло 8 часов. Идеально под лазерную гравировку.', 
-                price: 950, moq: 25, box_qty: 25, wb_price: 1900, stock: 520, weight_per_unit: 0.35, badge: 'Корпоратив', 
-                images: ['https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80'],
-                tiers: [{ min: 25, price: 620, label: '25-49 шт' }, { min: 50, price: 540, label: '50-149 шт' }, { min: 150, price: 470, label: 'от 150 шт' }]
-            }
-        ];
 
         localStorage.removeItem('galk_b2b_products');
         localStorage.removeItem('galk_b2b_products_v3');
