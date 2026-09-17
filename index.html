@@ -230,6 +230,7 @@
             </div>
 
             <div class="flex gap-2 overflow-x-auto hide-scrollbar py-0.5">
+                <button onclick="setCategory('Инструменты')" id="cat-tools" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Инструменты</button>
                 <button onclick="setCategory('all')" id="cat-all" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-bold solid-btn-main shadow-sm transition whitespace-nowrap">Все товары</button>
                 <button onclick="setCategory('favorites')" id="cat-fav" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">❤️ Избранное</button>
                 <button onclick="setCategory('Парфюмерия')" id="cat-perfume" class="cat-btn px-4 py-1.5 rounded-xl text-xs font-semibold solid-card text-muted-contrast transition whitespace-nowrap">Парфюмерия</button>
@@ -617,6 +618,26 @@
 
         const defaultProducts = [
             { 
+                id: 'azarek_tools_82', 
+                cat: 'Инструменты', 
+                title: 'Набор ручного инструмента 82 предмета (хром-ванадий)', 
+                desc: 'Профессиональный набор инструментов в кейсе. Ударопрочный пластик, трещотки 1/4 и 1/2, хром-ванадиевая сталь. Опт со склада ТЯК Москва.', 
+                price: 3000, 
+                moq: 10, 
+                box_qty: 10, 
+                wb_price: 3000, 
+                stock: 450, 
+                weight_per_unit: 5.8, 
+                badge: 'Хит продаж', 
+                images: ['https://rewortoo666-del.github.io/b2b-shop/tools.jpg'], 
+                tiers: [
+                    { min: 10, price: 2150, label: '10-99 шт' },
+                    { min: 100, price: 1950, label: '100-299 шт' },
+                    { min: 300, price: 1850, label: '300-499 шт' },
+                    { min: 500, price: 1750, label: 'от 500 шт' }
+                ] 
+            },
+            { 
                 id: 'p_attar_moon', 
                 cat: 'Парфюмерия', 
                 title: 'Attar Collection Moon Blanche (100 ml)', 
@@ -776,6 +797,7 @@
             const activeMap = {
                 'all': 'cat-all',
                 'favorites': 'cat-fav',
+                'Инструменты': 'cat-tools',
                 'Парфюмерия': 'cat-perfume',
                 'Одежда': 'cat-clothes',
                 'Обувь': 'cat-shoes',
@@ -1531,7 +1553,7 @@
 
         applyTheme(isDarkTheme);
         filterProducts();
-        syncCatalogWithServer();
+        // syncCatalogWithServer();
     </script>
 </body>
 </html>
