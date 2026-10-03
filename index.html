@@ -400,10 +400,26 @@
     const tg = window.Telegram && window.Telegram.WebApp;
     if (!tg || typeof tg.sendData !== "function") { toast("Откройте каталог через Telegram-бота"); return; }
     const shipLabel = { bus: "Рейсовый автобус", cdek: "СДЭК", tk: "ТК", pickup: "Самовывоз" }[shipMode];
-    const items = cart.map(i => ({ title: i.brand + " " + i.model, qty: i.qty || 1, total: i.price * (i.qty || 1), meta: "р. " + i.selectedSize }));
-    const payload = { type: "order", version: 2, name, phone, city, ship: shipLabel, pvz: document.getElementById("cdek-pvz").value.trim(), delivery: { method: shipLabel, city, address: document.getElementById("cdek-pvz").value.trim() || document.getElementById("bus-stand").value.trim() || (shipMode === "pickup" ? "Самовывоз" : ""), tk_fio: document.getElementById("tk-fio").value.trim(), tk_doc: document.getElementById("tk-doc").value.trim(), bus_stand: document.getElementById("bus-stand").value.trim(), bus_plate: document.getElementById("bus-plate").value.trim() }, items, cart: items, total: total(), total_sum: total(), created_at: new Date().toISOString() };
+    const bus = [document.getElementById("bus-stand").value.trim(), document.getElementById("bus-plate").value.trim()].filter(Boolean).join(" • ");
+    const cartPayload = cart.map(i => {
+      const boxes = i.boxes || Math.max(1, Math.round((i.qty || 1) / 8));
+      const lineTotal = i.boxTotal || i.price * (i.qty || 1);
+      return { id: i.id, title: i.brand + " " + i.model + " р." + i.selectedSize, qty: boxes, total: lineTotal };
+    });
+    const sum = cartPayload.reduce((s, i) => s + i.total, 0);
+    const payload = {
+      type: "order",
+      name, company: name, phone, contacts: phone,
+      city: city || "Самовывоз Салют 23.03",
+      tk: shipLabel,
+      bus,
+      pay_method: "sbp",
+      cart: cartPayload,
+      total: sum,
+      total_sum: sum
+    };
     try { tg.ready(); tg.sendData(JSON.stringify(payload)); } catch (e) { toast("Не удалось отправить заказ"); return; }
-    orders.unshift({ product: items.map(i => i.title).join(", "), price: total(), qty: pairs(), date: new Date().toLocaleString("ru-RU") });
+    orders.unshift({ product: cartPayload.map(i => i.title).join(", "), price: sum, qty: cartPayload.reduce((s,i)=>s+i.qty,0), date: new Date().toLocaleString("ru-RU") });
     localStorage.setItem("rg_orders", JSON.stringify(orders));
     cart = []; updateCartUI(); closeCart(); toast("Заказ отправлен в Telegram-бот");
   }
@@ -472,7 +488,7 @@
   function confirmBox() {
     const p = products.find(x => x.id === modalId); if (!p) return;
     const unit = boxUnit(p, modalQty);
-    cart.push({ ...p, selectedSize: sizeState[p.id] || "41", qty: modalQty * 8, price: Math.round(unit / 8), model: p.model + " • " + COLORS[modalColor] });
+    cart.push({ ...p, selectedSize: sizeState[p.id] || "41", qty: modalQty * 8, boxes: modalQty, price: Math.round(unit / 8), boxTotal: unit * modalQty, model: p.model + " • " + COLORS[modalColor] });
     updateCartUI(); closeProduct(); toast("Короб в корзине"); openCart();
   }
   function reviewsOf(id) { return [{name:"Мурад — Махачкала", rating:5, text:"Партия пришла целая, размеры ровные. Берём ещё."},{name:"Евгений — Воронеж", rating:5, text:"Собрали за день, фото один в один как в каталоге."}].concat(extraReviews[id]||[]); }
